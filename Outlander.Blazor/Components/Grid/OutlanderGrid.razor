@@ -1,0 +1,314 @@
+@namespace Outlander.Blazor.Components.OutlanderGrid
+
+@inherits Base.OutlanderComponentBase
+
+@typeparam TItem
+
+@using System.Reflection
+@using System.Globalization
+@using System.Text
+@using System.Net
+@using System.Text.RegularExpressions
+@using Microsoft.AspNetCore.Components
+@using Microsoft.JSInterop
+
+<CascadingValue Value="this" IsFixed="true">
+    <div style="display:none">
+        @Settings
+        @Columns
+    </div>
+
+    <div class="app-grid @(IsRowInteractive ? "app-grid-interactive-rows" : null) @(AllowHotTrackRow ? "allow-hot-track-row" : null)">
+        <div class="app-grid-toolbar">
+            <div class="app-grid-toolbar-main">
+                <div class="app-grid-toolbar-left">
+                    @if (ShowPageSizeSelector)
+                    {
+                        <div class="app-grid-page-size">
+                            <label class="form-label mb-0">@PageSizeLabelText</label>
+                            <select class="form-select form-select-sm"
+                                    value="@PageSize"
+                                    @onchange="HandlePageSizeChanged">
+                                @foreach (var size in PageSizeOptions)
+                                {
+                                    <option value="@size">@size</option>
+                                }
+                            </select>
+                            <span>@PageSizeSuffixText</span>
+                        </div>
+                    }
+                </div>
+
+                <div class="app-grid-toolbar-right">
+                    @if (ToolbarTemplate is not null)
+                    {
+                        @ToolbarTemplate
+                    }
+
+                    @if (ResolvedShowExportButtons)
+                    {
+                        <div class="dropdown">
+                            <button class="form-select w-auto"
+                                    type="button"
+                                    data-bs-toggle="dropdown"
+                                    aria-expanded="false">
+                                <i class="bi bi-file-earmark-arrow-down me-2"></i>@ResolvedExportButtonText
+                            </button>
+
+                            <div class="dropdown-menu dropdown-menu-end">
+                                @if (ResolvedAllowExportExcel)
+                                {
+                                    <button class="dropdown-item"
+                                            type="button"
+                                            @onclick="ExportExcelAsync">
+                                        <i class="bi bi-file-excel me-2"></i>@ResolvedExportExcelText
+                                    </button>
+                                }
+
+                                @if (ResolvedAllowExportPdf)
+                                {
+                                    <button class="dropdown-item"
+                                            type="button"
+                                            @onclick="ExportPdfAsync">
+                                        <i class="bi bi-file-pdf me-2"></i>@ResolvedExportPdfText
+                                    </button>
+                                }
+
+                                @if (ResolvedAllowExportPrint)
+                                {
+                                    <button class="dropdown-item"
+                                            type="button"
+                                            @onclick="PrintAsync">
+                                        <i class="bi bi-printer me-2"></i>@ResolvedExportPrintText
+                                    </button>
+                                }
+                            </div>
+                        </div>
+                    }
+                </div>
+            </div>
+
+            <div class="app-grid-toolbar-secondary">
+                <div class="app-grid-toolbar-secondary-left">
+                    @if (ShowSelectAllItems)
+                    {
+                        <div class="app-grid-select-all-items form-control pt-2">
+                            <input class="form-check-input"
+                                   type="checkbox"
+                                   id="chk-select-all-items"
+                                   checked="@AreAllProcessedItemsSelected()"
+                                   @ref="_selectAllItemsCheckboxRef"
+                                   @onchange="async e => await SetAllProcessedItemsSelectedAsync(e.Value is bool b && b)"
+                                   @onclick:stopPropagation="true" />
+                            <label class="form-check-label ms-2" for="chk-select-all-items">
+                                @GetSelectAllItemsLabel()
+                            </label>
+                        </div>
+                    }
+                </div>
+
+                <div class="app-grid-toolbar-secondary-right">
+                    @if (ResolvedShowSearchBox)
+                    {
+                        <div class="col input-group justify-content-end">
+                          <span class="input-group-text"><i class="bi bi-search"></i></span>
+                            <input class="form-control"
+                                   placeholder="@ResolvedSearchBoxNullText"
+                                   value="@SearchBoxText"
+                                   @oninput="HandleSearchTextChanged" />
+                        </div>
+                    }
+
+                    @if (ShowColumnChooser)
+                    {
+                        <div class="dropdown col-auto">
+                            <button class="form-select w-auto"
+                                    type="button"
+                                    data-bs-toggle="dropdown"
+                                    data-bs-auto-close="outside"
+                                    aria-expanded="false">
+                                @ColumnChooserButtonText
+                            </button>
+
+                            <div class="dropdown-menu dropdown-menu-end p-3 app-grid-column-chooser">
+                                @foreach (var column in AllColumnsDefinition.Where(c => c.ShowInColumnChooser))
+                                {
+                                    <div class="form-check">
+                                        <input class="form-check-input"
+                                               type="checkbox"
+                                               checked="@column.Visible"
+                                               id="chk-visible-@column.FieldName"
+                                               disabled="@(column.Visible && VisibleColumnsDefinition.Count == 1)"
+                                               @onchange="e => SetColumnVisibility(column.FieldName, e.Value is bool b && b)" />
+                                        <label class="form-check-label" for="chk-visible-@column.FieldName">@column.Caption</label>
+                                    </div>
+                                }
+                            </div>
+                        </div>
+                    }
+                </div>
+            </div>
+        </div>
+
+        <div class="app-grid-card">
+            <div class="table-responsive" @ref="_tableWrapperRef">
+                <table class="table app-grid-table mb-0 align-middle">
+                    <thead>
+                        <tr>
+                            @foreach (var column in VisibleColumnsDefinition)
+                            {
+                                <th class="@GetHeaderCellCssClass(column)" style="@GetWidthStyle(column)">
+                                    @if (column.IsSelectionColumn)
+                                    {
+                                        <input class="form-check-input"
+                                               type="checkbox"
+                                               checked="@AreAllPageItemsSelected()"
+                                               title="@GetSelectCurrentPageTitle()"
+                                               @ref="_selectPageCheckboxRef"
+                                               @onchange="async e => await SetAllPageItemsSelectedAsync(e.Value is bool b && b)"
+                                               @onclick:stopPropagation="true" />
+                                    }
+                                    else if (AllowSort && column.AllowSort)
+                                    {
+                                        <button type="button"
+                                                class="app-grid-sort-button"
+                                                @onclick="() => ToggleSort(column)">
+                                            @if (column.HeaderTemplate is not null)
+                                            {
+                                                @column.HeaderTemplate
+                                            }
+                                            else
+                                            {
+                                                <span>@column.Caption</span>
+                                            }
+
+                                            <i class="@GetSortIcon(column)"></i>
+                                        </button>
+                                    }
+                                    else
+                                    {
+                                        @if (column.HeaderTemplate is not null)
+                                        {
+                                            @column.HeaderTemplate
+                                        }
+                                        else
+                                        {
+                                            @column.Caption
+                                        }
+                                    }
+                                </th>
+                            }
+                        </tr>
+
+                        @if (ResolvedShowFilterRow && VisibleColumnsDefinition.Any(c => c.AllowFilter || c.FilterTemplate is not null))
+                        {
+                            <tr class="app-grid-filter-row">
+                                @foreach (var column in VisibleColumnsDefinition)
+                                {
+                                    <th style="@GetWidthStyle(column)">
+                                        @if (column.FilterTemplate is not null)
+                                        {
+                                            @column.FilterTemplate(BuildFilterContext(column))
+                                        }
+                                        else if (column.AllowFilter)
+                                        {
+                                            @RenderAutoFilter(column)
+                                        }
+                                    </th>
+                                }
+                            </tr>
+                        }
+                    </thead>
+
+                    <tbody>
+                        @if (PagedItems.Any())
+                        {
+                            @foreach (var item in PagedItems)
+                            {
+                                <tr class="@(GetRowCssClass(item))"
+                                    @onclick="() => HandleRowClickAsync(item)"
+                                    @ondblclick="() => HandleRowDoubleClickAsync(item)">
+                                    @foreach (var column in VisibleColumnsDefinition)
+                                    {
+                                        @if (column.IsSelectionColumn)
+                                        {
+                                            <td class="@GetDataCellCssClass(column)" style="@GetWidthStyle(column)">
+                                                <input class="form-check-input"
+                                                       type="checkbox"
+                                                       checked="@IsSelected(item)"
+                                                       @onchange="async e => await SetItemSelectedAsync(item, e.Value is bool b && b)"
+                                                       @onclick:stopPropagation="true" />
+                                            </td>
+                                        }
+                                        else
+                                        {
+                                            <td class="@GetDataCellCssClass(column)" style="@GetWidthStyle(column)">
+                                                @if (column.CellTemplate is not null)
+                                                {
+                                                    @column.CellTemplate(BuildCellContext(item, column))
+                                                }
+                                                else
+                                                {
+                                                    @HighlightAutomaticCell(item, column)
+                                                }
+                                            </td>
+                                        }
+                                    }
+                                </tr>
+                            }
+                        }
+                        else
+                        {
+                            <tr>
+                                <td colspan="@ResolvedColumnCount">
+                                    @EmptyText
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <div class="app-grid-footer">
+            <div class="app-grid-footer-left">
+                <span>@string.Format(ResolvedSummaryTextFormat, StartRecord, EndRecord, TotalItems)</span>
+            </div>
+
+            <div class="app-grid-footer-right">
+                <nav aria-label="Paginación del grid">
+                    <ul class="pagination mb-0">
+                        <li class="page-item @(IsFirstPage ? "disabled" : null)">
+                            <button class="page-link"
+                                    type="button"
+                                    @onclick="PreviousPage"
+                                    disabled="@IsFirstPage">
+                                @ResolvedPreviousPageText
+                            </button>
+                        </li>
+
+                        @foreach (var _page in VisiblePages)
+                        {
+                            <li class="page-item @(_page == CurrentPage ? "active" : null)">
+                                <button class="page-link"
+                                        type="button"
+                                        @onclick="() => GoToPage(_page)">
+                                    @_page
+                                </button>
+                            </li>
+                        }
+
+                        <li class="page-item @(IsLastPage ? "disabled" : null)">
+                            <button class="page-link"
+                                    type="button"
+                                    @onclick="NextPage"
+                                    disabled="@IsLastPage">
+                                @ResolvedNextPageText
+                            </button>
+                        </li>
+                    </ul>
+                </nav>
+            </div>
+        </div>
+    </div>
+</CascadingValue>

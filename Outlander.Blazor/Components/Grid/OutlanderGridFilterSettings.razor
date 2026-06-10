@@ -1,0 +1,49 @@
+@namespace Outlander.Blazor.Components.OutlanderGrid
+@typeparam TItem
+
+@code {
+    [CascadingParameter] internal OutlanderGrid<TItem> OwnerGrid { get; set; } = default!;
+
+    /// <summary>
+    /// Indicates whether the filter row is displayed.
+    /// </summary>
+    [Parameter]
+    public bool Show { get; set; } = true;
+
+    /// <summary>
+    /// Placeholder text used by automatic text filters.
+    /// </summary>
+    [Parameter]
+    public string NullText { get; set; } = "Filtrar...";
+
+    /// <summary>
+    /// Text displayed for the default option in select filters.
+    /// </summary>
+    [Parameter]
+    public string AllText { get; set; } = "Todos";
+
+    /// <summary>
+    /// Placeholder text used for the lower bound of range filters.
+    /// </summary>
+    [Parameter]
+    public string FromText { get; set; } = "Desde";
+
+    /// <summary>
+    /// Placeholder text used for the upper bound of range filters.
+    /// </summary>
+    [Parameter]
+    public string ToText { get; set; } = "Hasta";
+
+    protected override void OnInitialized()
+    {
+        OwnerGrid.RegisterFilterSettings(new OutlanderGridFilterSettingsDefinition
+        {
+            Show = Show,
+            NullText = NullText,
+            AllText = AllText,
+            FromText = FromText,
+            ToText = ToText
+        });
+    }
+
+}

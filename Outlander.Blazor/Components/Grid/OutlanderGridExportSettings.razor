@@ -1,0 +1,105 @@
+@namespace Outlander.Blazor.Components.OutlanderGrid
+@typeparam TItem
+
+@code {
+    [CascadingParameter] internal OutlanderGrid<TItem> OwnerGrid { get; set; } = default!;
+
+    /// <summary>
+    /// Indicates whether export buttons are displayed in the toolbar.
+    /// </summary>
+    [Parameter]
+    public bool ShowButtons { get; set; } = false;
+
+    /// <summary>
+    /// Indicates whether print export is enabled.
+    /// </summary>
+    [Parameter]
+    public bool AllowPrint { get; set; } = true;
+
+    /// <summary>
+    /// Indicates whether Excel export is enabled.
+    /// </summary>
+    [Parameter]
+    public bool AllowExcel { get; set; } = true;
+
+    /// <summary>
+    /// Indicates whether PDF export is enabled.
+    /// </summary>
+    [Parameter]
+    public bool AllowPdf { get; set; } = true;
+
+    /// <summary>
+    /// Base file name used for exported files.
+    /// </summary>
+    [Parameter]
+    public string FileName { get; set; } = "grid-export";
+
+    /// <summary>
+    /// Title used in exported documents.
+    /// </summary>
+    [Parameter]
+    public string Title { get; set; } = "Exportación del grid";
+
+    /// <summary>
+    /// Export mode used for Excel export.
+    /// </summary>
+    [Parameter]
+    public OutlanderGridExportMode ExcelMode { get; set; } = OutlanderGridExportMode.Data;
+
+    /// <summary>
+    /// Export mode used for PDF export.
+    /// </summary>
+    [Parameter]
+    public OutlanderGridExportMode PdfMode { get; set; } = OutlanderGridExportMode.Wysiwyg;
+
+    /// <summary>
+    /// Export mode used for print export.
+    /// </summary>
+    [Parameter]
+    public OutlanderGridExportMode PrintMode { get; set; } = OutlanderGridExportMode.Wysiwyg;
+
+    /// <summary>
+    /// Text displayed on the export dropdown button.
+    /// </summary>
+    [Parameter]
+    public string ButtonText { get; set; } = "Exportar";
+
+    /// <summary>
+    /// Text displayed for the Excel export action.
+    /// </summary>
+    [Parameter]
+    public string ExcelText { get; set; } = "Excel";
+
+    /// <summary>
+    /// Text displayed for the PDF export action.
+    /// </summary>
+    [Parameter]
+    public string PdfText { get; set; } = "PDF";
+
+    /// <summary>
+    /// Text displayed for the print export action.
+    /// </summary>
+    [Parameter]
+    public string PrintText { get; set; } = "Imprimir";
+
+    protected override void OnInitialized()
+    {
+        OwnerGrid.RegisterExportSettings(new OutlanderGridExportSettingsDefinition
+        {
+            ShowButtons = ShowButtons,
+            AllowPrint = AllowPrint,
+            AllowExcel = AllowExcel,
+            AllowPdf = AllowPdf,
+            FileName = FileName,
+            Title = Title,
+            ExcelMode = ExcelMode,
+            PdfMode = PdfMode,
+            PrintMode = PrintMode,
+            ButtonText = ButtonText,
+            ExcelText = ExcelText,
+            PdfText = PdfText,
+            PrintText = PrintText
+        });
+    }
+
+}

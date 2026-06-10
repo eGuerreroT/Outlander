@@ -1,0 +1,37 @@
+@namespace Outlander.Blazor.Components.OutlanderGrid
+@typeparam TItem
+
+@code {
+    [CascadingParameter] internal OutlanderGrid<TItem> OwnerGrid { get; set; } = default!;
+
+    /// <summary>
+    /// Gets or sets the CSS width value for the selection column.
+    /// </summary>
+    [Parameter]
+    public string Width { get; set; } = "48px";
+
+    /// <summary>
+    /// Gets or sets a value indicating whether the grid should allow selecting all processed items from the toolbar.
+    /// </summary>
+    [Parameter]
+    public bool AllowSelectAllItems { get; set; } = false;
+
+    protected override void OnInitialized()
+    {
+        OwnerGrid.RegisterSelectionColumn(new OutlanderGridColumnDefinition<TItem>
+        {
+            FieldName = "__selection",
+            Caption = string.Empty,
+            Width = Width,
+            Visible = true,
+            ShowInColumnChooser = false,
+            AllowSort = false,
+            AllowFilter = false,
+            SearchEnabled = false,
+            IsSelectionColumn = true,
+            AllowSelectAllItems = AllowSelectAllItems,
+            AllowExport = false
+        });
+    }
+
+}

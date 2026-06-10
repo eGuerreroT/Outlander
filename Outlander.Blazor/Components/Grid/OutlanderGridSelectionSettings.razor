@@ -1,0 +1,41 @@
+@namespace Outlander.Blazor.Components.OutlanderGrid
+@typeparam TItem
+
+@code {
+    [CascadingParameter] internal OutlanderGrid<TItem> OwnerGrid { get; set; } = default!;
+
+    /// <summary>
+    /// Gets or sets the text displayed for the select-all-items action.
+    /// </summary>
+    [Parameter]
+    public string AllText { get; set; } = "Seleccionar todo";
+
+    /// <summary>
+    /// Gets or sets the text displayed for the select-current-page action.
+    /// </summary>
+    [Parameter]
+    public string CurrentPageText { get; set; } = "Seleccionar página actual";
+
+    /// <summary>
+    /// Gets or sets the composite format string used to display the number of selected items.
+    /// </summary>
+    [Parameter]
+    public string SelectedItemsTextFormat { get; set; } = "{0} Seleccionados";
+
+    /// <summary>
+    /// Gets or sets the composite format string used to display the number of selected items in the current page.
+    /// </summary>
+    [Parameter]
+    public string SelectedPageItemsTextFormat { get; set; } = "Seleccionados en esta página: {0}";
+
+    protected override void OnInitialized()
+    {
+        OwnerGrid.RegisterSelectionSettings(new OutlanderGridSelectionSettingsDefinition
+        {
+            AllText = AllText,
+            CurrentPageText = CurrentPageText,
+            SelectedItemsTextFormat = SelectedItemsTextFormat,
+            SelectedPageItemsTextFormat = SelectedPageItemsTextFormat
+        });
+    }
+}

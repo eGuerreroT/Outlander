@@ -1,0 +1,154 @@
+@namespace Outlander.Blazor.Components.OutlanderGrid
+@typeparam TItem
+
+@code {
+    [CascadingParameter] internal OutlanderGrid<TItem> OwnerGrid { get; set; } = default!;
+
+    /// <summary>
+    /// Name of the bound field in <typeparamref name="TItem"/>.
+    /// </summary>
+    [Parameter, EditorRequired]
+    public string FieldName { get; set; } = string.Empty;
+
+    /// <summary>
+    /// Text displayed in the column header. If not specified, <see cref="FieldName"/> is used.
+    /// </summary>
+    [Parameter]
+    public string Caption { get; set; } = string.Empty;
+
+    /// <summary>
+    /// Indicates whether the column is visible.
+    /// </summary>
+    [Parameter]
+    public bool Visible { get; set; } = true;
+
+    /// <summary>
+    /// Indicates whether the column can be toggled in the column chooser.
+    /// </summary>
+    [Parameter]
+    public bool ShowInColumnChooser { get; set; } = true;
+
+    /// <summary>
+    /// Indicates whether sorting is enabled for the column.
+    /// </summary>
+    [Parameter]
+    public bool AllowSort { get; set; } = true;
+
+    /// <summary>
+    /// Indicates whether filtering is enabled for the column.
+    /// </summary>
+    [Parameter]
+    public bool AllowFilter { get; set; } = true;
+
+    /// <summary>
+    /// Indicates whether the column participates in global search.
+    /// </summary>
+    [Parameter]
+    public bool SearchEnabled { get; set; } = true;
+
+    /// <summary>
+    /// CSS width value for the column.
+    /// </summary>
+    [Parameter]
+    public string? Width { get; set; }
+
+    /// <summary>
+    /// Filter mode used by the column.
+    /// </summary>
+    [Parameter]
+    public GridFilterMode FilterMode { get; set; } = GridFilterMode.Auto;
+
+    /// <summary>
+    /// Determines how sorting is resolved for the column.
+    /// </summary>
+    [Parameter]
+    public GridColumnSortMode SortMode { get; set; } = GridColumnSortMode.Value;
+
+    /// <summary>
+    /// Initial sort order applied to the column.
+    /// </summary>
+    [Parameter]
+    public GridColumnSortOrder SortOrder { get; set; } = GridColumnSortOrder.None;
+
+    /// <summary>
+    /// Initial sort priority when multiple columns define a default sort.
+    /// </summary>
+    [Parameter]
+    public int? SortIndex { get; set; }
+
+    /// <summary>
+    /// Custom selector used to obtain the display text used for sorting.
+    /// </summary>
+    [Parameter]
+    public Func<TItem, string?>? SortTextSelector { get; set; }
+
+    /// <summary>
+    /// Custom selector used to obtain the display text used for filtering and search.
+    /// </summary>
+    [Parameter]
+    public Func<TItem, string?>? FilterTextSelector { get; set; }
+
+    /// <summary>
+    /// Custom header template for the column.
+    /// </summary>
+    [Parameter]
+    public RenderFragment? HeaderTemplate { get; set; }
+
+    /// <summary>
+    /// Custom filter template for the column.
+    /// </summary>
+    [Parameter]
+    public RenderFragment<OutlanderGridFilterContext>? FilterTemplate { get; set; }
+
+    /// <summary>
+    /// Custom cell template for the column.
+    /// </summary>
+    [Parameter]
+    public RenderFragment<OutlanderGridCellContext<TItem>>? CellTemplate { get; set; }
+
+    /// <summary>
+    /// Indicates whether the column is included in export operations.
+    /// </summary>
+    [Parameter]
+    public bool AllowExport { get; set; } = true;
+
+    /// <summary>
+    /// Caption used when exporting the column.
+    /// </summary>
+    [Parameter]
+    public string? ExportCaption { get; set; }
+
+    /// <summary>
+    /// Custom selector used to extract the exported value from a row item.
+    /// </summary>
+    [Parameter]
+    public Func<TItem, object?>? ExportValueSelector { get; set; }
+
+    protected override void OnInitialized()
+    {
+        OwnerGrid.RegisterColumn(new OutlanderGridColumnDefinition<TItem>
+        {
+            FieldName = FieldName,
+            Caption = string.IsNullOrWhiteSpace(Caption) ? FieldName : Caption,
+            Visible = Visible,
+            ShowInColumnChooser = ShowInColumnChooser,
+            AllowSort = AllowSort,
+            AllowFilter = AllowFilter,
+            SearchEnabled = SearchEnabled,
+            Width = Width,
+            FilterMode = FilterMode,
+            SortMode = SortMode,
+            SortOrder = SortOrder,
+            SortIndex = SortIndex,
+            SortTextSelector = SortTextSelector,
+            FilterTextSelector = FilterTextSelector,
+            AllowExport = AllowExport,
+            ExportCaption = ExportCaption,
+            ExportValueSelector = ExportValueSelector,
+            HeaderTemplate = HeaderTemplate,
+            FilterTemplate = FilterTemplate,
+            CellTemplate = CellTemplate
+        });
+    }
+
+}

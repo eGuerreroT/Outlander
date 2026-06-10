@@ -1,0 +1,43 @@
+.tags-select-box {
+    min-height: 46px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 10px;
+    cursor: pointer;
+}
+
+.tags-select-values {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+}
+
+.tag-chip {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    font-weight: 500;
+}
+
+.btn-close-chip {
+    border: 0;
+    background: transparent;
+    color: inherit;
+    padding: 0;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.tags-select-caret {
+    margin-left: auto;
+    color: var(--bs-secondary-color);
+}
+
+.tags-dropdown {
+    margin-top: 6px;
+    border-radius: 12px;
+    max-height: 240px;
+    overflow-y: auto;
+}

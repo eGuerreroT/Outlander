@@ -1,0 +1,42 @@
+@namespace Outlander.Blazor.Components.OutlanderGrid
+@typeparam TItem
+
+@code {
+    [CascadingParameter] internal OutlanderGrid<TItem> OwnerGrid { get; set; } = default!;
+
+    /// <summary>
+    /// Indicates whether the global search box is displayed.
+    /// </summary>
+    [Parameter]
+    public bool Show { get; set; } = true;
+
+    /// <summary>
+    /// Placeholder text displayed in the global search box.
+    /// </summary>
+    [Parameter]
+    public string NullText { get; set; } = "Buscar...";
+
+    /// <summary>
+    /// Init value for the global search box.
+    /// </summary>
+    [Parameter]
+    public string Text { get; set; } = "";
+
+    /// <summary>
+    /// Determines how the global search text is interpreted.
+    /// </summary>
+    [Parameter]
+    public GridSearchTextParseMode ParseMode { get; set; } = GridSearchTextParseMode.GroupWordsByAnd;
+
+    protected override void OnInitialized()
+    {
+        OwnerGrid.RegisterSearchSettings(new OutlanderGridSearchSettingsDefinition
+        {
+            Show = Show,
+            NullText = NullText,
+            ParseMode = ParseMode,
+            Text = Text,
+        });
+    }
+
+}

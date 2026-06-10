@@ -1,0 +1,80 @@
+<div class="mb-3 position-relative">
+    <label class="col-form-label fw-medium">@Caption</label>
+
+    <div class="form-control tags-select-box" @onclick="ToggleDropdown">
+        <div class="tags-select-values">
+            @if (SelectedTags.Any())
+            {
+                @foreach (var tag in SelectedTags)
+                {
+                    <span class="bg-gradient bg-opacity-50 bg-warning border border-warning-subtle ms-2 px-2 py-1 rounded-pill small text-bg-warning">
+                        @tag
+                        <button type="button" class="btn-close-chip" @onclick:stopPropagation="true" @onclick="() => RemoveTag(tag)">
+                            <i class="bi bi-x"></i>
+                        </button>
+                    </span>
+                }
+            }
+            else
+            {
+                <span class="text-body-secondary">Selecciona etiquetas...</span>
+            }
+        </div>
+
+        <span class="tags-select-caret">
+            <i class="bi bi-chevron-down"></i>
+        </span>
+    </div>
+
+    @if (DropdownOpen)
+    {
+        <div class="dropdown-menu show w-100 tags-dropdown">
+            @foreach (var tag in AvailableTags)
+            {
+                <button type="button"
+                        class="dropdown-item d-flex align-items-center justify-content-between"
+                        @onclick="() => ToggleTag(tag)">
+                    <span>@tag</span>
+
+                    @if (SelectedTags.Contains(tag))
+                    {
+                        <i class="bi bi-check2 text-primary"></i>
+                    }
+                </button>
+            }
+        </div>
+    }
+</div>
+
+@code {
+    private bool DropdownOpen;
+
+    [Parameter] public string Caption { get; set; } = "Etiquetas";
+    [Parameter] public List<string> AvailableTags { get; set; } = new();
+    [Parameter] public List<string> SelectedTags { get; set; } = new();
+    [Parameter] public EventCallback<List<string>> SelectedTagsChanged { get; set; }
+
+    private void ToggleDropdown()
+    {
+        DropdownOpen = !DropdownOpen;
+    }
+
+    private async Task ToggleTag(string tag)
+    {
+        if (SelectedTags.Contains(tag))
+            SelectedTags.Remove(tag);
+        else
+            SelectedTags.Add(tag);
+
+        await SelectedTagsChanged.InvokeAsync(SelectedTags);
+    }
+
+    private async Task RemoveTag(string tag)
+    {
+        if (SelectedTags.Contains(tag))
+        {
+            SelectedTags.Remove(tag);
+            await SelectedTagsChanged.InvokeAsync(SelectedTags);
+        }
+    }
+}

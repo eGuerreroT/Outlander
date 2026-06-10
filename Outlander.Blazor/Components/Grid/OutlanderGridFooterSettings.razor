@@ -1,0 +1,35 @@
+@namespace Outlander.Blazor.Components.OutlanderGrid
+@typeparam TItem
+
+@code {
+    [CascadingParameter] internal OutlanderGrid<TItem> OwnerGrid { get; set; } = default!;
+
+    /// <summary>
+    /// Composite format string used in the footer summary.
+    /// </summary>
+    [Parameter]
+    public string SummaryTextFormat { get; set; } = "Mostrando {0} - {1} de {2} registros";
+
+    /// <summary>
+    /// Text displayed on the previous page button.
+    /// </summary>
+    [Parameter]
+    public string PreviousPageText { get; set; } = "Anterior";
+
+    /// <summary>
+    /// Text displayed on the next page button.
+    /// </summary>
+    [Parameter]
+    public string NextPageText { get; set; } = "Siguiente";
+
+    protected override void OnInitialized()
+    {
+        OwnerGrid.RegisterFooterSettings(new OutlanderGridFooterSettingsDefinition
+        {
+            SummaryTextFormat = SummaryTextFormat,
+            PreviousPageText = PreviousPageText,
+            NextPageText = NextPageText
+        });
+    }
+
+}
