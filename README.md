@@ -1,6 +1,6 @@
 
 <p align="center">
-  <img src="Assets/Logo.png" width="128" />
+  <img src="Assets/Social_Media.png" width="128" />
 </p>
 
 <h1 align="center">Outlander.Blazor</h1>
