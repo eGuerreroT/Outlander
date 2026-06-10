@@ -37,6 +37,18 @@ The first component included in the library is a powerful data grid with support
 
 ---
 
+> [!IMPORTANT]
+> Outlander.Blazor currently uses Bootstrap Icons internally.
+>
+> The library automatically loads Bootstrap Icons through its stylesheet using:
+>
+> ```css
+> @import url('https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css');
+> ```
+>
+> Internet access to the CDN is required for icons to be displayed correctly.
+> A self-contained icon system is planned for a future release.
+
 ## Installation
 
 Install the package from NuGet:
