@@ -1,4 +1,4 @@
-namespace Outlander.Blazor.Components.OutlanderGrid;
+namespace Outlander.Blazor.Components;
 
 public partial class OutlanderGrid<TItem>
 {
@@ -31,7 +31,7 @@ public partial class OutlanderGrid<TItem>
 
         if (column.IsSelectionColumn || !column.AllowExport)
         {
-            classes.Add("app-grid-export-ignore");
+            classes.Add("outlander-grid-export-ignore");
         }
 
         return string.Join(" ", classes);
@@ -43,7 +43,7 @@ public partial class OutlanderGrid<TItem>
 
         if (column.IsSelectionColumn || !column.AllowExport)
         {
-            classes.Add("app-grid-export-ignore");
+            classes.Add("outlander-grid-export-ignore");
         }
 
         return string.Join(" ", classes);

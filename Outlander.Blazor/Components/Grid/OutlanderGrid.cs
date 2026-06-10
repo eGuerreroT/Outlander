@@ -1,4 +1,4 @@
-namespace Outlander.Blazor.Components.OutlanderGrid;
+namespace Outlander.Blazor.Components;
 
 using Microsoft.AspNetCore.Components;
 

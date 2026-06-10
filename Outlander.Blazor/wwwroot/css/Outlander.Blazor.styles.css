@@ -1,0 +1,21 @@
+﻿/* Bootstrap Icons Dependency */
+@import url('https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css');
+
+/* Outlander Theme */
+:root {
+    --outlander-text-primary: #1f2c45;
+    --outlander-border-color: #e5eaf3;
+    --outlander-bg-primary: #ffffff;
+    --outlander-bg-header: #f8f9fa;
+    --outlander-hover-bg: #fcfdff;
+    --outlander-text-secondary: #5b6d8b;
+}
+
+    :root[data-bs-theme="dark"] {
+        --outlander-text-primary: #d1d9ea;
+        --outlander-border-color: #313c4e;
+        --outlander-bg-primary: #1b2637;
+        --outlander-bg-header: #111723;
+        --outlander-hover-bg: rgba(255,255,255,0.1);
+        --outlander-text-secondary: #a6b3c5;
+    }

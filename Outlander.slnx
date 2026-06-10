@@ -1,3 +1,4 @@
 <Solution>
   <Project Path="Outlander.Blazor/Outlander.Blazor.csproj" />
+  <Project Path="Outlander.Demo/Outlander.Demo.csproj" Id="96b439e0-2ef5-43c4-987f-50342c7d77d8" />
 </Solution>

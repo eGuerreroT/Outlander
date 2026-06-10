@@ -257,7 +257,7 @@ builder.Services.AddOutlander();
                             AllowExport="false"
                             Width="90px">
             <CellTemplate Context="cell">
-                <button class="btn btn-default btn-default-sm app-grid-export-ignore">
+                <button class="btn btn-default btn-default-sm outlander-grid-export-ignore">
                     <i class="bi bi-download"></i>
                 </button>
             </CellTemplate>

@@ -11,10 +11,20 @@
     <PackageTags>Blazor;components;Blazor.components;Outlander;</PackageTags>
     <PackageIcon>Icon.png</PackageIcon>
     <Copyright>Copyright (c) 2026 Enrique Guerrero</Copyright>
+    <Title>Outlander.Blazor</Title>
+    <Authors>Enrique Guerrero, Contributors</Authors>
+    <PackageLicenseFile>LICENSE</PackageLicenseFile>
+    <PackageRequireLicenseAcceptance>True</PackageRequireLicenseAcceptance>
+    <GeneratePackageOnBuild>True</GeneratePackageOnBuild>
+	<VersionPrefix>1.0.4</VersionPrefix>
   </PropertyGroup>
 
   <ItemGroup>
     <None Include="..\Assets\Icon.png">
+      <Pack>True</Pack>
+      <PackagePath>\</PackagePath>
+    </None>
+    <None Include="..\LICENSE">
       <Pack>True</Pack>
       <PackagePath>\</PackagePath>
     </None>

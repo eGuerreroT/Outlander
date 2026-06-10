@@ -1,4 +1,4 @@
-@namespace Outlander.Blazor.Components.OutlanderGrid
+@namespace Outlander.Blazor.Components
 
 @inherits Base.OutlanderComponentBase
 
@@ -18,13 +18,13 @@
         @Columns
     </div>
 
-    <div class="app-grid @(IsRowInteractive ? "app-grid-interactive-rows" : null) @(AllowHotTrackRow ? "allow-hot-track-row" : null)">
-        <div class="app-grid-toolbar">
-            <div class="app-grid-toolbar-main">
-                <div class="app-grid-toolbar-left">
+    <div class="outlander-grid @(IsRowInteractive ? "outlander-grid-interactive-rows" : null) @(AllowHotTrackRow ? "allow-hot-track-row" : null)">
+        <div class="outlander-grid-toolbar">
+            <div class="outlander-grid-toolbar-main">
+                <div class="outlander-grid-toolbar-left">
                     @if (ShowPageSizeSelector)
                     {
-                        <div class="app-grid-page-size">
+                        <div class="outlander-grid-page-size">
                             <label class="form-label mb-0">@PageSizeLabelText</label>
                             <select class="form-select form-select-sm"
                                     value="@PageSize"
@@ -39,7 +39,7 @@
                     }
                 </div>
 
-                <div class="app-grid-toolbar-right">
+                <div class="outlander-grid-toolbar-right">
                     @if (ToolbarTemplate is not null)
                     {
                         @ToolbarTemplate
@@ -88,11 +88,11 @@
                 </div>
             </div>
 
-            <div class="app-grid-toolbar-secondary">
-                <div class="app-grid-toolbar-secondary-left">
+            <div class="outlander-grid-toolbar-secondary">
+                <div class="outlander-grid-toolbar-secondary-left">
                     @if (ShowSelectAllItems)
                     {
-                        <div class="app-grid-select-all-items form-control pt-2">
+                        <div class="outlander-grid-select-all-items form-control pt-2">
                             <input class="form-check-input"
                                    type="checkbox"
                                    id="chk-select-all-items"
@@ -107,7 +107,7 @@
                     }
                 </div>
 
-                <div class="app-grid-toolbar-secondary-right">
+                <div class="outlander-grid-toolbar-secondary-right">
                     @if (ResolvedShowSearchBox)
                     {
                         <div class="col input-group justify-content-end">
@@ -130,7 +130,7 @@
                                 @ColumnChooserButtonText
                             </button>
 
-                            <div class="dropdown-menu dropdown-menu-end p-3 app-grid-column-chooser">
+                            <div class="dropdown-menu dropdown-menu-end p-3 outlander-grid-column-chooser">
                                 @foreach (var column in AllColumnsDefinition.Where(c => c.ShowInColumnChooser))
                                 {
                                     <div class="form-check">
@@ -150,9 +150,9 @@
             </div>
         </div>
 
-        <div class="app-grid-card">
+        <div class="outlander-grid-card">
             <div class="table-responsive" @ref="_tableWrapperRef">
-                <table class="table app-grid-table mb-0 align-middle">
+                <table class="table outlander-grid-table mb-0 align-middle">
                     <thead>
                         <tr>
                             @foreach (var column in VisibleColumnsDefinition)
@@ -171,7 +171,7 @@
                                     else if (AllowSort && column.AllowSort)
                                     {
                                         <button type="button"
-                                                class="app-grid-sort-button"
+                                                class="outlander-grid-sort-button"
                                                 @onclick="() => ToggleSort(column)">
                                             @if (column.HeaderTemplate is not null)
                                             {
@@ -202,7 +202,7 @@
 
                         @if (ResolvedShowFilterRow && VisibleColumnsDefinition.Any(c => c.AllowFilter || c.FilterTemplate is not null))
                         {
-                            <tr class="app-grid-filter-row">
+                            <tr class="outlander-grid-filter-row">
                                 @foreach (var column in VisibleColumnsDefinition)
                                 {
                                     <th style="@GetWidthStyle(column)">
@@ -270,12 +270,12 @@
             </div>
         </div>
 
-        <div class="app-grid-footer">
-            <div class="app-grid-footer-left">
+        <div class="outlander-grid-footer">
+            <div class="outlander-grid-footer-left">
                 <span>@string.Format(ResolvedSummaryTextFormat, StartRecord, EndRecord, TotalItems)</span>
             </div>
 
-            <div class="app-grid-footer-right">
+            <div class="outlander-grid-footer-right">
                 <nav aria-label="Paginación del grid">
                     <ul class="pagination mb-0">
                         <li class="page-item @(IsFirstPage ? "disabled" : null)">

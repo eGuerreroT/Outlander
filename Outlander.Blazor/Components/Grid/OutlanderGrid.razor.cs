@@ -2,7 +2,7 @@ using Microsoft.AspNetCore.Components;
 using Microsoft.JSInterop;
 using System.Reflection;
 
-namespace Outlander.Blazor.Components.OutlanderGrid;
+namespace Outlander.Blazor.Components;
 
 public partial class OutlanderGrid<TItem> : IAsyncDisposable
 {
@@ -415,8 +415,8 @@ public partial class OutlanderGrid<TItem> : IAsyncDisposable
     {
         if (firstRender)
         {
-            _module = await JS.InvokeAsync<IJSObjectReference>("import", "./Components/Grid/OutlanderGrid.razor.js");
-            
+            _module = await JS.InvokeAsync<IJSObjectReference>("import", "/_content/Outlander.Blazor/Components/Grid/OutlanderGrid.razor.js");
+
             await _module.InvokeVoidAsync("ensureBootStrapLibraries");
         }
 

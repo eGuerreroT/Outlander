@@ -1,7 +1,7 @@
 using Microsoft.AspNetCore.Components;
 using System.Reflection;
 
-namespace Outlander.Blazor.Components.OutlanderGrid;
+namespace Outlander.Blazor.Components;
 
 public partial class OutlanderGrid<TItem>
 {
@@ -166,7 +166,7 @@ public partial class OutlanderGrid<TItem>
                 var inputType = GetRangeInputType(column);
 
                 builder.OpenElement(seq++, "div");
-                builder.AddAttribute(seq++, "class", "app-grid-range-filter");
+                builder.AddAttribute(seq++, "class", "outlander-grid-range-filter");
 
                 builder.OpenElement(seq++, "input");
                 builder.AddAttribute(seq++, "class", "form-control form-control-sm");

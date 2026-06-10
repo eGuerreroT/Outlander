@@ -1,10 +1,9 @@
-const PACKAGE_ID = "AdminTemplate.Web.Components";
+const PACKAGE_ID = "Outlander.Blazor";
 
 let exportLibrariesPromise = null;
 
 function getAssetUrl(relativePath) {
-    //return `./_content/${PACKAGE_ID}/${relativePath}`;
-    return `/${relativePath}`;
+    return `./_content/${PACKAGE_ID}/${relativePath}`;
 }
 
 function loadScript(src) {
@@ -428,7 +427,7 @@ function removeIgnoredColumns(table) {
     const ignoredIndexes = [];
 
     headerCells.forEach((cell, index) => {
-        if (cell.classList.contains("app-grid-export-ignore") || cell.matches("[data-export-ignore='true']")) {
+        if (cell.classList.contains("outlander-grid-export-ignore") || cell.matches("[data-export-ignore='true']")) {
             ignoredIndexes.push(index);
         }
     });
@@ -456,19 +455,19 @@ function cleanupClonedGridTable(container) {
 
     // 3. Eliminar elementos internos marcados explícitamente
     removeNodes(container, [
-        ".app-grid-export-ignore",
+        ".outlander-grid-export-ignore",
         "[data-export-ignore='true']"
     ]);
 
     // 4. Quitar elementos interactivos residuales no deseados
     removeNodes(container, [
-        ".app-grid-footer",
-        ".app-grid-pager",
-        ".app-grid-toolbar",
-        ".app-grid-column-sort",
-        ".app-grid-column-filter",
-        ".app-grid-column-menu",
-        ".app-grid-header-icon",
+        ".outlander-grid-footer",
+        ".outlander-grid-pager",
+        ".outlander-grid-toolbar",
+        ".outlander-grid-column-sort",
+        ".outlander-grid-column-filter",
+        ".outlander-grid-column-menu",
+        ".outlander-grid-header-icon",
         ".dropdown-menu"
     ]);
 
@@ -477,7 +476,7 @@ function cleanupClonedGridTable(container) {
         "input[type='checkbox']",
         "input[type='radio']",
         "input[type='search']",
-        ".app-grid-sort-button i"
+        ".outlander-grid-sort-button i"
     ]);
 
     // 6. Limpiar atributos interactivos
@@ -509,7 +508,7 @@ export function printGridWysiwyg(tableWrapperElement, title) {
     }
 
     const clonedTable = table.cloneNode(true);
-    clonedTable.classList.add("app-grid-card");
+    clonedTable.classList.add("outlander-grid-card");
 
     const tempContainer = document.createElement("div");
     tempContainer.style.padding = "10px";
@@ -538,7 +537,7 @@ export function printGridWysiwyg(tableWrapperElement, title) {
                         padding: 24px;
                     }
 
-                    .app-grid-print-title {
+                    .outlander-grid-print-title {
                         font-size: 22px;
                         font-weight: 700;
                         margin-bottom: 16px;
@@ -554,7 +553,7 @@ export function printGridWysiwyg(tableWrapperElement, title) {
                 </style>
             </head>
             <body>
-                ${title ? `<div class="app-grid-print-title">${escapeHtml(title)}</div>` : ""}
+                ${title ? `<div class="outlander-grid-print-title">${escapeHtml(title)}</div>` : ""}
                 ${tempContainer.outerHTML}
             </body>
         </html>
@@ -692,7 +691,7 @@ export async function exportPdfWysiwyg(tableWrapperElement, fileName, title) {
     // Ancho utilizable dentro de márgenes
     const imgWidth = pageWidth - (margin * 2);
 
-    cleanedTable.classList.add('app-grid-card');
+    cleanedTable.classList.add('outlander-grid-card');
     document.body.appendChild(tempContainer);
 
     const canvas = await html2canvas(tempContainer, {

@@ -3,7 +3,7 @@ using System.Globalization;
 using System.Net;
 using System.Text;
 
-namespace Outlander.Blazor.Components.OutlanderGrid;
+namespace Outlander.Blazor.Components;
 
 public partial class OutlanderGrid<TItem>
 {

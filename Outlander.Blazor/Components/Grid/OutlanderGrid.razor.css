@@ -1,10 +1,10 @@
-.app-grid {
+.outlander-grid {
     display: flex;
     flex-direction: column;
     gap: 14px;
 }
 
-.app-grid-footer {
+.outlander-grid-footer {
     display: flex;
     align-items: center;
     justify-content: space-between;
@@ -12,14 +12,14 @@
     flex-wrap: wrap;
 }
 
-.app-grid-toolbar {
+.outlander-grid-toolbar {
     display: flex;
     flex-direction: column;
     gap: 12px;
     margin-bottom: 0.25rem;
 }
 
-.app-grid-toolbar-main {
+.outlander-grid-toolbar-main {
     display: flex;
     align-items: center;
     justify-content: space-between;
@@ -27,14 +27,14 @@
     flex-wrap: wrap;
 }
 
-.app-grid-toolbar-left,
-.app-grid-toolbar-right {
+.outlander-grid-toolbar-left,
+.outlander-grid-toolbar-right {
     display: flex;
     align-items: center;
     gap: 12px;
 }
 
-.app-grid-toolbar-secondary {
+.outlander-grid-toolbar-secondary {
     display: flex;
     align-items: center;
     justify-content: space-between;
@@ -42,111 +42,111 @@
     flex-wrap: wrap;
 }
 
-    .app-grid-toolbar-secondary .form-control,
-    .app-grid-toolbar-secondary .form-select {
+    .outlander-grid-toolbar-secondary .form-control,
+    .outlander-grid-toolbar-secondary .form-select {
         max-width: 620px;
     }
 
-.app-grid-toolbar-secondary-left {
+.outlander-grid-toolbar-secondary-left {
     justify-content: start;
 }
 
-.app-grid-toolbar-secondary-left,
-.app-grid-toolbar-secondary-right {
+.outlander-grid-toolbar-secondary-left,
+.outlander-grid-toolbar-secondary-right {
     display: flex;
     align-items: center;
     gap: 10px;
     flex-wrap: wrap;
 }
 
-.app-grid-toolbar-secondary-right {
+.outlander-grid-toolbar-secondary-right {
     flex-grow: 1;
     justify-content: end;
 }
 
-.app-grid-select-all-items {
+.outlander-grid-select-all-items {
     margin-bottom: 0;
 }
 
-.app-grid-page-size {
+.outlander-grid-page-size {
     display: inline-flex;
     align-items: center;
     gap: 10px;
-    color: var(--text-primary);
+    color: var(--outlander-text-primary);
     font-size: 14px;
 }
 
-    .app-grid-page-size select {
+    .outlander-grid-page-size select {
         width: 84px;
     }
 
-.app-grid-card {
-    border: 1px solid var(--border-color);
+.outlander-grid-card {
+    border: 1px solid var(--outlander-border-color);
     border-radius: 14px;
     overflow: hidden;
-    background: var(--bg-primary);
+    background: var(--outlander-bg-primary);
 }
 
-.app-grid-table thead th {
+.outlander-grid-table thead th {
     padding: 14px;
-    background: var(--bg-header);
-    color: var(--text-primary);
+    background: var(--outlander-bg-header);
+    color: var(--outlander-text-primary);
     font-size: 14px;
     font-weight: 700;
     white-space: nowrap;
-    border-bottom: 1px solid var(--border-color);
+    border-bottom: 1px solid var(--outlander-border-color);
     vertical-align: middle;
     text-align: center;
 }
 
-.app-grid-table tbody td {
+.outlander-grid-table tbody td {
     padding: 14px;
-    background: var(--bg-primary);
-    color: var(--text-primary);
+    background: var(--outlander-bg-primary);
+    color: var(--outlander-text-primary);
     font-size: 14px;
     vertical-align: middle;
-    border-bottom: 1px solid var(--border-color);
+    border-bottom: 1px solid var(--outlander-border-color);
 }
 
-.app-grid-table tbody tr:hover {
-    background: var(--hover-bg);
+.outlander-grid-table tbody tr:hover {
+    background: var(--outlander-hover-bg);
 }
 
-.app-grid-filter-row th,
-.app-grid-filter-row td {
+.outlander-grid-filter-row th,
+.outlander-grid-filter-row td {
     padding: 10px 14px;
-    background: var(--bg-primary);
-    border-bottom: 1px solid var(--border-color);
+    background: var(--outlander-bg-primary);
+    border-bottom: 1px solid var(--outlander-border-color);
 }
 
-.app-grid-filter-row .form-control,
-.app-grid-filter-row .form-select {
+.outlander-grid-filter-row .form-control,
+.outlander-grid-filter-row .form-select {
     min-height: 36px;
     font-size: 13px;
 }
 
-.app-grid-empty {
+.outlander-grid-empty {
     text-align: center;
     padding: 28px !important;
-    color: var(--text-secondary);
+    color: var(--outlander-text-secondary);
 }
 
-.app-grid-footer-left {
-    color: var(--text-secondary);
+.outlander-grid-footer-left {
+    color: var(--outlander-text-secondary);
     font-size: 14px;
 }
 
-.app-grid-footer-right {
+.outlander-grid-footer-right {
     display: flex;
     align-items: center;
     gap: 10px;
 }
 
-.app-grid-footer .pagination {
+.outlander-grid-footer .pagination {
     margin-bottom: 0;
 }
 
-.app-grid-sort-button {
+.outlander-grid-sort-button {
     display: inline-flex;
     align-items: center;
     gap: 8px;
@@ -160,58 +160,58 @@
     text-align: left;
 }
 
-    .app-grid-sort-button:focus {
+    .outlander-grid-sort-button:focus {
         outline: none;
         box-shadow: none;
     }
 
-    .app-grid-sort-button i {
+    .outlander-grid-sort-button i {
         font-size: 12px;
         opacity: 0.8;
     }
 
-.app-grid-range-filter {
+.outlander-grid-range-filter {
     display: flex;
     flex-direction: column;
     gap: 6px;
 }
 
-.app-grid-filter-warning {
+.outlander-grid-filter-warning {
     display: flex;
     align-items: center;
     justify-content: center;
     min-height: 31px;
 }
 
-    .app-grid-filter-warning i {
+    .outlander-grid-filter-warning i {
         color: #b26a00;
         font-size: 14px;
         cursor: help;
     }
 
-.app-grid-column-chooser {
+.outlander-grid-column-chooser {
     min-width: 220px;
     max-height: 320px;
     overflow-y: auto;
 }
 
-    .app-grid-column-chooser .form-check + .form-check {
+    .outlander-grid-column-chooser .form-check + .form-check {
         margin-top: 8px;
     }
 
-.app-grid-table tbody tr {
+.outlander-grid-table tbody tr {
     cursor: default;
 }
 
-    .app-grid-table tbody tr.app-grid-row-focused td {
+    .outlander-grid-table tbody tr.outlander-grid-row-focused td {
         background: rgba(13, 110, 253, 0.08);
     }
 
-.app-grid.allow-hot-track-row .app-grid-table tbody tr:hover td {
+.outlander-grid.allow-hot-track-row .outlander-grid-table tbody tr:hover td {
     background: rgba(13, 110, 253, 0.12);
 }
 
-.app-grid.app-grid-interactive-rows .app-grid-table tbody tr {
+.outlander-grid.outlander-grid-interactive-rows .outlander-grid-table tbody tr {
     cursor: pointer;
 }
 
@@ -220,16 +220,16 @@
 }
 
 @media (max-width: 768px) {
-    .app-grid-footer {
+    .outlander-grid-footer {
         flex-direction: column;
         align-items: stretch;
     }
 
-    .app-grid-footer-right {
+    .outlander-grid-footer-right {
         justify-content: center;
     }
 
-    .app-grid-page-size {
+    .outlander-grid-page-size {
         justify-content: space-between;
     }
 }

@@ -1,4 +1,4 @@
-namespace Outlander.Blazor.Components.OutlanderGrid;
+namespace Outlander.Blazor.Components;
 
 public partial class OutlanderGrid<TItem>
 {

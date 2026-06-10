@@ -1,4 +1,4 @@
-namespace Outlander.Blazor.Components.OutlanderGrid;
+namespace Outlander.Blazor.Components;
 
 public partial class OutlanderGrid<TItem>
 {
@@ -27,7 +27,7 @@ public partial class OutlanderGrid<TItem>
         if (!AllowFocusedRow)
             return string.Empty;
 
-        return IsFocusedRow(item) ? "app-grid-row-focused" : string.Empty;
+        return IsFocusedRow(item) ? "outlander-grid-row-focused" : string.Empty;
     }
 
     private async Task HandleRowClickAsync(TItem item)
