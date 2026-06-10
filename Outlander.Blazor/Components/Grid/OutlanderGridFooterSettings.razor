@@ -8,19 +8,19 @@
     /// Composite format string used in the footer summary.
     /// </summary>
     [Parameter]
-    public string SummaryTextFormat { get; set; } = "Mostrando {0} - {1} de {2} registros";
+    public string SummaryTextFormat { get; set; } = "Showing {0} - {1} of {2} records";
 
     /// <summary>
     /// Text displayed on the previous page button.
     /// </summary>
     [Parameter]
-    public string PreviousPageText { get; set; } = "Anterior";
+    public string PreviousPageText { get; set; } = "Prev";
 
     /// <summary>
     /// Text displayed on the next page button.
     /// </summary>
     [Parameter]
-    public string NextPageText { get; set; } = "Siguiente";
+    public string NextPageText { get; set; } = "Next";
 
     protected override void OnInitialized()
     {

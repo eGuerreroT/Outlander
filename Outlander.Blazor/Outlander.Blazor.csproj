@@ -16,7 +16,7 @@
     <PackageLicenseFile>LICENSE</PackageLicenseFile>
     <PackageRequireLicenseAcceptance>True</PackageRequireLicenseAcceptance>
     <GeneratePackageOnBuild>True</GeneratePackageOnBuild>
-	<VersionPrefix>1.0.4</VersionPrefix>
+	<VersionPrefix>1.0.7</VersionPrefix>
   </PropertyGroup>
 
   <ItemGroup>

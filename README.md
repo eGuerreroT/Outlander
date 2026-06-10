@@ -47,6 +47,7 @@ The first component included in the library is a powerful data grid with support
 > ```
 >
 > Internet access to the CDN is required for icons to be displayed correctly.
+>
 > A self-contained icon system is planned for a future release.
 
 ## Installation
@@ -86,32 +87,80 @@ Add the link to your `App.razor`:
 ## Examples
 
 <details>
-<summary>Custom Columns</summary>
+<summary>Basic Implementation</summary>
+
+```razor
+<OutlanderGrid TItem="ServerItem"
+            Items="@ServersA"
+            @bind-FocusedRow="@FocusedServerA"
+            @bind-SelectedItems="@SelectedServersA"
+            ShowFilterRow="true"
+            PageSize="7"
+            EmptyText="Servers not found.">
+
+    <Columns>
+
+        <OutlanderGridDataColumn TItem="ServerItem"
+                            FieldName="Name" />
+
+        <OutlanderGridDataColumn TItem="ServerItem"
+                            FieldName="Provider" />
+
+        <OutlanderGridDataColumn TItem="ServerItem"
+                            FieldName="Status" />
+
+        <OutlanderGridDataColumn TItem="ServerItem"
+                            FieldName="Ip" />
+
+        <OutlanderGridDataColumn TItem="ServerItem"
+                            FieldName="Cluster" />
+
+        <OutlanderGridDataColumn TItem="ServerItem"
+                            FieldName="OperatingSystem" />
+
+        <OutlanderGridDataColumn TItem="ServerItem"
+                            FieldName="IsNew" />
+
+        <OutlanderGridDataColumn TItem="ServerItem"
+                            FieldName="MemoryGb"
+                            FilterMode="GridFilterMode.Range" />
+
+        <OutlanderGridDataColumn TItem="ServerItem"
+                            FieldName="CreatedAt"
+                            FilterMode="GridFilterMode.Range" />
+    </Columns>
+</OutlanderGrid>
+```
+
+</details>
+
+<details>
+<summary>Custom Implementation</summary>
   
 ```razor
-<AppGrid TItem="ServerItem"
-            Items="@ServersB"
-            RowClick="OnRowClick"
-            RowDoubleClick="OnRowDoubleClick"
-            AllowSort="true"
-            AllowHotTrackRow="true"
-            AllowFocusedRow="true"
-            @bind-FocusedRow="@FocusedServerB"
-            @bind-SelectedItems="@SelectedServersB"
-            ShowSearchBox="true"
-            SearchBoxNullText="Buscar en todas las columnas..."
-            SearchBoxText=""
-            ShowExportButtons="true"
-            ExcelExportMode="AppGridExportMode.Data"
-            PdfExportMode="AppGridExportMode.Data"
-            PrintExportMode="AppGridExportMode.Data"
-            ExportFileName="servidores"
-            ExportTitle="Listado de servidores"
-            SearchBoxParseMode="GridSearchTextParseMode.GroupWordsByAnd"
-            PageSize="@PageSize"
-            PageSizeChanged="OnPageSizeChanged"
-            ShowColumnChooser="true"
-            EmptyText="No se encontraron servidores.">
+<OutlanderGrid TItem="ServerItem"
+               Items="@ServersB"
+               RowClick="OnRowClick"
+               RowDoubleClick="OnRowDoubleClick"
+               AllowSort="true"
+               AllowHotTrackRow="true"
+               AllowFocusedRow="true"
+               @bind-FocusedRow="@FocusedServerB"
+               @bind-SelectedItems="@SelectedServersB"
+               ShowSearchBox="true"
+               SearchBoxNullText="Search in all columns..."
+               SearchBoxText=""
+               ShowExportButtons="true"
+               ExcelExportMode="OutlanderGridExportMode.Data"
+               PdfExportMode="OutlanderGridExportMode.Data"
+               PrintExportMode="OutlanderGridExportMode.Data"
+               ExportFileName="Servers"
+               ExportTitle="Servers List"
+               SearchBoxParseMode="GridSearchTextParseMode.GroupWordsByAnd"
+               PageSize="@PageSize"
+               PageSizeChanged="OnPageSizeChanged"
+               ShowColumnChooser="true"
+               EmptyText="No Records.">
     <ToolbarTemplate>
         <div class="d-flex align-items-center gap-2 flex-wrap justify-content-end">
             <button class="btn btn-primary"
@@ -119,30 +168,30 @@ Add the link to your `App.razor`:
                     data-bs-target="#importServersModal"
                     disabled="@(SelectedServers.Count == 0)">
                 <i class="bi bi-download me-2"></i>
-                <span>Importar @SelectedServers.Count seleccionados</span>
+                <span>Import @SelectedServers.Count Selected</span>
             </button>
         </div>
     </ToolbarTemplate>
     <Columns>
-        <AppGridSelectionColumn TItem="ServerItem"
-                                Width="48px"
-                                AllowSelectAllItems="true" />
+        <OutlanderGridSelectionColumn TItem="ServerItem"
+                                      Width="48px"
+                                      AllowSelectAllItems="true" />
 
-        <AppGridDataColumn TItem="ServerItem"
-                            FieldName="Name"
-                            Caption="Nombre"
-                            AllowFilter="true"
-                            AllowSort="true"
-                            SortMode="GridColumnSortMode.DisplayText"
-                            SortOrder="GridColumnSortOrder.Ascending"
-                            SortIndex="1"
-                            SortTextSelector="item => item.Name"
-                            FilterTextSelector="item => item.Name">
+        <OutlanderGridDataColumn TItem="ServerItem"
+                                 FieldName="Name"
+                                 Caption="Name"
+                                 AllowFilter="true"
+                                 AllowSort="true"
+                                 SortMode="GridColumnSortMode.DisplayText"
+                                 SortOrder="GridColumnSortOrder.Ascending"
+                                 SortIndex="1"
+                                 SortTextSelector="item => item.Name"
+                                 FilterTextSelector="item => item.Name">
             <FilterTemplate Context="filter">
                 <input class="form-control form-control-sm"
-                        placeholder="Filtrar nombre..."
-                        value="@filter.Value"
-                        @oninput="e => filter.SetValue(e.Value?.ToString())" />
+                       placeholder="Filtrar nombre..."
+                       value="@filter.Value"
+                       @oninput="e => filter.SetValue(e.Value?.ToString())" />
             </FilterTemplate>
             <CellTemplate Context="cell">
                 <div class="name-cell">
@@ -153,16 +202,16 @@ Add the link to your `App.razor`:
                     }
                 </div>
             </CellTemplate>
-        </AppGridDataColumn>
+        </OutlanderGridDataColumn>
 
-        <AppGridDataColumn TItem="ServerItem"
-                            FieldName="Provider"
-                            Caption="Proveedor"
-                            AllowFilter="true"
-                            AllowSort="true"
-                            SortMode="GridColumnSortMode.DisplayText"
-                            SortTextSelector="item => item.Provider"
-                            FilterTextSelector="item => item.Provider">
+        <OutlanderGridDataColumn TItem="ServerItem"
+                                 FieldName="Provider"
+                                 Caption="Provider"
+                                 AllowFilter="true"
+                                 AllowSort="true"
+                                 SortMode="GridColumnSortMode.DisplayText"
+                                 SortTextSelector="item => item.Provider"
+                                 FilterTextSelector="item => item.Provider">
             <FilterTemplate Context="filter">
                 <select class="form-select form-select-sm"
                         value="@filter.Value"
@@ -178,16 +227,16 @@ Add the link to your `App.razor`:
                     <span>@cell.Highlight(cell.Item.Provider)</span>
                 </div>
             </CellTemplate>
-        </AppGridDataColumn>
+        </OutlanderGridDataColumn>
 
-        <AppGridDataColumn TItem="ServerItem"
-                            FieldName="Status"
-                            Caption="Estado"
-                            AllowFilter="true"
-                            AllowSort="true"
-                            SortMode="GridColumnSortMode.DisplayText"
-                            SortTextSelector="item => item.Status"
-                            FilterTextSelector="item => item.Status">
+        <OutlanderGridDataColumn TItem="ServerItem"
+                                 FieldName="Status"
+                                 Caption="Status"
+                                 AllowFilter="true"
+                                 AllowSort="true"
+                                 SortMode="GridColumnSortMode.DisplayText"
+                                 SortTextSelector="item => item.Status"
+                                 FilterTextSelector="item => item.Status">
             <FilterTemplate Context="filter">
                 <select class="form-select form-select-sm"
                         value="@filter.Value"
@@ -203,51 +252,51 @@ Add the link to your `App.razor`:
                     <span>@cell.Highlight(cell.Item.Status)</span>
                 </div>
             </CellTemplate>
-        </AppGridDataColumn>
+        </OutlanderGridDataColumn>
 
-        <AppGridDataColumn TItem="ServerItem"
-                            FieldName="Ip"
-                            Caption="IP"
-                            AllowFilter="true"
-                            AllowSort="true"
-                            FilterTextSelector="item => item.Ip">
+        <OutlanderGridDataColumn TItem="ServerItem"
+                                 FieldName="Ip"
+                                 Caption="IP"
+                                 AllowFilter="true"
+                                 AllowSort="true"
+                                 FilterTextSelector="item => item.Ip">
             <FilterTemplate Context="filter">
                 <input class="form-control form-control-sm"
-                        placeholder="IP..."
-                        value="@filter.Value"
-                        @oninput="e => filter.SetValue(e.Value?.ToString())" />
+                       placeholder="IP..."
+                       value="@filter.Value"
+                       @oninput="e => filter.SetValue(e.Value?.ToString())" />
             </FilterTemplate>
-        </AppGridDataColumn>
+        </OutlanderGridDataColumn>
 
-        <AppGridDataColumn TItem="ServerItem"
-                            FieldName="Cluster"
-                            Caption="Cluster / Recurso"
-                            AllowFilter="true"
-                            AllowSort="true"
-                            SortMode="GridColumnSortMode.DisplayText"
-                            SortTextSelector="item => item.Cluster"
-                            FilterTextSelector="item => item.Cluster">
+        <OutlanderGridDataColumn TItem="ServerItem"
+                                 FieldName="Cluster"
+                                 Caption="Cluster / Resource"
+                                 AllowFilter="true"
+                                 AllowSort="true"
+                                 SortMode="GridColumnSortMode.DisplayText"
+                                 SortTextSelector="item => item.Cluster"
+                                 FilterTextSelector="item => item.Cluster">
             <FilterTemplate Context="filter">
                 <input class="form-control form-control-sm"
-                        placeholder="Cluster..."
-                        value="@filter.Value"
-                        @oninput="e => filter.SetValue(e.Value?.ToString())" />
+                       placeholder="Cluster..."
+                       value="@filter.Value"
+                       @oninput="e => filter.SetValue(e.Value?.ToString())" />
             </FilterTemplate>
-        </AppGridDataColumn>
+        </OutlanderGridDataColumn>
 
-        <AppGridDataColumn TItem="ServerItem"
-                            FieldName="OperatingSystem"
-                            Caption="Sistema Operativo"
-                            AllowFilter="true"
-                            AllowSort="true"
-                            SortMode="GridColumnSortMode.DisplayText"
-                            SortTextSelector='item => $"{item.Provider}-({item.OperatingSystem})"'
-                            FilterTextSelector='item => $"{item.Provider}-({item.OperatingSystem})"'>
+        <OutlanderGridDataColumn TItem="ServerItem"
+                                 FieldName="OperatingSystem"
+                                 Caption="Operating System"
+                                 AllowFilter="true"
+                                 AllowSort="true"
+                                 SortMode="GridColumnSortMode.DisplayText"
+                                 SortTextSelector='item => $"{item.Provider}-({item.OperatingSystem})"'
+                                 FilterTextSelector='item => $"{item.Provider}-({item.OperatingSystem})"'>
             <FilterTemplate Context="filter">
                 <input class="form-control form-control-sm"
-                        placeholder="SO..."
-                        value="@filter.Value"
-                        @oninput="e => filter.SetValue(e.Value?.ToString())" />
+                       placeholder="SO..."
+                       value="@filter.Value"
+                       @oninput="e => filter.SetValue(e.Value?.ToString())" />
             </FilterTemplate>
             <CellTemplate Context="cell">
                 <div class="status-cell">
@@ -255,139 +304,36 @@ Add the link to your `App.razor`:
                     <span>@cell.Highlight(cell.Item.OperatingSystem)</span>
                 </div>
             </CellTemplate>
-        </AppGridDataColumn>
+        </OutlanderGridDataColumn>
 
-        <AppGridDataColumn TItem="ServerItem"
-                            FieldName="_registered"
-                            Caption="Ya registrado"
-                            AllowFilter="false"
-                            AllowSort="false"
-                            FilterTextSelector='item => "No"'>
+        <OutlanderGridDataColumn TItem="ServerItem"
+                                 FieldName="_registered"
+                                 Caption="Registered"
+                                 AllowFilter="false"
+                                 AllowSort="false"
+                                 FilterTextSelector='item => "No"'>
             <CellTemplate Context="cell">
                 <span class="bg-danger bg-opacity-10 border border-danger-subtle fw-normal px-2 py-1 rounded small text-danger">
                     @cell.Highlight("No")
                 </span>
             </CellTemplate>
-        </AppGridDataColumn>
+        </OutlanderGridDataColumn>
 
-        <AppGridDataColumn TItem="ServerItem"
-                            FieldName="_actions"
-                            Caption="Acción"
-                            AllowFilter="false"
-                            AllowSort="false"
-                            AllowExport="false"
-                            Width="90px">
+        <OutlanderGridDataColumn TItem="ServerItem"
+                                 FieldName="_actions"
+                                 Caption="Action"
+                                 AllowFilter="false"
+                                 AllowSort="false"
+                                 AllowExport="false"
+                                 Width="90px">
             <CellTemplate Context="cell">
-                <button class="btn btn-default btn-default-sm outlander-grid-export-ignore">
+                <button class="btn btn-default btn-default-sm app-grid-export-ignore">
                     <i class="bi bi-download"></i>
                 </button>
             </CellTemplate>
-        </AppGridDataColumn>
+        </OutlanderGridDataColumn>
     </Columns>
-</AppGrid>
-```
-
-</details>
-
-<details>
-<summary>Automatic Columns</summary>
-
-```razor
-<AppGrid TItem="ServerItem"
-            Items="@ServersA"
-            RowClick="OnRowClick"
-            RowDoubleClick="OnRowDoubleClick"
-            AllowSort="true"
-            AllowHotTrackRow="true"
-            AllowFocusedRow="true"
-            @bind-FocusedRow="@FocusedServerA"
-            @bind-SelectedItems="@SelectedServersA"
-            ShowFilterRow="true"
-            ShowExportButtons="true"
-            PageSize="@PageSize"
-            PageSizeChanged="OnPageSizeChanged"
-            EmptyText="No se encontraron servidores.">
-
-    <Settings>
-        <AppGridSearchSettings TItem="ServerItem"
-                                Show="true"
-                                NullText="Buscar..."
-                                Text="centos"
-                                ParseMode="GridSearchTextParseMode.GroupWordsByAnd" />
-    </Settings>
-
-    <Columns>
-        <AppGridSelectionColumn TItem="ServerItem"
-                                Width="48px"
-                                AllowSelectAllItems="true">
-        </AppGridSelectionColumn>
-
-        <AppGridDataColumn TItem="ServerItem"
-                            FieldName="Name"
-                            Caption="Nombre"
-                            AllowFilter="true"
-                            AllowSort="true"
-                            SortMode="GridColumnSortMode.DisplayText"
-                            SortOrder="GridColumnSortOrder.Ascending"
-                            SortIndex="1" />
-
-        <AppGridDataColumn TItem="ServerItem"
-                            FieldName="Provider"
-                            Caption="Proveedor"
-                            AllowFilter="true"
-                            AllowSort="true"
-                            Visible="false"
-                            SortMode="GridColumnSortMode.DisplayText" />
-
-        <AppGridDataColumn TItem="ServerItem"
-                            FieldName="Status"
-                            Caption="Estado"
-                            AllowFilter="true"
-                            AllowSort="true"
-                            SortMode="GridColumnSortMode.DisplayText" />
-
-        <AppGridDataColumn TItem="ServerItem"
-                            FieldName="Ip"
-                            Caption="IP"
-                            AllowFilter="true"
-                            AllowSort="true" />
-
-        <AppGridDataColumn TItem="ServerItem"
-                            FieldName="Cluster"
-                            Caption="Cluster / Recurso"
-                            AllowFilter="true"
-                            AllowSort="true"
-                            SortMode="GridColumnSortMode.DisplayText" />
-
-        <AppGridDataColumn TItem="ServerItem"
-                            FieldName="OperatingSystem"
-                            Caption="Sistema Operativo"
-                            AllowFilter="true"
-                            AllowSort="true"
-                            SortMode="GridColumnSortMode.DisplayText"
-                            FilterMode="GridFilterMode.Range" />
-
-        <AppGridDataColumn TItem="ServerItem"
-                            FieldName="IsNew"
-                            Caption="Registrado"
-                            AllowFilter="true"
-                            AllowSort="true" />
-
-        <AppGridDataColumn TItem="ServerItem"
-                            FieldName="MemoryGb"
-                            Caption="Memoria (GB)"
-                            AllowFilter="true"
-                            AllowSort="true"
-                            FilterMode="GridFilterMode.Range" />
-
-        <AppGridDataColumn TItem="ServerItem"
-                            FieldName="CreatedAt"
-                            Caption="Fecha de alta"
-                            AllowFilter="true"
-                            AllowSort="true"
-                            FilterMode="GridFilterMode.Range" />
-    </Columns>
-</AppGrid>
+</OutlanderGrid>
 ```
 
 </details>

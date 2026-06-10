@@ -58,3 +58,79 @@ h1:focus {
 .form-floating > .form-control-plaintext:focus::placeholder, .form-floating > .form-control:focus::placeholder {
     text-align: start;
 }
+
+
+.status-wrap {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.status-dot {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    display: inline-block;
+}
+
+.status-ok {
+    background: var(--success);
+}
+
+.status-warn {
+    background: var(--warning);
+}
+
+.status-cell {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.status-green {
+    background: #18a957;
+}
+
+.status-orange {
+    background: #f5a623;
+}
+
+
+.provider-badge {
+    width: 22px;
+    height: 22px;
+    border-radius: 4px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    color: #fff;
+    font-size: 10px;
+    font-weight: 700;
+    text-transform: lowercase;
+    line-height: 1;
+}
+
+.provider-badge-primary {
+    background: #1aa3b0;
+}
+
+.provider-badge-orange {
+    background: #ff6a00;
+}
+
+.provider-cell {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.provider-mini {
+    width: 20px;
+    height: 20px;
+    border-radius: 4px;
+    display: grid;
+    place-items: center;
+    font-size: 10px;
+    font-weight: 700;
+    text-transform: lowercase;
+}

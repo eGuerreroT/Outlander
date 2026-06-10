@@ -8,31 +8,31 @@
     /// Indicates whether the filter row is displayed.
     /// </summary>
     [Parameter]
-    public bool Show { get; set; } = true;
+    public bool Show { get; set; } = false;
 
     /// <summary>
     /// Placeholder text used by automatic text filters.
     /// </summary>
     [Parameter]
-    public string NullText { get; set; } = "Filtrar...";
+    public string NullText { get; set; } = "Filter...";
 
     /// <summary>
     /// Text displayed for the default option in select filters.
     /// </summary>
     [Parameter]
-    public string AllText { get; set; } = "Todos";
+    public string AllText { get; set; } = "All";
 
     /// <summary>
     /// Placeholder text used for the lower bound of range filters.
     /// </summary>
     [Parameter]
-    public string FromText { get; set; } = "Desde";
+    public string FromText { get; set; } = "From";
 
     /// <summary>
     /// Placeholder text used for the upper bound of range filters.
     /// </summary>
     [Parameter]
-    public string ToText { get; set; } = "Hasta";
+    public string ToText { get; set; } = "To";
 
     protected override void OnInitialized()
     {

@@ -1,204 +1,47 @@
-﻿@page "/"
+﻿@page "/AutomaticColumns"
 
 <PageTitle>Home</PageTitle>
 
-<h1>Custom Columns</h1>
+<h1>Automatic Columns</h1>
 
 <OutlanderGrid TItem="ServerItem"
-               Items="@ServersB"
-               RowClick="OnRowClick"
-               RowDoubleClick="OnRowDoubleClick"
-               AllowSort="true"
-               AllowHotTrackRow="true"
-               AllowFocusedRow="true"
-               @bind-FocusedRow="@FocusedServerB"
-               @bind-SelectedItems="@SelectedServersB"
-               ShowSearchBox="true"
-               SearchBoxNullText="Search in all columns..."
-               SearchBoxText=""
-               ShowExportButtons="true"
-               ExcelExportMode="OutlanderGridExportMode.Data"
-               PdfExportMode="OutlanderGridExportMode.Data"
-               PrintExportMode="OutlanderGridExportMode.Data"
-               ExportFileName="Servers"
-               ExportTitle="Servers List"
-               SearchBoxParseMode="GridSearchTextParseMode.GroupWordsByAnd"
-               PageSize="@PageSize"
-               PageSizeChanged="OnPageSizeChanged"
-               ShowPageSizeSelector="true"
-               ShowColumnChooser="true"
-               EmptyText="No Records.">
-    <ToolbarTemplate>
-        <div class="d-flex align-items-center gap-2 flex-wrap justify-content-end">
-            <button class="btn btn-primary"
-                    data-bs-toggle="modal"
-                    data-bs-target="#importServersModal"
-                    disabled="@(SelectedServers.Count == 0)">
-                <i class="bi bi-download me-2"></i>
-                <span>Import @SelectedServers.Count Selected</span>
-            </button>
-        </div>
-    </ToolbarTemplate>
+            Items="@ServersA"
+            @bind-FocusedRow="@FocusedServerA"
+            @bind-SelectedItems="@SelectedServersA"
+            ShowFilterRow="true"
+            PageSize="7"
+            EmptyText="Servers not found.">
+
     <Columns>
-        <OutlanderGridSelectionColumn TItem="ServerItem"
-                                      Width="48px"
-                                      AllowSelectAllItems="true" />
 
         <OutlanderGridDataColumn TItem="ServerItem"
-                                 FieldName="Name"
-                                 Caption="Name"
-                                 AllowFilter="true"
-                                 AllowSort="true"
-                                 SortMode="GridColumnSortMode.DisplayText"
-                                 SortOrder="GridColumnSortOrder.Ascending"
-                                 SortIndex="1"
-                                 SortTextSelector="item => item.Name"
-                                 FilterTextSelector="item => item.Name">
-            <FilterTemplate Context="filter">
-                <input class="form-control form-control-sm"
-                       placeholder="Filtrar nombre..."
-                       value="@filter.Value"
-                       @oninput="e => filter.SetValue(e.Value?.ToString())" />
-            </FilterTemplate>
-            <CellTemplate Context="cell">
-                <div class="name-cell">
-                    @cell.Highlight(cell.Item.Name)
-                    @if (cell.Item.IsNew)
-                    {
-                        <span class="bg-danger bg-opacity-10 text-danger border border-danger-subtle px-2 py-1 small rounded-pill ms-2">NUEVO</span>
-                    }
-                </div>
-            </CellTemplate>
-        </OutlanderGridDataColumn>
+                            FieldName="Name" />
 
         <OutlanderGridDataColumn TItem="ServerItem"
-                                 FieldName="Provider"
-                                 Caption="Provider"
-                                 AllowFilter="true"
-                                 AllowSort="true"
-                                 SortMode="GridColumnSortMode.DisplayText"
-                                 SortTextSelector="item => item.Provider"
-                                 FilterTextSelector="item => item.Provider">
-            <FilterTemplate Context="filter">
-                <select class="form-select form-select-sm"
-                        value="@filter.Value"
-                        @onchange="e => filter.SetValue(e.Value?.ToString())">
-                    <option value="">Todos</option>
-                    <option value="VMware">VMware</option>
-                    <option value="Alibaba">Alibaba</option>
-                </select>
-            </FilterTemplate>
-            <CellTemplate Context="cell">
-                <div class="provider-cell">
-                    <span class="provider-mini @cell.Item.BootStrapIcon">@cell.Item.Abreviature</span>
-                    <span>@cell.Highlight(cell.Item.Provider)</span>
-                </div>
-            </CellTemplate>
-        </OutlanderGridDataColumn>
+                            FieldName="Provider" />
 
         <OutlanderGridDataColumn TItem="ServerItem"
-                                 FieldName="Status"
-                                 Caption="Status"
-                                 AllowFilter="true"
-                                 AllowSort="true"
-                                 SortMode="GridColumnSortMode.DisplayText"
-                                 SortTextSelector="item => item.Status"
-                                 FilterTextSelector="item => item.Status">
-            <FilterTemplate Context="filter">
-                <select class="form-select form-select-sm"
-                        value="@filter.Value"
-                        @onchange="e => filter.SetValue(e.Value?.ToString())">
-                    <option value="">Todos</option>
-                    <option value="Running">Running</option>
-                    <option value="Powered Off">Powered Off</option>
-                </select>
-            </FilterTemplate>
-            <CellTemplate Context="cell">
-                <div class="status-cell">
-                    <span class="status-dot @(cell.Item.Status == "Running" ? "status-green" : "status-orange")"></span>
-                    <span>@cell.Highlight(cell.Item.Status)</span>
-                </div>
-            </CellTemplate>
-        </OutlanderGridDataColumn>
+                            FieldName="Status" />
 
         <OutlanderGridDataColumn TItem="ServerItem"
-                                 FieldName="Ip"
-                                 Caption="IP"
-                                 AllowFilter="true"
-                                 AllowSort="true"
-                                 FilterTextSelector="item => item.Ip">
-            <FilterTemplate Context="filter">
-                <input class="form-control form-control-sm"
-                       placeholder="IP..."
-                       value="@filter.Value"
-                       @oninput="e => filter.SetValue(e.Value?.ToString())" />
-            </FilterTemplate>
-        </OutlanderGridDataColumn>
+                            FieldName="Ip" />
 
         <OutlanderGridDataColumn TItem="ServerItem"
-                                 FieldName="Cluster"
-                                 Caption="Cluster / Resource"
-                                 AllowFilter="true"
-                                 AllowSort="true"
-                                 SortMode="GridColumnSortMode.DisplayText"
-                                 SortTextSelector="item => item.Cluster"
-                                 FilterTextSelector="item => item.Cluster">
-            <FilterTemplate Context="filter">
-                <input class="form-control form-control-sm"
-                       placeholder="Cluster..."
-                       value="@filter.Value"
-                       @oninput="e => filter.SetValue(e.Value?.ToString())" />
-            </FilterTemplate>
-        </OutlanderGridDataColumn>
+                            FieldName="Cluster" />
 
         <OutlanderGridDataColumn TItem="ServerItem"
-                                 FieldName="OperatingSystem"
-                                 Caption="Operating System"
-                                 AllowFilter="true"
-                                 AllowSort="true"
-                                 SortMode="GridColumnSortMode.DisplayText"
-                                 SortTextSelector='item => $"{item.Provider}-({item.OperatingSystem})"'
-                                 FilterTextSelector='item => $"{item.Provider}-({item.OperatingSystem})"'>
-            <FilterTemplate Context="filter">
-                <input class="form-control form-control-sm"
-                       placeholder="SO..."
-                       value="@filter.Value"
-                       @oninput="e => filter.SetValue(e.Value?.ToString())" />
-            </FilterTemplate>
-            <CellTemplate Context="cell">
-                <div class="status-cell">
-                    <span class="fw-bold">@cell.Highlight(cell.Item.Provider + "-")</span>
-                    <span>@cell.Highlight(cell.Item.OperatingSystem)</span>
-                </div>
-            </CellTemplate>
-        </OutlanderGridDataColumn>
+                            FieldName="OperatingSystem" />
 
         <OutlanderGridDataColumn TItem="ServerItem"
-                                 FieldName="_registered"
-                                 Caption="Registered"
-                                 AllowFilter="false"
-                                 AllowSort="false"
-                                 FilterTextSelector='item => "No"'>
-            <CellTemplate Context="cell">
-                <span class="bg-danger bg-opacity-10 border border-danger-subtle fw-normal px-2 py-1 rounded small text-danger">
-                    @cell.Highlight("No")
-                </span>
-            </CellTemplate>
-        </OutlanderGridDataColumn>
+                            FieldName="IsNew" />
 
         <OutlanderGridDataColumn TItem="ServerItem"
-                                 FieldName="_actions"
-                                 Caption="Action"
-                                 AllowFilter="false"
-                                 AllowSort="false"
-                                 AllowExport="false"
-                                 Width="90px">
-            <CellTemplate Context="cell">
-                <button class="btn btn-default btn-default-sm app-grid-export-ignore">
-                    <i class="bi bi-download"></i>
-                </button>
-            </CellTemplate>
-        </OutlanderGridDataColumn>
+                            FieldName="MemoryGb"
+                            FilterMode="GridFilterMode.Range" />
+
+        <OutlanderGridDataColumn TItem="ServerItem"
+                            FieldName="CreatedAt"
+                            FilterMode="GridFilterMode.Range" />
     </Columns>
 </OutlanderGrid>
 
@@ -285,28 +128,4 @@
     
     private ServerItem? FocusedServerA { get; set; }
     private IList<ServerItem> SelectedServersA { get; set; } = new List<ServerItem>();
-
-    private ServerItem? FocusedServerB { get; set; }
-    private IList<ServerItem> SelectedServersB { get; set; } = new List<ServerItem>();
-    private IList<ServerItem> SelectedServers => SelectedServersA.Count > 0 ? SelectedServersA : SelectedServersB;
-
-    private int PageSize = 10;
-
-    private Task OnPageSizeChanged(int value)
-    {
-        PageSize = value;
-        return Task.CompletedTask;
-    }
-
-    private Task OnRowClick(ServerItem item)
-    {
-        Console.WriteLine($"Click en: {item.Name}");
-        return Task.CompletedTask;
-    }
-
-    private Task OnRowDoubleClick(ServerItem item)
-    {
-        Console.WriteLine($"Double click en: {item.Name}");
-        return Task.CompletedTask;
-    }
 }

@@ -115,7 +115,7 @@ public partial class OutlanderGrid<TItem> : IAsyncDisposable
     /// Gets or sets the text displayed when the grid has no rows to render.
     /// </summary>
     [Parameter]
-    public string EmptyText { get; set; } = "No hay registros para mostrar.";
+    public string EmptyText { get; set; } = "No records to show.";
 
     /// <summary>
     /// Gets or sets a value indicating whether the column chooser is displayed.
@@ -127,7 +127,7 @@ public partial class OutlanderGrid<TItem> : IAsyncDisposable
     /// Gets or sets a value indicating whether the page size selector is displayed in the toolbar.
     /// </summary>
     [Parameter]
-    public bool ShowPageSizeSelector { get; set; } = true;
+    public bool ShowPageSizeSelector { get; set; } = false;
 
     /// <summary>
     /// Gets or sets the number of rows displayed per page.
@@ -151,19 +151,19 @@ public partial class OutlanderGrid<TItem> : IAsyncDisposable
     /// Gets or sets a value indicating whether column sorting is enabled.
     /// </summary>
     [Parameter]
-    public bool AllowSort { get; set; } = true;
+    public bool AllowSort { get; set; } = false;
 
     /// <summary>
     /// Gets or sets a value indicating whether the global search box is displayed.
     /// </summary>
     [Parameter]
-    public bool ShowSearchBox { get; set; } = true;
+    public bool ShowSearchBox { get; set; } = false;
 
     /// <summary>
     /// Gets or sets the placeholder text displayed in the global search box.
     /// </summary>
     [Parameter]
-    public string SearchBoxNullText { get; set; } = "Buscar...";
+    public string SearchBoxNullText { get; set; } = "Search...";
 
     /// <summary>
     /// Gets or sets the current global search text.
@@ -265,7 +265,7 @@ public partial class OutlanderGrid<TItem> : IAsyncDisposable
     /// Gets or sets the title used in exported documents.
     /// </summary>
     [Parameter]
-    public string ExportTitle { get; set; } = "Exportación del grid";
+    public string ExportTitle { get; set; } = "Grid export";
 
     /// <summary>
     /// Gets or sets the export mode used for Excel export.
@@ -289,7 +289,7 @@ public partial class OutlanderGrid<TItem> : IAsyncDisposable
     /// Gets or sets the text displayed on the export dropdown button.
     /// </summary>
     [Parameter]
-    public string ExportButtonText { get; set; } = "Exportar";
+    public string ExportButtonText { get; set; } = "Export";
 
     /// <summary>
     /// Gets or sets the text displayed for the Excel export action.
@@ -307,61 +307,61 @@ public partial class OutlanderGrid<TItem> : IAsyncDisposable
     /// Gets or sets the text displayed for the print action.
     /// </summary>
     [Parameter]
-    public string ExportPrintText { get; set; } = "Imprimir";
+    public string ExportPrintText { get; set; } = "Print";
 
     /// <summary>
     /// Gets or sets the label displayed before the page size selector.
     /// </summary>
     [Parameter]
-    public string PageSizeLabelText { get; set; } = "Mostrar";
+    public string PageSizeLabelText { get; set; } = "Show";
 
     /// <summary>
     /// Gets or sets the text displayed after the page size selector.
     /// </summary>
     [Parameter]
-    public string PageSizeSuffixText { get; set; } = "registros";
+    public string PageSizeSuffixText { get; set; } = "records";
 
     /// <summary>
     /// Gets or sets the text displayed on the column chooser button.
     /// </summary>
     [Parameter]
-    public string ColumnChooserButtonText { get; set; } = "Columnas";
+    public string ColumnChooserButtonText { get; set; } = "Columns";
 
     /// <summary>
     /// Gets or sets a value indicating whether the filter row is displayed below the header row.
     /// </summary>
     [Parameter]
-    public bool ShowFilterRow { get; set; } = true;
+    public bool ShowFilterRow { get; set; } = false;
 
     /// <summary>
     /// Gets or sets the placeholder text used by automatic text filters.
     /// </summary>
     [Parameter]
-    public string FilterNullText { get; set; } = "Filtrar...";
+    public string FilterNullText { get; set; } = "Filter...";
 
     /// <summary>
     /// Gets or sets the text displayed for the default option in select filters.
     /// </summary>
     [Parameter]
-    public string FilterAllText { get; set; } = "Todos";
+    public string FilterAllText { get; set; } = "All";
 
     /// <summary>
     /// Gets or sets the placeholder text used for the lower bound of range filters.
     /// </summary>
     [Parameter]
-    public string FilterFromText { get; set; } = "Desde";
+    public string FilterFromText { get; set; } = "From";
 
     /// <summary>
     /// Gets or sets the placeholder text used for the upper bound of range filters.
     /// </summary>
     [Parameter]
-    public string FilterToText { get; set; } = "Hasta";
+    public string FilterToText { get; set; } = "To";
 
     /// <summary>
     /// Gets or sets the text used to display a <see langword="true" /> boolean value.
     /// </summary>
     [Parameter]
-    public string BooleanTrueText { get; set; } = "Sí";
+    public string BooleanTrueText { get; set; } = "Yes";
 
     /// <summary>
     /// Gets or sets the text used to display a <see langword="false" /> boolean value.
@@ -373,43 +373,43 @@ public partial class OutlanderGrid<TItem> : IAsyncDisposable
     /// Gets or sets the text displayed for the select-all-items action.
     /// </summary>
     [Parameter]
-    public string SelectAllItemsText { get; set; } = "Seleccionar todo";
+    public string SelectAllItemsText { get; set; } = "Select All";
 
     /// <summary>
     /// Gets or sets the text displayed for the select-current-page action.
     /// </summary>
     [Parameter]
-    public string SelectCurrentPageText { get; set; } = "Seleccionar página actual";
+    public string SelectCurrentPageText { get; set; } = "Select Current Page";
 
     /// <summary>
     /// Gets or sets the composite format string used to display the number of selected items.
     /// </summary>
     [Parameter]
-    public string SelectedItemsTextFormat { get; set; } = "{0} Seleccionados";
+    public string SelectedItemsTextFormat { get; set; } = "{0} Selected";
 
     /// <summary>
     /// Gets or sets the composite format string used to display the number of selected items in the current page.
     /// </summary>
     [Parameter]
-    public string SelectedPageItemsTextFormat { get; set; } = "Seleccionados en esta página: {0}";
+    public string SelectedPageItemsTextFormat { get; set; } = "Selected in page: {0}";
 
     /// <summary>
     /// Gets or sets the composite format string used in the footer summary.
     /// </summary>
     [Parameter]
-    public string SummaryTextFormat { get; set; } = "Mostrando {0} - {1} de {2} registros";
+    public string SummaryTextFormat { get; set; } = "Showing {0} - {1} of {2} records";
 
     /// <summary>
     /// Gets or sets the text displayed on the previous page button.
     /// </summary>
     [Parameter]
-    public string PreviousPageText { get; set; } = "Anterior";
+    public string PreviousPageText { get; set; } = "Prev";
 
     /// <summary>
     /// Gets or sets the text displayed on the next page button.
     /// </summary>
     [Parameter]
-    public string NextPageText { get; set; } = "Siguiente";
+    public string NextPageText { get; set; } = "Next";
 
     protected override async Task OnAfterRenderAsync(bool firstRender)
     {

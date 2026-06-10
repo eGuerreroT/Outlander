@@ -296,12 +296,12 @@ public class OutlanderGridSearchSettingsDefinition
     /// <summary>
     /// Gets or sets whether the global search box is displayed.
     /// </summary>
-    public bool Show { get; set; } = true;
+    public bool Show { get; set; } = false;
 
     /// <summary>
     /// Gets or sets the placeholder text displayed in the global search box.
     /// </summary>
-    public string NullText { get; set; } = "Buscar...";
+    public string NullText { get; set; } = "Type to search...";
 
     /// <summary>
     /// Gets or sets the init value for the global search box.
@@ -322,27 +322,27 @@ public class OutlanderGridFilterSettingsDefinition
     /// <summary>
     /// Gets or sets whether the filter row is displayed.
     /// </summary>
-    public bool Show { get; set; } = true;
+    public bool Show { get; set; } = false;
 
     /// <summary>
     /// Gets or sets the placeholder text used by automatic text filters.
     /// </summary>
-    public string NullText { get; set; } = "Filtrar...";
+    public string NullText { get; set; } = "Filter...";
 
     /// <summary>
     /// Gets or sets the text displayed for the default option in select filters.
     /// </summary>
-    public string AllText { get; set; } = "Todos";
+    public string AllText { get; set; } = "All";
 
     /// <summary>
     /// Gets or sets the placeholder text used for the lower bound of range filters.
     /// </summary>
-    public string FromText { get; set; } = "Desde";
+    public string FromText { get; set; } = "From";
 
     /// <summary>
     /// Gets or sets the placeholder text used for the upper bound of range filters.
     /// </summary>
-    public string ToText { get; set; } = "Hasta";
+    public string ToText { get; set; } = "To";
 }
 
 /// <summary>
@@ -353,17 +353,17 @@ public class OutlanderGridFooterSettingsDefinition
     /// <summary>
     /// Gets or sets the composite format string used in the footer summary.
     /// </summary>
-    public string SummaryTextFormat { get; set; } = "Mostrando {0} - {1} de {2} registros";
+    public string SummaryTextFormat { get; set; } = "Showing {0} - {1} of {2} records";
 
     /// <summary>
     /// Gets or sets the text displayed on the previous page button.
     /// </summary>
-    public string PreviousPageText { get; set; } = "Anterior";
+    public string PreviousPageText { get; set; } = "Prev";
 
     /// <summary>
     /// Gets or sets the text displayed on the next page button.
     /// </summary>
-    public string NextPageText { get; set; } = "Siguiente";
+    public string NextPageText { get; set; } = "Next";
 }
 
 /// <summary>
@@ -399,7 +399,7 @@ public class OutlanderGridExportSettingsDefinition
     /// <summary>
     /// Gets or sets the title used in exported documents.
     /// </summary>
-    public string Title { get; set; } = "Exportación del grid";
+    public string Title { get; set; } = "Grid export";
 
     /// <summary>
     /// Gets or sets the export mode used for Excel export.
@@ -419,7 +419,7 @@ public class OutlanderGridExportSettingsDefinition
     /// <summary>
     /// Gets or sets the text displayed on the export dropdown button.
     /// </summary>
-    public string ButtonText { get; set; } = "Exportar";
+    public string ButtonText { get; set; } = "Export";
 
     /// <summary>
     /// Gets or sets the text displayed for the Excel export action.
@@ -434,7 +434,7 @@ public class OutlanderGridExportSettingsDefinition
     /// <summary>
     /// Gets or sets the text displayed for the print export action.
     /// </summary>
-    public string PrintText { get; set; } = "Imprimir";
+    public string PrintText { get; set; } = "Print";
 }
 
 /// <summary>
@@ -445,21 +445,21 @@ public class OutlanderGridSelectionSettingsDefinition
     /// <summary>
     /// Gets or sets the text displayed for the select-all-items action.
     /// </summary>
-    public string AllText { get; set; } = "Seleccionar todo";
+    public string AllText { get; set; } = "Select All";
 
     /// <summary>
     /// Gets or sets the text displayed for the select-current-page action.
     /// </summary>
-    public string CurrentPageText { get; set; } = "Seleccionar página actual";
+    public string CurrentPageText { get; set; } = "Select Current Page";
 
     /// <summary>
     /// Gets or sets the composite format string used to display the number of selected items.
     /// </summary>
-    public string SelectedItemsTextFormat { get; set; } = "{0} Seleccionados";
+    public string SelectedItemsTextFormat { get; set; } = "{0} Selected";
 
     /// <summary>
     /// Gets or sets the composite format string used to display the number of selected items in the current page.
     /// </summary>
-    public string SelectedPageItemsTextFormat { get; set; } = "Seleccionados en esta página: {0}";
+    public string SelectedPageItemsTextFormat { get; set; } = "Selected in page: {0}";
 
 }
