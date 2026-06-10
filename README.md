@@ -1,6 +1,13 @@
-# Outlander.Blazor
 
-## Build Business Applications Faster with Blazor
+<p align="center">
+  <img src="Assets/logo.png" width="128" />
+</p>
+
+<h1 align="center">Outlander.Blazor</h1>
+
+<h2 align="center">
+  Build Business Applications Faster with Blazor
+</h2>
 
 Outlander.Blazor is a modern component library for Blazor applications focused on productivity, performance, and enterprise scenarios.
 
