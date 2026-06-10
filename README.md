@@ -53,12 +53,20 @@ Add the namespace to your `_Imports.razor`:
 
 ```razor
 @using Outlander.Blazor
+@using Outlander.Blazor.Components
 ```
 
 If required by future components:
 
 ```csharp
 builder.Services.AddOutlander();
+```
+
+Styles
+Add the link to your `App.razor`:
+
+```razor
+<link href="_content/Outlander.Blazor/Outlander.Blazor.styles.css" rel="stylesheet">
 ```
 
 ---
