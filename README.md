@@ -63,10 +63,11 @@ builder.Services.AddOutlander();
 
 ---
 
-## Example
+## Examples
 
-<h4 class="">Custom Columns</h4>
-
+<details>
+<summary>Custom Columns</summary>
+  
 ```razor
 <AppGrid TItem="ServerItem"
             Items="@ServersB"
@@ -266,7 +267,10 @@ builder.Services.AddOutlander();
 </AppGrid>
 ```
 
-<h4 class="">Automatic Columns</h4>
+</details>
+
+<details>
+<summary>Automatic Columns</summary>
 
 ```razor
 <AppGrid TItem="ServerItem"
@@ -366,9 +370,10 @@ builder.Services.AddOutlander();
 </AppGrid>
 ```
 
----
+</details>
 
-## Example Model
+<details>
+<summary>Model</summary>
 
 ```csharp
 public class ServerItem
@@ -451,6 +456,8 @@ public class ServerItem
         new() { Name = "vm-test-01", Provider = "VMware", Status = "Running", Ip = "10.10.10.14", Cluster = "Cluster-Test", OperatingSystem = "Debian 11", IsNew = true, Selected = true, BootStrapIcon = "provider-badge-primary", Abreviature = "vm", CreatedAt = new DateTime(2026, 07, 19), MemoryGb = 16 },
     };
 ```
+
+</details>
 
 ---
 
