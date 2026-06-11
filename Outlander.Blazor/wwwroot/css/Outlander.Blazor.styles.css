@@ -19,3 +19,12 @@
         --outlander-hover-bg: rgba(255,255,255,0.1);
         --outlander-text-secondary: #a6b3c5;
     }
+
+
+.cursor-pointer {
+    cursor: pointer;
+}
+
+.cursor-help {
+    cursor: help;
+}

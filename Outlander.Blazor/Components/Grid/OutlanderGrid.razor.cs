@@ -453,7 +453,7 @@ public partial class OutlanderGrid<TItem> : IAsyncDisposable
     internal void RegisterSelectionColumn(OutlanderGridColumnDefinition<TItem> column)
     {
         if (_columns.Any(c => c.IsSelectionColumn))
-            throw new InvalidOperationException("Solo se permite una OutlanderGridSelectionColumn por grid.");
+            throw new InvalidOperationException("Only one OutlanderGridSelectionColumn is allowed per grid.");
 
         _columns.Insert(0, column);
 

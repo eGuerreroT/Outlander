@@ -31,7 +31,7 @@ The first component included in the library is a powerful data grid with support
 - Excel export
 - PDF export
 - Responsive design
-- Bootstrap 5 integration
+- Bootstrap 5 integration (Dark theme compatible)
 - Blazor Server support
 - Blazor WebAssembly support
 
@@ -178,7 +178,9 @@ Add the link to your `App.razor`:
                SearchBoxParseMode="GridSearchTextParseMode.GroupWordsByAnd"
                PageSize="@PageSize"
                PageSizeChanged="OnPageSizeChanged"
+               ShowPageSizeSelector="true"
                ShowColumnChooser="true"
+               ShowFilterRow="true"
                EmptyText="No Records.">
     <ToolbarTemplate>
         <div class="d-flex align-items-center gap-2 flex-wrap justify-content-end">
@@ -208,7 +210,7 @@ Add the link to your `App.razor`:
                                  FilterTextSelector="item => item.Name">
             <FilterTemplate Context="filter">
                 <input class="form-control form-control-sm"
-                       placeholder="Filtrar nombre..."
+                       placeholder="Filter by Name..."
                        value="@filter.Value"
                        @oninput="e => filter.SetValue(e.Value?.ToString())" />
             </FilterTemplate>
@@ -309,14 +311,9 @@ Add the link to your `App.razor`:
                                  AllowFilter="true"
                                  AllowSort="true"
                                  SortMode="GridColumnSortMode.DisplayText"
+                                 FilterMode="GridFilterMode.Range"
                                  SortTextSelector='item => $"{item.Provider}-({item.OperatingSystem})"'
-                                 FilterTextSelector='item => $"{item.Provider}-({item.OperatingSystem})"'>
-            <FilterTemplate Context="filter">
-                <input class="form-control form-control-sm"
-                       placeholder="SO..."
-                       value="@filter.Value"
-                       @oninput="e => filter.SetValue(e.Value?.ToString())" />
-            </FilterTemplate>
+                                 FilterTextSelector='item => $"{item.Provider}-({item.OperatingSystem})"'>            
             <CellTemplate Context="cell">
                 <div class="status-cell">
                     <span class="fw-bold">@cell.Highlight(cell.Item.Provider + "-")</span>
@@ -328,7 +325,6 @@ Add the link to your `App.razor`:
         <OutlanderGridDataColumn TItem="ServerItem"
                                  FieldName="_registered"
                                  Caption="Registered"
-                                 AllowFilter="false"
                                  AllowSort="false"
                                  FilterTextSelector='item => "No"'>
             <CellTemplate Context="cell">
