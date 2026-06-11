@@ -17,7 +17,7 @@ function loadScript(src) {
             }
 
             existing.addEventListener("load", () => resolve(), { once: true });
-            existing.addEventListener("error", () => reject(new Error(`No se pudo cargar el script: ${src}`)), { once: true });
+            existing.addEventListener("error", () => reject(new Error(`The script could not be loaded: ${src}`)), { once: true });
             return;
         }
 
@@ -31,7 +31,7 @@ function loadScript(src) {
         }, { once: true });
 
         script.addEventListener("error", () => {
-            reject(new Error(`No se pudo cargar el script: ${src}`));
+            reject(new Error(`The script could not be loaded: ${src}`));
         }, { once: true });
 
         document.head.appendChild(script);
@@ -74,14 +74,14 @@ async function ensureExportLibraries() {
 export async function ensureBootStrapLibraries() {
     const bootstrapVersion = window.bootstrap?.Tooltip?.VERSION;
 
-    console.log(`Bootstrap detectado: ${bootstrapVersion}`);
+    console.log(`Bootstrap detected: ${bootstrapVersion}`);
 
     if (!bootstrapVersion) {
-        throw new Error("Bootstrap no está disponible.");
+        throw new Error("Bootstrap is not available.");
     }
 
     if (!isVersionGreaterOrEqual(bootstrapVersion, "5.3.0")) {
-        throw new Error(`Bootstrap ${bootstrapVersion} no es compatible. Se requiere Bootstrap 5.3 o superior.`);
+        throw new Error(`Bootstrap ${bootstrapVersion} is not supported. Bootstrap 5.3 or later is required.`);
     }
 }
 
@@ -185,7 +185,7 @@ export async function exportExcel(fileName, title, headers, rows) {
     await ensureExportLibraries();
 
     if (!window.XLSX) {
-        throw new Error("SheetJS (XLSX) no está disponible.");
+        throw new Error("SheetJS (XLSX) is not available.");
     }
 
     const data = [];
@@ -263,7 +263,7 @@ export async function exportPdf(fileName, title, headers, rows) {
     await ensureExportLibraries();
 
     if (!window.jspdf || !window.jspdf.jsPDF) {
-        throw new Error("jsPDF no está disponible.");
+        throw new Error("jsPDF is not available.");
     }
 
     const doc = new window.jspdf.jsPDF({
@@ -278,7 +278,7 @@ export async function exportPdf(fileName, title, headers, rows) {
     }
 
     if (typeof doc.autoTable !== "function") {
-        throw new Error("jsPDF-AutoTable no está disponible.");
+        throw new Error("jsPDF-AutoTable is not available.");
     }
 
     doc.autoTable({
@@ -302,7 +302,7 @@ export function printGrid(title, headers, rows) {
     const printWindow = window.open("", "_blank");
 
     if (!printWindow) {
-        throw new Error("No se pudo abrir la ventana de impresión.");
+        throw new Error("The print window could not be opened.");
     }
 
     const headerHtml = headers
@@ -498,13 +498,13 @@ function cleanupClonedGridTable(container) {
 
 export function printGridWysiwyg(tableWrapperElement, title) {
     if (!tableWrapperElement) {
-        throw new Error("No se encontró el contenedor de la tabla del grid.");
+        throw new Error("The grid table container was not found.");
     }
 
     const table = tableWrapperElement.querySelector("table");
 
     if (!table) {
-        throw new Error("No se encontró la tabla del grid.");
+        throw new Error("The grid table was not found.");
     }
 
     const clonedTable = table.cloneNode(true);
@@ -519,7 +519,7 @@ export function printGridWysiwyg(tableWrapperElement, title) {
     const printWindow = window.open("", "_blank");
 
     if (!printWindow) {
-        throw new Error("No se pudo abrir la ventana de impresión.");
+        throw new Error("The print window could not be opened.");
     }
 
     const stylesHtml = collectDocumentStylesHtml();
@@ -608,17 +608,17 @@ export async function exportPdfWysiwyg(tableWrapperElement, fileName, title) {
     await ensureExportLibraries();
 
     if (!tableWrapperElement) {
-        throw new Error("No se encontró el contenedor de la tabla del grid.");
+        throw new Error("The grid table container was not found.");
     }
 
     if (!window.jspdf || !window.jspdf.jsPDF) {
-        throw new Error("jsPDF no está disponible.");
+        throw new Error("jsPDF is not available.");
     }
 
     const originalTable = tableWrapperElement.querySelector("table");
 
     if (!originalTable) {
-        throw new Error("No se encontró la tabla del grid.");
+        throw new Error("The grid table was not found.");
     }
 
     const clonedTable = originalTable.cloneNode(true);
@@ -634,13 +634,13 @@ export async function exportPdfWysiwyg(tableWrapperElement, fileName, title) {
     const cleanedTable = tempContainer.querySelector("table");
 
     if (!cleanedTable) {
-        throw new Error("No se pudo preparar la tabla limpia para exportación.");
+        throw new Error("The clean table could not be prepared for export.");
     }
 
     const { headers } = extractTableDataFromClonedTable(cleanedTable);
 
     if (!headers.length) {
-        throw new Error("La tabla no contiene encabezados exportables.");
+        throw new Error("The table does not contain exportable headers.");
     }
 
     if (title) {

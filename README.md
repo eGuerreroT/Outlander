@@ -38,6 +38,24 @@ The first component included in the library is a powerful data grid with support
 ---
 
 > [!IMPORTANT]
+> Outlander.Blazor requires **Bootstrap Bundle 5.3 or later**.
+>
+> Make sure the Bootstrap bundle script is loaded before using Outlander components:
+>
+> ```html
+> <script src="@Assets["lib/bootstrap/dist/js/bootstrap.bundle.js"]"></script>
+> ```
+>
+> If Bootstrap is missing or an unsupported version is loaded, a runtime exception similar to the following will be thrown:
+>
+> ```text
+> Bootstrap {bootstrapVersion} is not supported. Bootstrap 5.3 or later is required.
+> ```
+>
+> The Bootstrap bundle is required because Outlander.Blazor relies on Bootstrap JavaScript components and Popper functionality.
+
+
+> [!IMPORTANT]
 > Outlander.Blazor currently uses Bootstrap Icons internally.
 >
 > The library automatically loads Bootstrap Icons through its stylesheet using:
@@ -76,6 +94,7 @@ builder.Services.AddOutlander();
 ```
 
 Styles
+
 Add the link to your `App.razor`:
 
 ```razor
