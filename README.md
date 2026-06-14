@@ -98,7 +98,7 @@ Styles
 Add the link to your `App.razor`:
 
 ```razor
-<link href="_content/Outlander.Blazor/Outlander.Blazor.styles.css" rel="stylesheet">
+<link href="@Assets["_content/Outlander.Blazor/css/Outlander.Blazor.styles.css"]" rel="stylesheet">
 ```
 
 ---
