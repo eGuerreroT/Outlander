@@ -9,6 +9,18 @@
   Build Business Applications Faster with Blazor
 </h2>
 
+<p align="center">
+  <a href="https://www.nuget.org/packages/Outlander.Blazor">
+    <img src="https://img.shields.io/nuget/v/Outlander.Blazor.svg" alt="NuGet Version" />
+  </a>
+  <a href="https://www.nuget.org/packages/Outlander.Blazor">
+    <img src="https://img.shields.io/nuget/dt/Outlander.Blazor.svg" alt="NuGet Downloads" />
+  </a>
+  <a href="https://github.com/eGuerreroT/Outlander/blob/master/LICENSE">
+    <img src="https://img.shields.io/github/license/eGuerreroT/Outlander.svg" alt="License" />
+  </a>
+</p>
+
 Outlander.Blazor is a modern component library for Blazor applications focused on productivity, performance, and enterprise scenarios.
 
 The project provides reusable UI components designed to simplify the development of business applications such as ERP, CRM, POS, reporting systems, dashboards, and internal management platforms.
@@ -37,14 +49,53 @@ The first component included in the library is a powerful data grid with support
 
 ---
 
+## Installation
+
+```bash
+dotnet add package Outlander.Blazor
+```
+
+---
+
+## Namespaces Registration
+
+Add to `_Imports.razor`:
+
+```razor
+@using Outlander.Blazor
+@using Outlander.Blazor.Components
+```
+
+---
+
+## Styles and Scripts
+
+Outlander.Blazor requires **Bootstrap Bundle 5.3+** and the Outlander stylesheet.
+
+### Option A — Blazor Web App (.NET 8/9 with `@Assets`)
+
+Add in `App.razor`:
+
+```razor
+<link href="@Assets["_content/Outlander.Blazor/css/Outlander.Blazor.styles.css"]" rel="stylesheet" />
+<script src="@Assets["lib/bootstrap/dist/js/bootstrap.bundle.min.js"]"></script>
+```
+
+---
+
+### Option B — Generic/static path (`_content`)
+
+Use this when `@Assets` is not available:
+
+```html
+<link href="_content/Outlander.Blazor/css/Outlander.Blazor.styles.css" rel="stylesheet" />
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+```
+
 > [!IMPORTANT]
 > Outlander.Blazor requires **Bootstrap Bundle 5.3 or later**.
 >
 > Make sure the Bootstrap bundle script is loaded before using Outlander components:
->
-> ```html
-> <script src="@Assets["lib/bootstrap/dist/js/bootstrap.bundle.js"]"></script>
-> ```
 >
 > If Bootstrap is missing or an unsupported version is loaded, a runtime exception similar to the following will be thrown:
 >
@@ -68,37 +119,14 @@ The first component included in the library is a powerful data grid with support
 >
 > A self-contained icon system is planned for a future release.
 
-## Installation
-
-Install the package from NuGet:
-
-```bash
-dotnet add package Outlander.Blazor
-```
-
 ---
 
-## Registration
+## Optional Service Registration
 
-Add the namespace to your `_Imports.razor`:
-
-```razor
-@using Outlander.Blazor
-@using Outlander.Blazor.Components
-```
-
-If required by future components:
+If required by current/future components:
 
 ```csharp
 builder.Services.AddOutlander();
-```
-
-Styles
-
-Add the link to your `App.razor`:
-
-```razor
-<link href="@Assets["_content/Outlander.Blazor/css/Outlander.Blazor.styles.css"]" rel="stylesheet">
 ```
 
 ---
@@ -347,6 +375,67 @@ Add the link to your `App.razor`:
                 </button>
             </CellTemplate>
         </OutlanderGridDataColumn>
+    </Columns>
+</OutlanderGrid>
+```
+
+</details>
+
+
+<details>
+<summary>Settings-based Configuration (recommended)</summary>
+
+```razor
+<OutlanderGrid TItem="ServerItem"
+               Items="@Servers"
+               @bind-SelectedItems="@SelectedServers"
+               ShowColumnChooser="true"
+               EmptyText="No records found.">
+
+    <Settings>
+        <OutlanderGridSearchSettings TItem="ServerItem"
+                                     Show="true"
+                                     NullText="Search..."
+                                     Text=""
+                                     ParseMode="GridSearchTextParseMode.GroupWordsByAnd" />
+
+        <OutlanderGridFilterSettings TItem="ServerItem"
+                                     Show="true"
+                                     NullText="Filter..."
+                                     AllText="All"
+                                     FromText="From"
+                                     ToText="To" />
+
+        <OutlanderGridFooterSettings TItem="ServerItem"
+                                     SummaryTextFormat="Showing {0} - {1} of {2} records"
+                                     PreviousPageText="Previous"
+                                     NextPageText="Next" />
+
+        <OutlanderGridExportSettings TItem="ServerItem"
+                                     ShowButtons="true"
+                                     AllowExcel="true"
+                                     AllowPdf="true"
+                                     AllowPrint="true"
+                                     FileName="servers"
+                                     Title="Servers List" />
+
+        <OutlanderGridSelectionSettings TItem="ServerItem"
+                                        AllText="Select all"
+                                        CurrentPageText="Select current page"
+                                        SelectedItemsTextFormat="{0} selected"
+                                        SelectedPageItemsTextFormat="Selected on this page: {0}" />
+    </Settings>
+
+    <Columns>
+        <OutlanderGridSelectionColumn TItem="ServerItem"
+                                      Width="48px"
+                                      AllowSelectAllItems="true" />
+
+        <OutlanderGridDataColumn TItem="ServerItem" FieldName="Name" Caption="Name" />
+        <OutlanderGridDataColumn TItem="ServerItem" FieldName="Provider" Caption="Provider" />
+        <OutlanderGridDataColumn TItem="ServerItem" FieldName="Status" Caption="Status" />
+        <OutlanderGridDataColumn TItem="ServerItem" FieldName="MemoryGb" Caption="Memory (GB)" FilterMode="GridFilterMode.Range" />
+        <OutlanderGridDataColumn TItem="ServerItem" FieldName="CreatedAt" Caption="Created" FilterMode="GridFilterMode.Range" />
     </Columns>
 </OutlanderGrid>
 ```
