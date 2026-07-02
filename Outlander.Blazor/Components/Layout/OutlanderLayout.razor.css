@@ -8,6 +8,10 @@
     overflow: hidden;
 }
 
+.outlander-sidebar {
+    display: flex;
+}
+
 .outlander-main {
     flex: 1;
     min-width: 0;
