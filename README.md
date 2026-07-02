@@ -21,553 +21,209 @@
   </a>
 </p>
 
-Outlander.Blazor is a modern component library for Blazor applications focused on productivity, performance, and enterprise scenarios.
+Outlander.Blazor is a modern component library for Blazor applications
+focused on productivity, performance, and enterprise scenarios.
 
-The project provides reusable UI components designed to simplify the development of business applications such as ERP, CRM, POS, reporting systems, dashboards, and internal management platforms.
+The project provides reusable UI components designed to simplify the
+development of business applications such as:
 
----
+-   ERP systems
+-   CRM platforms
+-   POS applications
+-   Reporting systems
+-   Dashboards
+-   Internal management platforms
 
-## Features
+------------------------------------------------------------------------
 
-### OutlanderGrid
+# Features
 
-The first component included in the library is a powerful data grid with support for:
+## Data Components
 
-- Server-side and client-side data binding
-- Sorting
-- Filtering
-- Global search
-- Row selection
-- Column customization
-- Footer summaries
-- Excel export
-- PDF export
-- Responsive design
-- Bootstrap 5 integration (Dark theme compatible)
-- Blazor Server support
-- Blazor WebAssembly support
+## OutlanderGrid
 
----
+A powerful data grid component designed for enterprise applications.
 
-## Installation
+Features:
 
-```bash
+-   Server-side and client-side data binding
+-   Sorting
+-   Filtering
+-   Global search
+-   Row selection
+-   Column customization
+-   Footer summaries
+-   Excel export
+-   PDF export
+-   Responsive design
+-   Bootstrap 5.3 integration
+-   Dark theme support
+-   Blazor Server support
+-   Blazor WebAssembly support
+
+Documentation: [OutlanderGrid](Docs/Components/OutlanderGrid.md)
+
+------------------------------------------------------------------------
+
+## Layout Components
+
+## OutlanderNavMenu
+
+Responsive navigation component for application layouts.
+
+Features:
+
+-   Desktop collapsed mode
+-   Mobile navigation
+-   Nested menu items
+-   Flyout submenus
+-   Footer menu items
+-   Persistent collapsed state
+-   Bootstrap Icons integration
+
+Documentation: [OutlanderNavMenu](Docs/Components/OutlanderNavMenu.md)
+
+------------------------------------------------------------------------
+
+## OutlanderTopMenu
+
+Application top navigation component.
+
+Features:
+
+-   Navigation menu toggle
+-   Custom left and right content
+-   Action buttons
+-   Notification badges
+-   Theme selector integration
+-   Mobile offcanvas actions
+
+Documentation: [OutlanderTopMenu](Docs/Components/OutlanderTopMenu.md)
+
+------------------------------------------------------------------------
+
+## OutlanderThemeSelector
+
+Bootstrap theme selector component.
+
+Features:
+
+-   Light theme
+-   Dark theme
+-   System preference
+-   Browser persistence using localStorage
+-   Bootstrap 5.3 dark mode support
+
+Documentation: [OutlanderThemeSelector](Docs/Components/OutlanderThemeSelector.md)
+
+------------------------------------------------------------------------
+
+# Installation
+
+Install the NuGet package:
+
+``` bash
 dotnet add package Outlander.Blazor
 ```
 
----
+------------------------------------------------------------------------
 
-## Namespaces Registration
+# Quick Start
 
-Add to `_Imports.razor`:
+Add the required namespaces to `_Imports.razor`:
 
-```razor
+``` razor
 @using Outlander.Blazor
 @using Outlander.Blazor.Components
+@using Outlander.Blazor.Components.Layout
 ```
 
----
+Add the Outlander stylesheet:
 
-## Styles and Scripts
-
-Outlander.Blazor requires **Bootstrap Bundle 5.3+** and the Outlander stylesheet.
-
-### Option A — Blazor Web App (.NET 8/9 with `@Assets`)
-
-Add in `App.razor`:
-
-```razor
+``` html
 <link href="@Assets["_content/Outlander.Blazor/css/Outlander.Blazor.styles.css"]" rel="stylesheet" />
+```
+
+Add Outlander suport themes script:
+
+``` html
+<script src="@Assets["_content/Outlander.Blazor/js/OutlanderTheme.js"]"></script>
+```
+
+Add Bootstrap Bundle 5.3 or later:
+
+``` html
 <script src="@Assets["lib/bootstrap/dist/js/bootstrap.bundle.min.js"]"></script>
 ```
 
----
-
-### Option B — Generic/static path (`_content`)
-
-Use this when `@Assets` is not available:
-
-```html
-<link href="_content/Outlander.Blazor/css/Outlander.Blazor.styles.css" rel="stylesheet" />
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
-```
-
-> [!IMPORTANT]
-> Outlander.Blazor requires **Bootstrap Bundle 5.3 or later**.
->
-> Make sure the Bootstrap bundle script is loaded before using Outlander components:
->
-> If Bootstrap is missing or an unsupported version is loaded, a runtime exception similar to the following will be thrown:
->
-> ```text
-> Bootstrap {bootstrapVersion} is not supported. Bootstrap 5.3 or later is required.
-> ```
->
-> The Bootstrap bundle is required because Outlander.Blazor relies on Bootstrap JavaScript components and Popper functionality.
-
-
-> [!IMPORTANT]
-> Outlander.Blazor currently uses Bootstrap Icons internally.
->
-> The library automatically loads Bootstrap Icons through its stylesheet using:
->
-> ```css
-> @import url('https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css');
-> ```
->
-> Internet access to the CDN is required for icons to be displayed correctly.
->
-> A self-contained icon system is planned for a future release.
-
----
-
-## Optional Service Registration
-
-If required by current/future components:
+Optional Service Registration
 
 ```csharp
 builder.Services.AddOutlander();
 ```
 
----
+For detailed installation instructions:
 
-## Examples
+[Getting Started](Docs/GettingStarted.md)
 
-<details>
-<summary>Basic Implementation</summary>
+------------------------------------------------------------------------
 
-```razor
-<OutlanderGrid TItem="ServerItem"
-            Items="@ServersA"
-            @bind-FocusedRow="@FocusedServerA"
-            @bind-SelectedItems="@SelectedServersA"
-            ShowFilterRow="true"
-            PageSize="7"
-            EmptyText="Servers not found.">
+# Documentation
 
-    <Columns>
+## Components
 
-        <OutlanderGridDataColumn TItem="ServerItem"
-                            FieldName="Name" />
+-   [OutlanderGrid](Docs/Components/OutlanderGrid.md)
+-   [OutlanderNavMenu](Docs/Components/OutlanderNavMenu.md)
+-   [OutlanderTopMenu](Docs/Components/OutlanderTopMenu.md)
+-   [OutlanderThemeSelector](Docs/Components/OutlanderThemeSelector.md)
 
-        <OutlanderGridDataColumn TItem="ServerItem"
-                            FieldName="Provider" />
+## Guides
 
-        <OutlanderGridDataColumn TItem="ServerItem"
-                            FieldName="Status" />
+-   [Getting Started](Docs/GettingStarted.md)
+-   [Themes](Docs/Themes.md)
+-   [Layout](Docs/Layout.md)
 
-        <OutlanderGridDataColumn TItem="ServerItem"
-                            FieldName="Ip" />
+------------------------------------------------------------------------
 
-        <OutlanderGridDataColumn TItem="ServerItem"
-                            FieldName="Cluster" />
+# Roadmap
 
-        <OutlanderGridDataColumn TItem="ServerItem"
-                            FieldName="OperatingSystem" />
+## Version 0.x
 
-        <OutlanderGridDataColumn TItem="ServerItem"
-                            FieldName="IsNew" />
+-   [x] OutlanderGrid
+-   [x] Excel Export
+-   [x] PDF Export
+-   [x] Search
+-   [x] Filtering
+-   [x] Selection
+-   [x] OutlanderNavMenu
+-   [x] OutlanderTopMenu
+-   [x] Theme support
+-   [ ] Virtualization
+-   [ ] Column Reordering
+-   [ ] State Persistence
 
-        <OutlanderGridDataColumn TItem="ServerItem"
-                            FieldName="MemoryGb"
-                            FilterMode="GridFilterMode.Range" />
+## Version 1.x
 
-        <OutlanderGridDataColumn TItem="ServerItem"
-                            FieldName="CreatedAt"
-                            FilterMode="GridFilterMode.Range" />
-    </Columns>
-</OutlanderGrid>
-```
+-   [ ] OutlanderButton
+-   [ ] OutlanderDialog
+-   [ ] OutlanderToast
+-   [ ] OutlanderTextBox
+-   [ ] OutlanderSelect
+-   [ ] OutlanderDatePicker
+-   [ ] OutlanderTabs
 
-</details>
+------------------------------------------------------------------------
 
-<details>
-<summary>Custom Implementation</summary>
-  
-```razor
-<OutlanderGrid TItem="ServerItem"
-               Items="@ServersB"
-               RowClick="OnRowClick"
-               RowDoubleClick="OnRowDoubleClick"
-               AllowSort="true"
-               AllowHotTrackRow="true"
-               AllowFocusedRow="true"
-               @bind-FocusedRow="@FocusedServerB"
-               @bind-SelectedItems="@SelectedServersB"
-               ShowSearchBox="true"
-               SearchBoxNullText="Search in all columns..."
-               SearchBoxText=""
-               ShowExportButtons="true"
-               ExcelExportMode="OutlanderGridExportMode.Data"
-               PdfExportMode="OutlanderGridExportMode.Data"
-               PrintExportMode="OutlanderGridExportMode.Data"
-               ExportFileName="Servers"
-               ExportTitle="Servers List"
-               SearchBoxParseMode="GridSearchTextParseMode.GroupWordsByAnd"
-               PageSize="@PageSize"
-               PageSizeChanged="OnPageSizeChanged"
-               ShowPageSizeSelector="true"
-               ShowColumnChooser="true"
-               ShowFilterRow="true"
-               EmptyText="No Records.">
-    <ToolbarTemplate>
-        <div class="d-flex align-items-center gap-2 flex-wrap justify-content-end">
-            <button class="btn btn-primary"
-                    data-bs-toggle="modal"
-                    data-bs-target="#importServersModal"
-                    disabled="@(SelectedServers.Count == 0)">
-                <i class="bi bi-download me-2"></i>
-                <span>Import @SelectedServers.Count Selected</span>
-            </button>
-        </div>
-    </ToolbarTemplate>
-    <Columns>
-        <OutlanderGridSelectionColumn TItem="ServerItem"
-                                      Width="48px"
-                                      AllowSelectAllItems="true" />
-
-        <OutlanderGridDataColumn TItem="ServerItem"
-                                 FieldName="Name"
-                                 Caption="Name"
-                                 AllowFilter="true"
-                                 AllowSort="true"
-                                 SortMode="GridColumnSortMode.DisplayText"
-                                 SortOrder="GridColumnSortOrder.Ascending"
-                                 SortIndex="1"
-                                 SortTextSelector="item => item.Name"
-                                 FilterTextSelector="item => item.Name">
-            <FilterTemplate Context="filter">
-                <input class="form-control form-control-sm"
-                       placeholder="Filter by Name..."
-                       value="@filter.Value"
-                       @oninput="e => filter.SetValue(e.Value?.ToString())" />
-            </FilterTemplate>
-            <CellTemplate Context="cell">
-                <div class="name-cell">
-                    @cell.Highlight(cell.Item.Name)
-                    @if (cell.Item.IsNew)
-                    {
-                        <span class="bg-danger bg-opacity-10 text-danger border border-danger-subtle px-2 py-1 small rounded-pill ms-2">NUEVO</span>
-                    }
-                </div>
-            </CellTemplate>
-        </OutlanderGridDataColumn>
-
-        <OutlanderGridDataColumn TItem="ServerItem"
-                                 FieldName="Provider"
-                                 Caption="Provider"
-                                 AllowFilter="true"
-                                 AllowSort="true"
-                                 SortMode="GridColumnSortMode.DisplayText"
-                                 SortTextSelector="item => item.Provider"
-                                 FilterTextSelector="item => item.Provider">
-            <FilterTemplate Context="filter">
-                <select class="form-select form-select-sm"
-                        value="@filter.Value"
-                        @onchange="e => filter.SetValue(e.Value?.ToString())">
-                    <option value="">Todos</option>
-                    <option value="VMware">VMware</option>
-                    <option value="Alibaba">Alibaba</option>
-                </select>
-            </FilterTemplate>
-            <CellTemplate Context="cell">
-                <div class="provider-cell">
-                    <span class="provider-mini @cell.Item.BootStrapIcon">@cell.Item.Abreviature</span>
-                    <span>@cell.Highlight(cell.Item.Provider)</span>
-                </div>
-            </CellTemplate>
-        </OutlanderGridDataColumn>
-
-        <OutlanderGridDataColumn TItem="ServerItem"
-                                 FieldName="Status"
-                                 Caption="Status"
-                                 AllowFilter="true"
-                                 AllowSort="true"
-                                 SortMode="GridColumnSortMode.DisplayText"
-                                 SortTextSelector="item => item.Status"
-                                 FilterTextSelector="item => item.Status">
-            <FilterTemplate Context="filter">
-                <select class="form-select form-select-sm"
-                        value="@filter.Value"
-                        @onchange="e => filter.SetValue(e.Value?.ToString())">
-                    <option value="">Todos</option>
-                    <option value="Running">Running</option>
-                    <option value="Powered Off">Powered Off</option>
-                </select>
-            </FilterTemplate>
-            <CellTemplate Context="cell">
-                <div class="status-cell">
-                    <span class="status-dot @(cell.Item.Status == "Running" ? "status-green" : "status-orange")"></span>
-                    <span>@cell.Highlight(cell.Item.Status)</span>
-                </div>
-            </CellTemplate>
-        </OutlanderGridDataColumn>
-
-        <OutlanderGridDataColumn TItem="ServerItem"
-                                 FieldName="Ip"
-                                 Caption="IP"
-                                 AllowFilter="true"
-                                 AllowSort="true"
-                                 FilterTextSelector="item => item.Ip">
-            <FilterTemplate Context="filter">
-                <input class="form-control form-control-sm"
-                       placeholder="IP..."
-                       value="@filter.Value"
-                       @oninput="e => filter.SetValue(e.Value?.ToString())" />
-            </FilterTemplate>
-        </OutlanderGridDataColumn>
-
-        <OutlanderGridDataColumn TItem="ServerItem"
-                                 FieldName="Cluster"
-                                 Caption="Cluster / Resource"
-                                 AllowFilter="true"
-                                 AllowSort="true"
-                                 SortMode="GridColumnSortMode.DisplayText"
-                                 SortTextSelector="item => item.Cluster"
-                                 FilterTextSelector="item => item.Cluster">
-            <FilterTemplate Context="filter">
-                <input class="form-control form-control-sm"
-                       placeholder="Cluster..."
-                       value="@filter.Value"
-                       @oninput="e => filter.SetValue(e.Value?.ToString())" />
-            </FilterTemplate>
-        </OutlanderGridDataColumn>
-
-        <OutlanderGridDataColumn TItem="ServerItem"
-                                 FieldName="OperatingSystem"
-                                 Caption="Operating System"
-                                 AllowFilter="true"
-                                 AllowSort="true"
-                                 SortMode="GridColumnSortMode.DisplayText"
-                                 FilterMode="GridFilterMode.Range"
-                                 SortTextSelector='item => $"{item.Provider}-({item.OperatingSystem})"'
-                                 FilterTextSelector='item => $"{item.Provider}-({item.OperatingSystem})"'>            
-            <CellTemplate Context="cell">
-                <div class="status-cell">
-                    <span class="fw-bold">@cell.Highlight(cell.Item.Provider + "-")</span>
-                    <span>@cell.Highlight(cell.Item.OperatingSystem)</span>
-                </div>
-            </CellTemplate>
-        </OutlanderGridDataColumn>
-
-        <OutlanderGridDataColumn TItem="ServerItem"
-                                 FieldName="_registered"
-                                 Caption="Registered"
-                                 AllowSort="false"
-                                 FilterTextSelector='item => "No"'>
-            <CellTemplate Context="cell">
-                <span class="bg-danger bg-opacity-10 border border-danger-subtle fw-normal px-2 py-1 rounded small text-danger">
-                    @cell.Highlight("No")
-                </span>
-            </CellTemplate>
-        </OutlanderGridDataColumn>
-
-        <OutlanderGridDataColumn TItem="ServerItem"
-                                 FieldName="_actions"
-                                 Caption="Action"
-                                 AllowFilter="false"
-                                 AllowSort="false"
-                                 AllowExport="false"
-                                 Width="90px">
-            <CellTemplate Context="cell">
-                <button class="btn btn-default btn-default-sm app-grid-export-ignore">
-                    <i class="bi bi-download"></i>
-                </button>
-            </CellTemplate>
-        </OutlanderGridDataColumn>
-    </Columns>
-</OutlanderGrid>
-```
-
-</details>
-
-
-<details>
-<summary>Settings-based Configuration (recommended)</summary>
-
-```razor
-<OutlanderGrid TItem="ServerItem"
-               Items="@Servers"
-               @bind-SelectedItems="@SelectedServers"
-               ShowColumnChooser="true"
-               EmptyText="No records found.">
-
-    <Settings>
-        <OutlanderGridSearchSettings TItem="ServerItem"
-                                     Show="true"
-                                     NullText="Search..."
-                                     Text=""
-                                     ParseMode="GridSearchTextParseMode.GroupWordsByAnd" />
-
-        <OutlanderGridFilterSettings TItem="ServerItem"
-                                     Show="true"
-                                     NullText="Filter..."
-                                     AllText="All"
-                                     FromText="From"
-                                     ToText="To" />
-
-        <OutlanderGridFooterSettings TItem="ServerItem"
-                                     SummaryTextFormat="Showing {0} - {1} of {2} records"
-                                     PreviousPageText="Previous"
-                                     NextPageText="Next" />
-
-        <OutlanderGridExportSettings TItem="ServerItem"
-                                     ShowButtons="true"
-                                     AllowExcel="true"
-                                     AllowPdf="true"
-                                     AllowPrint="true"
-                                     FileName="servers"
-                                     Title="Servers List" />
-
-        <OutlanderGridSelectionSettings TItem="ServerItem"
-                                        AllText="Select all"
-                                        CurrentPageText="Select current page"
-                                        SelectedItemsTextFormat="{0} selected"
-                                        SelectedPageItemsTextFormat="Selected on this page: {0}" />
-    </Settings>
-
-    <Columns>
-        <OutlanderGridSelectionColumn TItem="ServerItem"
-                                      Width="48px"
-                                      AllowSelectAllItems="true" />
-
-        <OutlanderGridDataColumn TItem="ServerItem" FieldName="Name" Caption="Name" />
-        <OutlanderGridDataColumn TItem="ServerItem" FieldName="Provider" Caption="Provider" />
-        <OutlanderGridDataColumn TItem="ServerItem" FieldName="Status" Caption="Status" />
-        <OutlanderGridDataColumn TItem="ServerItem" FieldName="MemoryGb" Caption="Memory (GB)" FilterMode="GridFilterMode.Range" />
-        <OutlanderGridDataColumn TItem="ServerItem" FieldName="CreatedAt" Caption="Created" FilterMode="GridFilterMode.Range" />
-    </Columns>
-</OutlanderGrid>
-```
-
-</details>
-
-<details>
-<summary>Model</summary>
-
-```csharp
-public class ServerItem
-    {
-        public string Name { get; set; } = string.Empty;
-        public string Provider { get; set; } = string.Empty;
-        public string Status { get; set; } = string.Empty;
-        public string Ip { get; set; } = string.Empty;
-        public string Cluster { get; set; } = string.Empty;
-        public string OperatingSystem { get; set; } = string.Empty;
-        public string BootStrapIcon { get; set; } = string.Empty;
-        public string Abreviature { get; set; } = string.Empty;
-        public bool IsNew { get; set; }
-        public bool Selected { get; set; }
-        public DateTime CreatedAt { get; set; }
-        public decimal MemoryGb { get; set; }
-    }
-
-    private List<ServerItem> ServersA = new()
-    {
-        new() { Name = "vm-prod-01", Provider = "VMware", Status = "Running", Ip = "10.10.10.10", Cluster = "Cluster-Prod", OperatingSystem = "Ubuntu 22.04", IsNew = true, Selected = true, BootStrapIcon = "provider-badge-primary", Abreviature = "vm", CreatedAt = new DateTime(2026, 05, 29), MemoryGb = 16 },
-        new() { Name = "vm-prod-01", Provider = "VMware", Status = "Running", Ip = "10.10.10.10", Cluster = "Cluster-Prod", OperatingSystem = "Ubuntu 22.04", IsNew = true, Selected = true, BootStrapIcon = "provider-badge-primary", Abreviature = "vm", CreatedAt = new DateTime(2026, 04, 29), MemoryGb = 20 },
-        new() { Name = "vm-db0-01", Provider = "Alibaba", Status = "Running", Ip = "10.10.10.11", Cluster = "Clúster-Prod", OperatingSystem = "RHEL 8.6", IsNew = true, Selected = true, BootStrapIcon = "provider-badge-orange", Abreviature = "a", CreatedAt = new DateTime(2026, 06, 29), MemoryGb = 16 },
-        new() { Name = "vm-db0-01", Provider = "Alibaba", Status = "Running", Ip = "10.10.10.11", Cluster = "Cluster-Prod", OperatingSystem = "RHEL 8.6", IsNew = true, Selected = true, BootStrapIcon = "provider-badge-orange", Abreviature = "a", CreatedAt = new DateTime(2026, 05, 9), MemoryGb = 16 },
-        new() { Name = "vm-prod-01", Provider = "VMware", Status = "Running", Ip = "10.10.10.10", Cluster = "Cluster-Prod", OperatingSystem = "Ubuntu 22.04", IsNew = true, Selected = true, BootStrapIcon = "provider-badge-primary", Abreviature = "vm", CreatedAt = new DateTime(2025, 05, 29), MemoryGb = 32 },
-        new() { Name = "vm-prod-01", Provider = "VMware", Status = "Running", Ip = "10.10.10.10", Cluster = "Cluster-Prod", OperatingSystem = "Ubuntu 22.04", IsNew = true, Selected = true, BootStrapIcon = "provider-badge-primary", Abreviature = "vm", CreatedAt = new DateTime(2024, 05, 29), MemoryGb = 64 },
-        new() { Name = "vm-db0-01", Provider = "Alibaba", Status = "Running", Ip = "10.10.10.11", Cluster = "Cluster-Prod", OperatingSystem = "RHEL 8.6", IsNew = true, Selected = true, BootStrapIcon = "provider-badge-orange", Abreviature = "a", CreatedAt = new DateTime(2026, 07, 29), MemoryGb = 128 },
-        new() { Name = "vm-db0-01", Provider = "Alibaba", Status = "Running", Ip = "10.10.10.11", Cluster = "Cluster-Prod", OperatingSystem = "RHEL 8.6", IsNew = true, Selected = true, BootStrapIcon = "provider-badge-orange", Abreviature = "a", CreatedAt = new DateTime(2026, 08, 29), MemoryGb = 32 },
-        new() { Name = "vm-prod-01", Provider = "VMware", Status = "Running", Ip = "10.10.10.10", Cluster = "Cluster-Prod", OperatingSystem = "Ubuntu 22.04", IsNew = true, Selected = true, BootStrapIcon = "provider-badge-primary", Abreviature = "vm", CreatedAt = new DateTime(2026, 05, 29), MemoryGb = 32 },
-        new() { Name = "vm-prod-01", Provider = "VMware", Status = "Running", Ip = "10.10.10.10", Cluster = "Cluster-Prod", OperatingSystem = "Ubuntu 22.04", IsNew = true, Selected = true, BootStrapIcon = "provider-badge-primary", Abreviature = "vm", CreatedAt = new DateTime(2026, 05, 29), MemoryGb = 16 },
-        new() { Name = "vm-db0-01", Provider = "Alibaba", Status = "Running", Ip = "10.10.10.11", Cluster = "Cluster-Prod", OperatingSystem = "RHEL 8.6", IsNew = true, Selected = true, BootStrapIcon = "provider-badge-orange", Abreviature = "a", CreatedAt = new DateTime(2026, 07, 30), MemoryGb = 64 },
-        new() { Name = "vm-db0-01", Provider = "Alibaba", Status = "Running", Ip = "10.10.10.11", Cluster = "Cluster-Prod", OperatingSystem = "RHEL 8.6", IsNew = true, Selected = true, BootStrapIcon = "provider-badge-orange", Abreviature = "a", CreatedAt = new DateTime(2026, 08, 30), MemoryGb = 16 },
-        new() { Name = "vm-prod-01", Provider = "VMware", Status = "Running", Ip = "10.10.10.10", Cluster = "Cluster-Prod", OperatingSystem = "Ubuntu 22.04", IsNew = true, Selected = true, BootStrapIcon = "provider-badge-primary", Abreviature = "vm", CreatedAt = new DateTime(2026, 05, 20), MemoryGb = 20 },
-        new() { Name = "vm-prod-01", Provider = "VMware", Status = "Running", Ip = "10.10.10.10", Cluster = "Cluster-Prod", OperatingSystem = "Ubuntu 22.04", IsNew = true, Selected = true, BootStrapIcon = "provider-badge-primary", Abreviature = "vm", CreatedAt = new DateTime(2026, 05, 20), MemoryGb = 20 },
-        new() { Name = "vm-db0-01", Provider = "Alibaba", Status = "Running", Ip = "10.10.10.11", Cluster = "Cluster-Prod", OperatingSystem = "RHEL 8.6", IsNew = true, Selected = true, BootStrapIcon = "provider-badge-orange", Abreviature = "a", CreatedAt = new DateTime(2026, 2, 19), MemoryGb = 32 },
-        new() { Name = "vm-db0-01", Provider = "Alibaba", Status = "Running", Ip = "10.10.10.11", Cluster = "Cluster-Prod", OperatingSystem = "RHEL 8.6", IsNew = true, Selected = true, BootStrapIcon = "provider-badge-orange", Abreviature = "a", CreatedAt = new DateTime(2026, 2, 9), MemoryGb = 32 },
-        new() { Name = "vm-db0-01", Provider = "Alibaba", Status = "Running", Ip = "10.10.10.11", Cluster = "Cluster-Prod", OperatingSystem = "RHEL 8.6", IsNew = true, Selected = true, BootStrapIcon = "provider-badge-orange", Abreviature = "a", CreatedAt = new DateTime(2026, 2, 2), MemoryGb = 20 },
-        new() { Name = "vm-web-02", Provider = "Alibaba", Status = "Powered Off", Ip = "10.10.10.12", Cluster = "Cluster-Web", OperatingSystem = "Ubuntu 20.04", IsNew = true, Selected = true, BootStrapIcon = "provider-badge-orange", Abreviature = "a", CreatedAt = new DateTime(2026, 04, 29), MemoryGb = 20 },
-        new() { Name = "vm-web-02", Provider = "Alibaba", Status = "Powered Off", Ip = "10.10.10.12", Cluster = "Cluster-Web", OperatingSystem = "Ubuntu 20.04", IsNew = true, Selected = true, BootStrapIcon = "provider-badge-orange", Abreviature = "a", CreatedAt = new DateTime(2026, 09, 29), MemoryGb = 20 },
-        new() { Name = "vm-web-02", Provider = "Alibaba", Status = "Powered Off", Ip = "10.10.10.12", Cluster = "Cluster-Web", OperatingSystem = "Ubuntu 20.04", IsNew = true, Selected = true, BootStrapIcon = "provider-badge-orange", Abreviature = "a", CreatedAt = new DateTime(2026, 10, 29), MemoryGb = 20 },
-        new() { Name = "vm-app-03", Provider = "VMware", Status = "Running", Ip = "10.10.10.13", Cluster = "Cluster-Apps", OperatingSystem = "CentOS 7", IsNew = true, Selected = true, BootStrapIcon = "provider-badge-primary", Abreviature = "vm", CreatedAt = new DateTime(2026, 11, 29), MemoryGb = 20 },
-        new() { Name = "vm-app-03", Provider = "VMware", Status = "Running", Ip = "10.10.10.13", Cluster = "Cluster-Apps", OperatingSystem = "CentOS 7", IsNew = true, Selected = true, BootStrapIcon = "provider-badge-primary", Abreviature = "vm", CreatedAt = new DateTime(2026, 12, 29), MemoryGb = 64 },
-        new() { Name = "vm-app-03", Provider = "VMware", Status = "Running", Ip = "10.10.10.13", Cluster = "Cluster-Apps", OperatingSystem = "CentOS 7", IsNew = true, Selected = true, BootStrapIcon = "provider-badge-primary", Abreviature = "vm", CreatedAt = new DateTime(2026, 1, 29), MemoryGb = 64 },
-        new() { Name = "vm-test-01", Provider = "VMware", Status = "Running", Ip = "10.10.10.14", Cluster = "Cluster-Test", OperatingSystem = "Debian 11", IsNew = true, Selected = true, BootStrapIcon = "provider-badge-primary", Abreviature = "vm", CreatedAt = new DateTime(2026, 05, 2), MemoryGb = 120 },
-        new() { Name = "vm-test-01", Provider = "VMware", Status = "Running", Ip = "10.10.10.14", Cluster = "Cluster-Test", OperatingSystem = "Debian 11", IsNew = true, Selected = true, BootStrapIcon = "provider-badge-primary", Abreviature = "vm", CreatedAt = new DateTime(2026, 05, 19), MemoryGb = 120 },
-        new() { Name = "vm-test-01", Provider = "VMware", Status = "Running", Ip = "10.10.10.14", Cluster = "Cluster-Test", OperatingSystem = "Debian 11", IsNew = true, Selected = true, BootStrapIcon = "provider-badge-primary", Abreviature = "vm", CreatedAt = new DateTime(2026, 03, 9), MemoryGb = 16 },
-        new() { Name = "vm-test-01", Provider = "VMware", Status = "Running", Ip = "10.10.10.14", Cluster = "Cluster-Test", OperatingSystem = "Debian 11", IsNew = true, Selected = true, BootStrapIcon = "provider-badge-primary", Abreviature = "vm", CreatedAt = new DateTime(2026, 07, 9), MemoryGb = 16 },
-        new() { Name = "vm-test-01", Provider = "VMware", Status = "Running", Ip = "10.10.10.14", Cluster = "Cluster-Test", OperatingSystem = "Debian 11", IsNew = true, Selected = true, BootStrapIcon = "provider-badge-primary", Abreviature = "vm", CreatedAt = new DateTime(2026, 07, 19), MemoryGb = 16 },
-    };
-
-    private List<ServerItem> ServersB = new()
-    {
-        new() { Name = "vm-prod-01", Provider = "VMware", Status = "Running", Ip = "10.10.10.10", Cluster = "Cluster-Prod", OperatingSystem = "Ubuntu 22.04", IsNew = true, Selected = true, BootStrapIcon = "provider-badge-primary", Abreviature = "vm", CreatedAt = new DateTime(2026, 05, 29), MemoryGb = 16 },
-        new() { Name = "vm-prod-01", Provider = "VMware", Status = "Running", Ip = "10.10.10.10", Cluster = "Cluster-Prod", OperatingSystem = "Ubuntu 22.04", IsNew = true, Selected = true, BootStrapIcon = "provider-badge-primary", Abreviature = "vm", CreatedAt = new DateTime(2026, 04, 29), MemoryGb = 20 },
-        new() { Name = "vm-db0-01", Provider = "Alibaba", Status = "Running", Ip = "10.10.10.11", Cluster = "Clúster-Prod", OperatingSystem = "RHEL 8.6", IsNew = true, Selected = true, BootStrapIcon = "provider-badge-orange", Abreviature = "a", CreatedAt = new DateTime(2026, 06, 29), MemoryGb = 16 },
-        new() { Name = "vm-db0-01", Provider = "Alibaba", Status = "Running", Ip = "10.10.10.11", Cluster = "Cluster-Prod", OperatingSystem = "RHEL 8.6", IsNew = true, Selected = true, BootStrapIcon = "provider-badge-orange", Abreviature = "a", CreatedAt = new DateTime(2026, 05, 9), MemoryGb = 16 },
-        new() { Name = "vm-prod-01", Provider = "VMware", Status = "Running", Ip = "10.10.10.10", Cluster = "Cluster-Prod", OperatingSystem = "Ubuntu 22.04", IsNew = true, Selected = true, BootStrapIcon = "provider-badge-primary", Abreviature = "vm", CreatedAt = new DateTime(2025, 05, 29), MemoryGb = 32 },
-        new() { Name = "vm-prod-01", Provider = "VMware", Status = "Running", Ip = "10.10.10.10", Cluster = "Cluster-Prod", OperatingSystem = "Ubuntu 22.04", IsNew = true, Selected = true, BootStrapIcon = "provider-badge-primary", Abreviature = "vm", CreatedAt = new DateTime(2024, 05, 29), MemoryGb = 64 },
-        new() { Name = "vm-db0-01", Provider = "Alibaba", Status = "Running", Ip = "10.10.10.11", Cluster = "Cluster-Prod", OperatingSystem = "RHEL 8.6", IsNew = true, Selected = true, BootStrapIcon = "provider-badge-orange", Abreviature = "a", CreatedAt = new DateTime(2026, 07, 29), MemoryGb = 128 },
-        new() { Name = "vm-db0-01", Provider = "Alibaba", Status = "Running", Ip = "10.10.10.11", Cluster = "Cluster-Prod", OperatingSystem = "RHEL 8.6", IsNew = true, Selected = true, BootStrapIcon = "provider-badge-orange", Abreviature = "a", CreatedAt = new DateTime(2026, 08, 29), MemoryGb = 32 },
-        new() { Name = "vm-prod-01", Provider = "VMware", Status = "Running", Ip = "10.10.10.10", Cluster = "Cluster-Prod", OperatingSystem = "Ubuntu 22.04", IsNew = true, Selected = true, BootStrapIcon = "provider-badge-primary", Abreviature = "vm", CreatedAt = new DateTime(2026, 05, 29), MemoryGb = 32 },
-        new() { Name = "vm-prod-01", Provider = "VMware", Status = "Running", Ip = "10.10.10.10", Cluster = "Cluster-Prod", OperatingSystem = "Ubuntu 22.04", IsNew = true, Selected = true, BootStrapIcon = "provider-badge-primary", Abreviature = "vm", CreatedAt = new DateTime(2026, 05, 29), MemoryGb = 16 },
-        new() { Name = "vm-db0-01", Provider = "Alibaba", Status = "Running", Ip = "10.10.10.11", Cluster = "Cluster-Prod", OperatingSystem = "RHEL 8.6", IsNew = true, Selected = true, BootStrapIcon = "provider-badge-orange", Abreviature = "a", CreatedAt = new DateTime(2026, 07, 30), MemoryGb = 64 },
-        new() { Name = "vm-db0-01", Provider = "Alibaba", Status = "Running", Ip = "10.10.10.11", Cluster = "Cluster-Prod", OperatingSystem = "RHEL 8.6", IsNew = true, Selected = true, BootStrapIcon = "provider-badge-orange", Abreviature = "a", CreatedAt = new DateTime(2026, 08, 30), MemoryGb = 16 },
-        new() { Name = "vm-prod-01", Provider = "VMware", Status = "Running", Ip = "10.10.10.10", Cluster = "Cluster-Prod", OperatingSystem = "Ubuntu 22.04", IsNew = true, Selected = true, BootStrapIcon = "provider-badge-primary", Abreviature = "vm", CreatedAt = new DateTime(2026, 05, 20), MemoryGb = 20 },
-        new() { Name = "vm-prod-01", Provider = "VMware", Status = "Running", Ip = "10.10.10.10", Cluster = "Cluster-Prod", OperatingSystem = "Ubuntu 22.04", IsNew = true, Selected = true, BootStrapIcon = "provider-badge-primary", Abreviature = "vm", CreatedAt = new DateTime(2026, 05, 20), MemoryGb = 20 },
-        new() { Name = "vm-db0-01", Provider = "Alibaba", Status = "Running", Ip = "10.10.10.11", Cluster = "Cluster-Prod", OperatingSystem = "RHEL 8.6", IsNew = true, Selected = true, BootStrapIcon = "provider-badge-orange", Abreviature = "a", CreatedAt = new DateTime(2026, 2, 19), MemoryGb = 32 },
-        new() { Name = "vm-db0-01", Provider = "Alibaba", Status = "Running", Ip = "10.10.10.11", Cluster = "Cluster-Prod", OperatingSystem = "RHEL 8.6", IsNew = true, Selected = true, BootStrapIcon = "provider-badge-orange", Abreviature = "a", CreatedAt = new DateTime(2026, 2, 9), MemoryGb = 32 },
-        new() { Name = "vm-db0-01", Provider = "Alibaba", Status = "Running", Ip = "10.10.10.11", Cluster = "Cluster-Prod", OperatingSystem = "RHEL 8.6", IsNew = true, Selected = true, BootStrapIcon = "provider-badge-orange", Abreviature = "a", CreatedAt = new DateTime(2026, 2, 2), MemoryGb = 20 },
-        new() { Name = "vm-web-02", Provider = "Alibaba", Status = "Powered Off", Ip = "10.10.10.12", Cluster = "Cluster-Web", OperatingSystem = "Ubuntu 20.04", IsNew = true, Selected = true, BootStrapIcon = "provider-badge-orange", Abreviature = "a", CreatedAt = new DateTime(2026, 04, 29), MemoryGb = 20 },
-        new() { Name = "vm-web-02", Provider = "Alibaba", Status = "Powered Off", Ip = "10.10.10.12", Cluster = "Cluster-Web", OperatingSystem = "Ubuntu 20.04", IsNew = true, Selected = true, BootStrapIcon = "provider-badge-orange", Abreviature = "a", CreatedAt = new DateTime(2026, 09, 29), MemoryGb = 20 },
-        new() { Name = "vm-web-02", Provider = "Alibaba", Status = "Powered Off", Ip = "10.10.10.12", Cluster = "Cluster-Web", OperatingSystem = "Ubuntu 20.04", IsNew = true, Selected = true, BootStrapIcon = "provider-badge-orange", Abreviature = "a", CreatedAt = new DateTime(2026, 10, 29), MemoryGb = 20 },
-        new() { Name = "vm-app-03", Provider = "VMware", Status = "Running", Ip = "10.10.10.13", Cluster = "Cluster-Apps", OperatingSystem = "CentOS 7", IsNew = true, Selected = true, BootStrapIcon = "provider-badge-primary", Abreviature = "vm", CreatedAt = new DateTime(2026, 11, 29), MemoryGb = 20 },
-        new() { Name = "vm-app-03", Provider = "VMware", Status = "Running", Ip = "10.10.10.13", Cluster = "Cluster-Apps", OperatingSystem = "CentOS 7", IsNew = true, Selected = true, BootStrapIcon = "provider-badge-primary", Abreviature = "vm", CreatedAt = new DateTime(2026, 12, 29), MemoryGb = 64 },
-        new() { Name = "vm-app-03", Provider = "VMware", Status = "Running", Ip = "10.10.10.13", Cluster = "Cluster-Apps", OperatingSystem = "CentOS 7", IsNew = true, Selected = true, BootStrapIcon = "provider-badge-primary", Abreviature = "vm", CreatedAt = new DateTime(2026, 1, 29), MemoryGb = 64 },
-        new() { Name = "vm-test-01", Provider = "VMware", Status = "Running", Ip = "10.10.10.14", Cluster = "Cluster-Test", OperatingSystem = "Debian 11", IsNew = true, Selected = true, BootStrapIcon = "provider-badge-primary", Abreviature = "vm", CreatedAt = new DateTime(2026, 05, 2), MemoryGb = 120 },
-        new() { Name = "vm-test-01", Provider = "VMware", Status = "Running", Ip = "10.10.10.14", Cluster = "Cluster-Test", OperatingSystem = "Debian 11", IsNew = true, Selected = true, BootStrapIcon = "provider-badge-primary", Abreviature = "vm", CreatedAt = new DateTime(2026, 05, 19), MemoryGb = 120 },
-        new() { Name = "vm-test-01", Provider = "VMware", Status = "Running", Ip = "10.10.10.14", Cluster = "Cluster-Test", OperatingSystem = "Debian 11", IsNew = true, Selected = true, BootStrapIcon = "provider-badge-primary", Abreviature = "vm", CreatedAt = new DateTime(2026, 03, 9), MemoryGb = 16 },
-        new() { Name = "vm-test-01", Provider = "VMware", Status = "Running", Ip = "10.10.10.14", Cluster = "Cluster-Test", OperatingSystem = "Debian 11", IsNew = true, Selected = true, BootStrapIcon = "provider-badge-primary", Abreviature = "vm", CreatedAt = new DateTime(2026, 07, 9), MemoryGb = 16 },
-        new() { Name = "vm-test-01", Provider = "VMware", Status = "Running", Ip = "10.10.10.14", Cluster = "Cluster-Test", OperatingSystem = "Debian 11", IsNew = true, Selected = true, BootStrapIcon = "provider-badge-primary", Abreviature = "vm", CreatedAt = new DateTime(2026, 07, 19), MemoryGb = 16 },
-    };
-```
-
-</details>
-
----
-
-## Roadmap
-
-### Version 0.x
-
-- [x] OutlanderGrid
-- [x] Excel Export
-- [x] PDF Export
-- [x] Search
-- [x] Filtering
-- [x] Selection
-- [x] Focus
-- [ ] Virtualization
-- [ ] Column Reordering
-- [ ] State Persistence
-
-### Version 1.x
-
-- [ ] OutlanderButton
-- [ ] OutlanderDialog
-- [ ] OutlanderToast
-- [ ] OutlanderTextBox
-- [ ] OutlanderSelect
-- [ ] OutlanderDatePicker
-- [ ] OutlanderTabs
-
----
-
-## Browser Support
+# Browser Support
 
 Outlander.Blazor supports all modern browsers:
 
-- Microsoft Edge
-- Google Chrome
-- Mozilla Firefox
-- Safari
+-   Microsoft Edge
+-   Google Chrome
+-   Mozilla Firefox
+-   Safari
 
----
+------------------------------------------------------------------------
 
 ## Compatibility
 
@@ -577,7 +233,7 @@ Outlander.Blazor supports all modern browsers:
 | .NET 9 | ✅ |
 | .NET 10 | ✅ |
 
----
+------------------------------------------------------------------------
 
 ## Contributing
 
@@ -585,7 +241,7 @@ Contributions, bug reports, feature requests, and suggestions are welcome.
 
 Please open an issue or submit a pull request.
 
----
+------------------------------------------------------------------------
 
 ## License
 

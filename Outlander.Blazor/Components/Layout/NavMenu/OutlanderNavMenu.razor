@@ -1,0 +1,432 @@
+﻿@namespace Outlander.Blazor.Components.Layout
+
+@inherits Base.OutlanderComponentBase
+
+<div class="outlander-nav-menu  @(NavMenuCollapsed ? "outlander-nav-menu-collapsed" : "") @(MobileMenuOpen ? "mobile-menu-open" : "") @(IsActuallyCollapsed ? "collapsed" : "") @(initialized ? "" : "opacity-0")">
+    <div class="outlander-nav-menu-brand">
+        <div class="brand-area">
+            <div class="brand-icon">
+                <i class="bi bi-boxes"></i>
+            </div>
+
+            @if (!IsActuallyCollapsed)
+            {
+                <div class="brand-text">@BrandText</div>
+            }
+
+            @if (ShowNavMenuToggle)
+            {
+                <button class="outlander-nav-menu-toggle-btn"
+                        @onclick="ToggleNavMenuFromMenu"
+                        title="Mostrar/Ocultar menú">
+                    <i class="bi @(IsActuallyCollapsed ? "bi-chevron-right" : "bi-chevron-left")"></i>
+                </button>
+            }
+        </div>
+    </div>
+
+    <div class="outlander-nav-menu-body">
+        @if (Groups is not null)
+        {
+            @foreach (var group in Groups)
+            {
+                <div class="menu-group">
+                    @if (!IsActuallyCollapsed && !string.IsNullOrWhiteSpace(group.Title))
+                    {
+                        <div class="menu-title">@group.Title</div>
+                    }
+
+                    @foreach (var item in group.Items)
+                    {
+                        @if (item.HasChildren)
+                        {
+                            <div class="menu-group menu-group-has-flyout">
+                                <div class="flyout-wrapper">
+                                    <button class="submenu-toggle @(IsExpanded(item) ? "open" : "")"
+                                            @onclick="() => ToggleItem(item)"
+                                            data-bs-toggle="tooltip"
+                                            data-bs-placement="right"
+                                            data-bs-container=".outlander-nav-menu-body"
+                                            title="@(item.Tooltip ?? item.Text)">
+                                        <span class="submenu-left">
+                                            <i class="bi @item.Icon"></i>
+
+                                            @if (!IsActuallyCollapsed)
+                                            {
+                                                <span>@item.Text</span>
+                                            }
+                                        </span>
+
+                                        @if (!IsActuallyCollapsed)
+                                        {
+                                            <i class="bi bi-chevron-down submenu-arrow"></i>
+                                        }
+                                    </button>
+
+                                    @if (!IsActuallyCollapsed && IsExpanded(item))
+                                    {
+                                        <div class="submenu-list">
+                                            @foreach (var child in item.Children)
+                                            {
+                                                <a class="menu-link @(child.IsActive ? "active" : "")"
+                                                       href="@(child.Url ?? "#")"
+                                                       data-bs-toggle="tooltip"
+                                                       data-bs-placement="right"
+                                                       title="@(child.Tooltip ?? child.Text)">
+                                                    <i class="bi @child.Icon"></i>
+                                                    <span>@child.Text</span>
+                                                </a>
+                                            }
+                                        </div>
+                                    }
+
+                                    @if (IsActuallyCollapsed)
+                                    {
+                                        <div class="submenu-flyout">
+                                            <div class="submenu-flyout-title">@item.Text</div>
+
+                                            @foreach (var child in item.Children)
+                                            {
+                                                <a class="menu-link @(child.IsActive ? "active" : "")"
+                                                       href="@(child.Url ?? "#")">
+                                                    <i class="bi @child.Icon"></i>
+                                                    <span>@child.Text</span>
+                                                </a>
+                                            }
+                                        </div>
+                                    }
+                                </div>
+                            </div>
+                        }
+                        else
+                        {
+                            <a class="menu-link @(item.IsActive ? "active" : "")"
+                                   href="@(item.Url ?? "#")"
+                                   data-bs-toggle="tooltip"
+                                   data-bs-placement="right"
+                                   title="@(item.Tooltip ?? item.Text)">
+                                <i class="bi @item.Icon"></i>
+
+                                @if (!IsActuallyCollapsed)
+                                {
+                                    <span>@item.Text</span>
+                                }
+                            </a>
+                        }
+                    }
+                </div>
+            }
+        }
+    </div>
+
+    @if (FooterItems is not null && FooterItems.Any())
+    {
+        <div class="outlander-nav-menu-footer">
+            @foreach (var item in FooterItems)
+            {
+                @if (item.HasChildren)
+                {
+                    <div class="menu-group menu-group-has-flyout">
+                        <div class="flyout-wrapper">
+                            <button class="submenu-toggle @(IsExpanded(item) ? "open" : "")"
+                                    @onclick="() => ToggleItem(item)"
+                                    data-bs-toggle="tooltip"
+                                    data-bs-placement="right"
+                                    title="@(item.Tooltip ?? item.Text)">
+                                <span class="submenu-left">
+                                    <i class="bi @item.Icon"></i>
+
+                                    @if (!IsActuallyCollapsed)
+                                    {
+                                        <span>@item.Text</span>
+                                    }
+                                </span>
+
+                                @if (!IsActuallyCollapsed)
+                                {
+                                    <i class="bi bi-chevron-down submenu-arrow"></i>
+                                }
+                            </button>
+
+                            @if (!IsActuallyCollapsed && IsExpanded(item))
+                            {
+                                <div class="submenu-list">
+                                    @foreach (var child in item.Children)
+                                    {
+                                        <a class="menu-link @(child.IsActive ? "active" : "")"
+                                               href="@(child.Url ?? "#")"
+                                               data-bs-toggle="tooltip"
+                                               data-bs-placement="right"
+                                               title="@(child.Tooltip ?? child.Text)">
+                                            <i class="bi @child.Icon"></i>
+                                            <span>@child.Text</span>
+                                        </a>
+                                    }
+                                </div>
+                            }
+
+                            @if (IsActuallyCollapsed)
+                            {
+                                <div class="submenu-flyout">
+                                    <div class="submenu-flyout-title">@item.Text</div>
+
+                                    @foreach (var child in item.Children)
+                                    {
+                                        <a class="menu-link @(child.IsActive ? "active" : "")"
+                                               href="@(child.Url ?? "#")">
+                                            <i class="bi @child.Icon"></i>
+                                            <span>@child.Text</span>
+                                        </a>
+                                    }
+                                </div>
+                            }
+                        </div>
+                    </div>
+                }
+                else
+                {
+                    <a class="menu-link @(item.IsActive ? "active" : "")"
+                           href="@(item.Url ?? "#")"
+                           data-bs-toggle="tooltip"
+                           data-bs-placement="right"
+                           title="@(item.Tooltip ?? item.Text)">
+                        <i class="bi @item.Icon"></i>
+
+                        @if (!IsActuallyCollapsed)
+                        {
+                            <span>@item.Text</span>
+                        }
+                    </a>
+                }
+            }
+        </div>
+    }
+</div>
+
+@if (MobileMenuOpen)
+{
+    <div class="outlander-nav-menu-backdrop" @onclick="CloseMobileMenu"></div>
+}
+
+@code {
+    /// <summary>
+    /// Gets or sets a value indicating whether the button used to expand or collapse the navigation menu is displayed.
+    /// When enabled, the menu can be collapsed from the component itself.
+    /// </summary>
+    [Parameter]
+    public bool ShowNavMenuToggle { get; set; } = true;
+
+    /// <summary>
+    /// Gets or sets a value indicating whether the navigation menu is open in mobile mode.
+    /// </summary>
+    /// <remarks>
+    /// This value is normally controlled by the parent component through two-way binding.
+    /// The component does not modify this value internally.
+    /// </remarks>
+    [Parameter]
+    public bool MobileMenuOpen { get; set; }
+
+    /// <summary>
+    /// Gets or sets the callback invoked when the mobile navigation menu open state changes.
+    /// </summary>
+    /// <remarks>
+    /// This callback is used together with <see cref="MobileMenuOpen"/> to support
+    /// two-way binding from the parent component.
+    /// </remarks>
+    [Parameter]
+    public EventCallback<bool> MobileMenuOpenChanged { get; set; }
+
+    /// <summary>
+    /// Gets or sets a value indicating whether the navigation menu is collapsed in desktop mode.
+    /// </summary>
+    /// <remarks>
+    /// This value is normally controlled by the parent component through two-way binding.
+    /// The component does not modify this value internally.
+    /// When collapsed, the menu displays only icons and hides text labels.
+    /// On mobile devices this value does not affect the rendering mode.
+    /// </remarks>
+    [Parameter]
+    public bool NavMenuCollapsed { get; set; }
+
+    /// <summary>
+    /// Gets or sets the callback invoked when the navigation menu collapsed state changes.
+    /// </summary>
+    /// <remarks>
+    /// This callback is used together with <see cref="NavMenuCollapsed"/>
+    /// to support two-way binding from the parent component.
+    /// </remarks>
+    [Parameter]
+    public EventCallback<bool> NavMenuCollapsedChanged { get; set; }
+
+    /// <summary>
+    /// Gets or sets the viewport width threshold used to switch between desktop and mobile behavior.
+    /// When the browser width is less than or equal to this value, the menu is rendered in mobile mode.
+    /// </summary>
+    [Parameter]
+    public int BreakPointForMobile { get; set; } = 768;
+
+    /// <summary>
+    /// Gets or sets the text displayed in the navigation menu brand area.
+    /// </summary>
+    [Parameter]
+    public string BrandText { get; set; } = "Outlander";
+
+    /// <summary>
+    /// Gets or sets the collection of menu groups displayed in the navigation menu.
+    /// Each group can contain menu items and nested child items.
+    /// </summary>
+    [Parameter]
+    public IEnumerable<OutlanderNavMenuMenuGroup>? Groups { get; set; }
+
+    /// <summary>
+    /// Gets or sets the collection of menu items displayed in the navigation menu footer area.
+    /// These items are rendered separately from the main navigation groups.
+    /// </summary>
+    [Parameter]
+    public IEnumerable<OutlanderNavMenuItem>? FooterItems { get; set; }
+
+    private readonly HashSet<string> expandedItems = [];
+    private bool IsActuallyCollapsed => NavMenuCollapsed && !isMobile;
+
+    private bool isMobile { get; set; }
+    private bool initialized;
+    private DotNetObjectReference<OutlanderNavMenu>? dotNetRef;
+
+    private IJSObjectReference? _module;
+
+    protected override void OnParametersSet()
+    {
+        expandedItems.Clear();
+
+        if (Groups is not null)
+        {
+            foreach (var item in Groups.SelectMany(g => g.Items))
+            {
+                RegisterExpandedItems(item);
+            }
+        }
+
+        if (FooterItems is not null)
+        {
+            foreach (var item in FooterItems)
+            {
+                RegisterExpandedItems(item);
+            }
+        }
+    }
+
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        if (firstRender)
+        {
+            dotNetRef = DotNetObjectReference.Create(this);
+
+            _module = await JS.InvokeAsync<IJSObjectReference>("import", "/_content/Outlander.Blazor/Components/Layout/NavMenu/OutlanderNavMenu.razor.js");
+            
+            var savedCollapsed = await _module.InvokeAsync<bool>("getNavMenuCollapsed");
+
+            if (NavMenuCollapsedChanged.HasDelegate)
+                await NavMenuCollapsedChanged.InvokeAsync(savedCollapsed);
+
+            var width = await _module.InvokeAsync<int>("getWindowWidth");
+            isMobile = width <= BreakPointForMobile;
+
+            await _module.InvokeVoidAsync("registerResizeCallback", dotNetRef);
+            
+            initialized = true;
+
+            await InvokeAsync(StateHasChanged);
+        }
+
+        await base.OnAfterRenderAsync(firstRender);
+    }
+
+    private void RegisterExpandedItems(OutlanderNavMenuItem item)
+    {
+        if (item.HasChildren && item.IsExpandedByDefault)
+        {
+            expandedItems.Add(item.Id);
+        }
+
+        foreach (var child in item.Children)
+        {
+            RegisterExpandedItems(child);
+        }
+    }
+
+    private bool IsExpanded(OutlanderNavMenuItem item) => expandedItems.Contains(item.Id);
+
+    private void ToggleItem(OutlanderNavMenuItem item)
+    {
+        if (!item.HasChildren || IsActuallyCollapsed)
+        {
+            return;
+        }
+
+        if (!expandedItems.Add(item.Id))
+        {
+            expandedItems.Remove(item.Id);
+        }
+    }
+
+    private async Task CloseMobileMenu()
+    {
+        if (MobileMenuOpenChanged.HasDelegate)
+            await MobileMenuOpenChanged.InvokeAsync(false);
+    }
+    
+    [JSInvokable]
+    public async Task OnBrowserResize(int width)
+    {
+        var newIsMobile = width <= BreakPointForMobile;
+
+        if (newIsMobile != isMobile)
+        {
+            isMobile = newIsMobile;
+
+            if (!isMobile)
+            {
+                if (MobileMenuOpenChanged.HasDelegate)
+                    await MobileMenuOpenChanged.InvokeAsync(false);
+            }
+
+            await InvokeAsync(StateHasChanged);
+        }
+    }
+    
+    private async Task ToggleNavMenuFromMenu()
+    {
+        if (isMobile)
+        {
+            if (MobileMenuOpenChanged.HasDelegate)
+                await MobileMenuOpenChanged.InvokeAsync(false);
+
+            return;
+        }
+
+        var newValue = !NavMenuCollapsed;
+        
+        if (_module is not null)
+            await _module.InvokeVoidAsync("setNavMenuCollapsed", newValue);
+        
+        if (NavMenuCollapsedChanged.HasDelegate)
+            await NavMenuCollapsedChanged.InvokeAsync(newValue);
+    }
+        
+    public async ValueTask DisposeAsync()
+    {
+        dotNetRef?.Dispose();
+
+        if (_module is null)
+            return;
+
+        try
+        {
+            await _module.DisposeAsync();
+        }
+        catch (JSDisconnectedException)
+        {
+        }
+    }
+
+}

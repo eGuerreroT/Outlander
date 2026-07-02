@@ -1,0 +1,80 @@
+﻿@namespace Outlander.Blazor.Components.Layout
+
+@inherits Base.OutlanderComponentBase
+
+<div class="outlander-shell">
+
+    <aside class="outlander-sidebar">
+        @NavMenu
+    </aside>
+
+
+    <div class="outlander-main">
+
+        <header class="outlander-header">
+            @TopMenu
+        </header>
+
+
+        <main class="outlander-content overflow-auto">
+            @Body
+        </main>
+
+        @if (Footer != null)
+        {
+            <footer class="outlander-footer">
+                <div class="outlander-footer-content">
+                    @Footer
+                </div>
+            </footer>
+        }
+    </div>
+
+</div>
+
+@code {
+    /// <summary>
+    /// Content rendered in the left side section of the layout.
+    /// Typically used to place navigation components such as OutlanderNavMenu.
+    /// </summary>
+    [Parameter]
+    public RenderFragment? NavMenu { get; set; }
+
+
+    /// <summary>
+    /// Content rendered in the top section of the layout.
+    /// Typically used to place components such as OutlanderTopMenu,
+    /// toolbars, or global actions.
+    /// </summary>
+    [Parameter]
+    public RenderFragment? TopMenu { get; set; }
+
+    /// <summary>
+    /// Content rendered inside the main layout area.
+    /// Usually contains the routed page content provided by the application.
+    /// </summary>
+    [Parameter]
+    public RenderFragment? Body { get; set; }
+
+    /// <summary>
+    /// Content rendered in the bottom section of the layout.
+    /// Can be used to display additional information such as application version,
+    /// copyright information, support links, or other secondary content.
+    /// </summary>
+    [Parameter]
+    public RenderFragment? Footer { get; set; }
+
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        if (firstRender)
+        {
+            await JS.InvokeVoidAsync("outlander.initTooltips");
+        }
+    }
+
+    public ValueTask DisposeAsync()
+    {
+        return ValueTask.CompletedTask;
+    }
+
+}

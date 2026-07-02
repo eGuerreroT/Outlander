@@ -1,0 +1,73 @@
+
+.outlander-shell {
+    display: flex;
+    min-height: 100vh;
+    height: 100vh;
+    background: var(--outlander-bg-app);
+    position: relative;
+    overflow: hidden;
+}
+
+.outlander-main {
+    flex: 1;
+    min-width: 0;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+}
+
+.outlander-content {
+    flex: 1;
+    padding: 24px;
+    min-width: 0;
+    overflow-y: auto;
+}
+
+.outlander-footer {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 40px;
+    padding: 0.5rem 1rem;
+    font-size: 0.875rem;
+    border-top: 1px solid var(--outlander-border-color, #dee2e6);
+    color: var(--text-muted, #6c757d);
+    background-color: var(--outlander-bg-primary, #ffffff);
+    transition: background-color 0.2s ease, border-color 0.2s ease, color 0.2s ease;
+}
+
+
+/* Cuando el contenido del footer tiene elementos separados */
+.outlander-footer-content {
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 0.25rem;
+}
+
+.outlander-footer a {
+    color: var(--outlander-text-primary);
+    text-decoration: none;
+}
+
+    .outlander-footer a:hover {
+        text-decoration: underline;
+    }
+
+/* Responsive */
+@media (max-width: 768px) {
+    .outlander-shell {
+        flex-direction: column;
+    }
+
+    .outlander-content {
+        padding: 16px;
+    }
+
+    .outlander-footer-content {
+        flex-direction: column;
+        justify-content: center;
+        text-align: center;
+    }
+}

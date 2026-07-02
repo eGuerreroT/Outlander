@@ -1,0 +1,383 @@
+﻿@namespace Outlander.Blazor.Components
+
+@inherits Base.OutlanderComponentBase
+
+<div class="outlander-topbar @(Sticky ? "outlander-sticky-topbar" : string.Empty) @(initialized ? "" : "opacity-0")">
+    <div class="outlander-topbar-left">
+        @if (ShowNavMenuToggle)
+        {
+            <button class="btn outlander-btn-default" @onclick="ToggleNavMenuMode" title="Expandir/Contraer menú">
+                <i class="bi @NavMenuButtonIcon"></i>
+            </button>
+        }
+
+        @if (!ShouldCollapseActionsToMobileMenu && LeftContent is not null)
+        {
+            @LeftContent
+        }
+    </div>
+
+    <div class="outlander-topbar-right">
+        @if (ShowThemeSelector)
+        {
+            <OutlanderThemeSelector @bind-CurrentTheme="currentTheme"></OutlanderThemeSelector>
+        }
+
+        @if (ShouldCollapseActionsToMobileMenu && HasMobileOffcanvasContent)
+        {
+            @foreach (var item in KeepVisibleOnMobileItems)
+            {
+                <button class="outlander-icon-btn btn outlander-btn-default @(item.CssClass ?? string.Empty)"
+                        title="@item.Title"
+                        @onclick="item.OnClick">
+                    <i class="bi @item.Icon"></i>
+
+                    @if (!string.IsNullOrWhiteSpace(item.BadgeText))
+                    {
+                        <span class="outlander-notif-badge">@item.BadgeText</span>
+                    }
+                </button>
+            }
+
+            <button class="btn outlander-btn-default"
+                    @onclick="ToggleMobileActions"
+                    title="Más acciones"
+                    aria-label="Más acciones">
+                <i class="bi bi-three-dots-vertical"></i>
+            </button>
+        }
+        else
+        {
+            @if (RightContent is not null)
+            {
+                @RightContent
+            }
+            else if (ActionItems is not null)
+            {
+                @foreach (var item in ActionItems)
+                {
+                    <button class="outlander-icon-btn btn outlander-btn-default @(item.CssClass ?? string.Empty)"
+                            title="@item.Title"
+                            @onclick="item.OnClick">
+                        <span class="d-inline-flex align-items-center gap-2">
+                            <i class="bi @item.Icon"></i>
+                            <span>@item.Title</span>
+                        </span>
+
+                        @if (!string.IsNullOrWhiteSpace(item.BadgeText))
+                        {
+                            <span class="outlander-notif-badge">@item.BadgeText</span>
+                        }
+                    </button>
+                }
+            }
+        }
+    </div>
+</div>
+
+@if (ShouldCollapseActionsToMobileMenu && HasMobileOffcanvasContent)
+{
+    <div class="outlander-topmenu-mobile-backdrop @(mobileActionsOpen ? "show" : "")"
+         @onclick="CloseMobileActions"></div>
+
+    <aside class="outlander-topmenu-mobile-panel @(mobileActionsOpen ? "show" : "")"
+           aria-hidden="@(!mobileActionsOpen)">
+        <div class="outlander-topmenu-mobile-header">
+            <div class="outlander-topmenu-mobile-title">@MobileOffcanvasTitle</div>
+            <button class="btn outlander-btn-default"
+                    @onclick="CloseMobileActions"
+                    title="Cerrar"
+                    aria-label="Cerrar">
+                <i class="bi bi-x-lg"></i>
+            </button>
+        </div>
+
+        <div class="outlander-topmenu-mobile-body">
+            @if (IncludeLeftContentInMobileOffcanvas && LeftContent is not null)
+            {
+                <div class="outlander-topmenu-mobile-section">
+                    @LeftContent
+                </div>
+            }
+
+            <div class="outlander-topmenu-mobile-section">
+                @if (RightContent is not null)
+                {
+                    @RightContent
+                }
+                else if (VisibleMobileActionItems.Any())
+                {
+                    @foreach (var item in VisibleMobileActionItems)
+                    {
+                        <button class="outlander-topmenu-mobile-action btn outlander-btn-default @(item.CssClass ?? string.Empty)"
+                                title="@item.Title"
+                                @onclick="async () => await OnMobileActionClick(item.OnClick)">
+                            <span class="outlander-topmenu-mobile-action-inner">
+                                <span class="outlander-topmenu-mobile-action-left">
+                                    <i class="bi @item.Icon"></i>
+                                    <span>@item.Title</span>
+                                </span>
+
+                                @if (!string.IsNullOrWhiteSpace(item.BadgeText))
+                                {
+                                    <span class="outlander-notif-badge">@item.BadgeText</span>
+                                }
+                            </span>
+                        </button>
+                    }
+                }
+            </div>
+        </div>
+    </aside>
+}
+
+@code {
+    /// <summary>
+    /// Gets or sets the breakpoint width used to determine when the top menu switches
+    /// to mobile rendering mode.
+    /// </summary>
+    /// <remarks>
+    /// The component compares the browser width against this value to enable
+    /// mobile-specific behaviors such as collapsing actions into the offcanvas menu.
+    /// </remarks>
+    [Parameter]
+    public int BreakPointForMobile { get; set; } = 768;
+
+    /// <summary>
+    /// Gets or sets a value indicating whether the theme selector button is displayed
+    /// in the top menu.
+    /// </summary>
+    [Parameter]
+    public bool ShowThemeSelector { get; set; } = false;
+
+    /// <summary>
+    /// Gets or sets a value indicating whether the navigation menu toggle button is displayed
+    /// in the top menu.
+    /// </summary>
+    [Parameter]
+    public bool ShowNavMenuToggle { get; set; } = false;
+
+    /// <summary>
+    /// Gets or sets a value indicating whether the top menu uses sticky positioning.
+    /// </summary>
+    /// <remarks>
+    /// When enabled, the top menu remains visible while the page content is scrolled.
+    /// </remarks>
+    [Parameter]
+    public bool Sticky { get; set; } = false;
+
+    /// <summary>
+    /// Gets or sets a value indicating whether action items should be collapsed into
+    /// a mobile offcanvas panel when the component is rendered in mobile mode.
+    /// </summary>
+    /// <remarks>
+    /// When enabled, actions that do not have <see cref="OutlanderTopMenuActionItem.KeepVisibleOnMobile"/>
+    /// configured are moved into the mobile actions panel.
+    /// </remarks>
+    [Parameter]
+    public bool CollapseActionsToOffcanvasOnMobile { get; set; } = true;
+
+    /// <summary>
+    /// Gets or sets a value indicating whether <see cref="LeftContent"/> should also be displayed
+    /// inside the mobile offcanvas actions panel.
+    /// </summary>
+    /// <remarks>
+    /// This allows left-side content, such as custom controls or filters, to remain accessible
+    /// on mobile devices.
+    /// </remarks>
+    [Parameter]
+    public bool IncludeLeftContentInMobileOffcanvas { get; set; } = false;
+
+    /// <summary>
+    /// Gets or sets the title displayed in the mobile offcanvas actions panel header.
+    /// </summary>
+    [Parameter]
+    public string MobileOffcanvasTitle { get; set; } = "Acciones";
+
+    /// <summary>
+    /// Gets or sets custom content rendered on the left side of the top menu.
+    /// </summary>
+    /// <remarks>
+    /// In mobile mode, this content is hidden unless
+    /// <see cref="IncludeLeftContentInMobileOffcanvas"/> is enabled.
+    /// </remarks>
+    [Parameter]
+    public RenderFragment? LeftContent { get; set; }
+
+    /// <summary>
+    /// Gets or sets custom content rendered on the right side of the top menu.
+    /// </summary>
+    /// <remarks>
+    /// When provided, this content takes precedence over <see cref="ActionItems"/>.
+    /// In mobile mode, it is rendered inside the offcanvas actions panel when
+    /// <see cref="CollapseActionsToOffcanvasOnMobile"/> is enabled.
+    /// </remarks>
+    [Parameter]
+    public RenderFragment? RightContent { get; set; }
+
+    /// <summary>
+    /// Gets or sets the collection of predefined action items rendered by the top menu
+    /// when <see cref="RightContent"/> is not provided.
+    /// </summary>
+    [Parameter]
+    public IEnumerable<OutlanderTopMenuActionItem>? ActionItems { get; set; }
+
+    /// <summary>
+    /// Gets or sets a value indicating whether the navigation menu is open in mobile mode.
+    /// </summary>
+    /// <remarks>
+    /// This value is normally controlled by the parent component through two-way binding.
+    /// The component does not modify this value internally.
+    /// </remarks>
+    [Parameter]
+    public bool MobileMenuOpen { get; set; }
+
+    /// <summary>
+    /// Gets or sets the callback invoked when the mobile navigation menu open state changes.
+    /// </summary>
+    /// <remarks>
+    /// This callback is used together with <see cref="MobileMenuOpen"/> to support
+    /// two-way binding from the parent component.
+    /// </remarks>
+    [Parameter]
+    public EventCallback<bool> MobileMenuOpenChanged { get; set; }
+
+    /// <summary>
+    /// Gets or sets a value indicating whether the navigation menu is collapsed in desktop mode.
+    /// </summary>
+    /// <remarks>
+    /// This value is normally controlled by the parent component through two-way binding.
+    /// The component does not modify this value internally.
+    /// When collapsed, the menu displays only icons and hides text labels.
+    /// On mobile devices this value does not affect the rendering mode.
+    /// </remarks>
+    [Parameter]
+    public bool NavMenuCollapsed { get; set; }
+
+    /// <summary>
+    /// Gets or sets the callback invoked when the navigation menu collapsed state changes.
+    /// </summary>
+    /// <remarks>
+    /// This callback is used together with <see cref="NavMenuCollapsed"/>
+    /// to support two-way binding from the parent component.
+    /// </remarks>
+    [Parameter]
+    public EventCallback<bool> NavMenuCollapsedChanged { get; set; }
+
+    private bool isMobile { get; set; }
+    private bool initialized;
+    private DotNetObjectReference<OutlanderTopMenu>? dotNetRef;
+
+    private IJSObjectReference? _module;
+
+    private bool mobileActionsOpen;
+
+    private bool ShouldCollapseActionsToMobileMenu =>
+        isMobile && CollapseActionsToOffcanvasOnMobile;
+
+    private IReadOnlyList<OutlanderTopMenuActionItem> VisibleMobileActionItems =>
+        ActionItems?
+            .Where(x => !x.KeepVisibleOnMobile)
+            .ToList()
+        ?? [];
+
+    private IReadOnlyList<OutlanderTopMenuActionItem> KeepVisibleOnMobileItems =>
+        ActionItems?
+            .Where(x => x.KeepVisibleOnMobile)
+            .ToList()
+        ?? [];
+
+    private bool HasMobileOffcanvasContent =>
+        (IncludeLeftContentInMobileOffcanvas && LeftContent is not null) ||
+        RightContent is not null ||
+        VisibleMobileActionItems.Count > 0;
+
+    private string NavMenuButtonIcon =>
+        isMobile
+            ? (MobileMenuOpen ? "bi-x-lg" : "bi-list")
+            : (NavMenuCollapsed ? "bi-layout-sidebar-inset" : "bi-layout-sidebar");
+
+    private string currentTheme;
+
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        if (firstRender)
+        {
+            dotNetRef = DotNetObjectReference.Create(this);
+
+            _module = await JS.InvokeAsync<IJSObjectReference>("import", "/_content/Outlander.Blazor/Components/Layout/NavMenu/OutlanderNavMenu.razor.js");
+
+            var savedCollapsed = await _module.InvokeAsync<bool>("getNavMenuCollapsed");
+
+            if (NavMenuCollapsedChanged.HasDelegate)
+                await NavMenuCollapsedChanged.InvokeAsync(savedCollapsed);
+
+            var width = await _module.InvokeAsync<int>("getWindowWidth");
+
+            isMobile = width <= BreakPointForMobile;
+
+            await _module.InvokeVoidAsync("registerResizeCallback", dotNetRef);
+
+            initialized = true;
+
+            await InvokeAsync(StateHasChanged);
+        }
+
+        await base.OnAfterRenderAsync(firstRender);
+    }
+
+    private void ToggleMobileActions()
+    {
+        mobileActionsOpen = !mobileActionsOpen;
+    }
+
+    private void CloseMobileActions()
+    {
+        mobileActionsOpen = false;
+    }
+
+    private async Task OnMobileActionClick(EventCallback callback)
+    {
+        await callback.InvokeAsync();
+        CloseMobileActions();
+    }
+    
+    [JSInvokable]
+    public async Task OnBrowserResize(int width)
+    {
+        var newIsMobile = width <= BreakPointForMobile;
+
+        if (newIsMobile != isMobile)
+        {
+            isMobile = newIsMobile;
+
+            if (!isMobile)
+            {
+                if (MobileMenuOpenChanged.HasDelegate)
+                    await MobileMenuOpenChanged.InvokeAsync(false);
+            }
+
+            await InvokeAsync(StateHasChanged);
+        }
+    }
+
+    private async Task ToggleNavMenuMode()
+    {
+        if (isMobile)
+        {
+            if (MobileMenuOpenChanged.HasDelegate)
+                await MobileMenuOpenChanged.InvokeAsync(!MobileMenuOpen);
+
+            return;
+        }
+
+        var newValue = !NavMenuCollapsed;
+
+        if (_module is not null)
+            await _module.InvokeVoidAsync("setNavMenuCollapsed", newValue);
+
+        if (NavMenuCollapsedChanged.HasDelegate)
+            await NavMenuCollapsedChanged.InvokeAsync(newValue);
+    }
+    
+}

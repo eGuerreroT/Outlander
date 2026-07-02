@@ -1,23 +1,173 @@
 ﻿@inherits LayoutComponentBase
 
-<div class="page">
-    <div class="sidebar">
-        <NavMenu />
-    </div>
+<OutlanderLayout>
+    <NavMenu>
+        <OutlanderNavMenu @bind-MobileMenuOpen="mobileMenuOpen"
+                          @bind-NavMenuCollapsed="navMenuCollapsed"
+                          ShowNavMenuToggle="false"
+                          BrandText="Admin Template"
+                          Groups="NavMenuGroups"
+                          FooterItems="NavMenuFooterItems" />
+    </NavMenu>
 
-    <main>
-        <div class="top-row px-4">
-            <a href="https://learn.microsoft.com/aspnet/core/" target="_blank">About</a>
-        </div>
+    <TopMenu>
+        <OutlanderTopMenu @bind-MobileMenuOpen="mobileMenuOpen"
+                          @bind-NavMenuCollapsed="navMenuCollapsed"
+                          ShowNavMenuToggle="true"
+                          ShowThemeSelector="true"
+                          CollapseActionsToOffcanvasOnMobile="true"
+                          IncludeLeftContentInMobileOffcanvas="false"
+                          ActionItems="TopActions" />
+    </TopMenu>
 
-        <article class="content px-4">
-            @Body
-        </article>
-    </main>
-</div>
+    <Body>
+        @Body
+    </Body>
+
+    <Footer>
+        <span>
+            © 2026 My Outlander Company
+        </span>
+        <span>
+            Outlander.Blazor v1.0.1
+        </span>
+    </Footer>
+</OutlanderLayout>
 
 <div id="blazor-error-ui" data-nosnippet>
     An unhandled error has occurred.
     <a href="." class="reload">Reload</a>
     <span class="dismiss">🗙</span>
 </div>
+
+@code {
+    private bool mobileMenuOpen;
+    private bool navMenuCollapsed;
+
+    private List<OutlanderTopMenuActionItem> TopActions = [];
+    private List<OutlanderNavMenuMenuGroup> NavMenuGroups = [];
+    private List<OutlanderNavMenuItem> NavMenuFooterItems = [];
+
+    private Task OpenDocs() => Task.CompletedTask;
+    private Task ShowNotifications() => Task.CompletedTask;
+    private Task OpenProfile() => Task.CompletedTask;
+
+    protected override void OnInitialized()
+    {
+        TopActions =
+        [
+            new OutlanderTopMenuActionItem
+            {
+                Title = "Docs",
+                Icon = "bi-journal-text",
+                OnClick = EventCallback.Factory.Create(this, OpenDocs)
+            },
+            new OutlanderTopMenuActionItem
+            {
+                Title = "Notificaciones",
+                Icon = "bi-bell",
+                BadgeText = "3",
+                OnClick = EventCallback.Factory.Create(this, ShowNotifications)
+            },
+            new OutlanderTopMenuActionItem
+            {
+                Title = "Usuario",
+                Icon = "bi-person-circle",
+                OnClick = EventCallback.Factory.Create(this, OpenProfile),
+                KeepVisibleOnMobile = true
+            }
+        ];
+
+        NavMenuGroups =
+        [
+            new OutlanderNavMenuMenuGroup
+            {
+                Title = "Principal",
+                Items =
+                [
+                    new OutlanderNavMenuItem
+                    {
+                        Text = "Dashboard",
+                        Icon = "bi-grid",
+                        Url = "#",
+                        Tooltip = "Dashboard"
+                    }
+                ]
+            },
+            new OutlanderNavMenuMenuGroup
+            {
+                Title = "Infraestructura",
+                Items =
+                [
+                    new OutlanderNavMenuItem
+                    {
+                        Text = "Infraestructura",
+                        Icon = "bi-hdd-stack",
+                        Tooltip = "Infraestructura",
+                        IsExpandedByDefault = true,
+                        Children =
+                        [
+                            new OutlanderNavMenuItem { Text = "Servidores", Icon = "bi-hdd-stack", Url = "#", Tooltip = "Servidores" },
+                            new OutlanderNavMenuItem { Text = "Descubrimiento", Icon = "bi-search", Url = "/discovery", Tooltip = "AutomaticColumns", IsActive = true },
+                            new OutlanderNavMenuItem { Text = "Proveedores Cloud", Icon = "bi-cloud", Url = "#", Tooltip = "Proveedores Cloud" },
+                            new OutlanderNavMenuItem { Text = "Tareas / Sincronización", Icon = "bi-arrow-repeat", Url = "#", Tooltip = "Tareas / Sincronización" }
+                        ]
+                    }
+                ]
+            },
+            new OutlanderNavMenuMenuGroup
+            {
+                Title = "Reportes",
+                Items =
+                [
+                    new OutlanderNavMenuItem
+                    {
+                        Text = "Reportes",
+                        Icon = "bi-bar-chart",
+                        Tooltip = "Reportes",
+                        IsExpandedByDefault = true,
+                        Children =
+                        [
+                            new OutlanderNavMenuItem { Text = "Servidores", Icon = "bi-hdd-stack", Url = "#", Tooltip = "Servidores" },
+                            new OutlanderNavMenuItem { Text = "Línea de tiempo", Icon = "bi-clock-history", Url = "#", Tooltip = "Línea de tiempo" },
+                            new OutlanderNavMenuItem { Text = "Utilidades", Icon = "bi-tools", Url = "#", Tooltip = "Utilidades" },
+                            new OutlanderNavMenuItem { Text = "Tareas / Sincronización", Icon = "bi-arrow-repeat", Url = "#", Tooltip = "Tareas / Sincronización" }
+                        ]
+                    }
+                ]
+            },
+            new OutlanderNavMenuMenuGroup
+            {
+                Title = "Administración",
+                Items =
+                [
+                    new OutlanderNavMenuItem
+                    {
+                        Text = "Administración",
+                        Icon = "bi-shield-lock",
+                        Tooltip = "Administración",
+                        IsExpandedByDefault = true,
+                        Children =
+                        [
+                            new OutlanderNavMenuItem { Text = "Grupos", Icon = "bi-collection", Url = "#", Tooltip = "Grupos" },
+                            new OutlanderNavMenuItem { Text = "Usuarios", Icon = "bi-people", Url = "#", Tooltip = "Usuarios" },
+                            new OutlanderNavMenuItem { Text = "Roles", Icon = "bi-shield-lock", Url = "#", Tooltip = "Roles" },
+                            new OutlanderNavMenuItem { Text = "Auditoría", Icon = "bi-clipboard-check", Url = "#", Tooltip = "Auditoría" }
+                        ]
+                    }
+                ]
+            }
+        ];
+
+        NavMenuFooterItems =
+        [
+            new OutlanderNavMenuItem
+            {
+                Text = "Configuración",
+                Icon = "bi-gear",
+                Url = "#",
+                Tooltip = "Configuración"
+            }
+        ];
+    }
+}

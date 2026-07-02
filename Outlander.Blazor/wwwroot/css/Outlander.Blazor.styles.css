@@ -3,23 +3,79 @@
 
 /* Outlander Theme */
 :root {
-    --outlander-text-primary: #1f2c45;
-    --outlander-border-color: #e5eaf3;
-    --outlander-bg-primary: #ffffff;
+    --outlander-bg-app: #fefefe;
     --outlander-bg-header: #f8f9fa;
-    --outlander-hover-bg: #fcfdff;
+    --outlander-white: #ffffff;
+    --outlander-border: #e8edf5;
+    --outlander-border-strong: #dbe4f0;
+    --outlander-text-main: #1c2740;
+    --outlander-text-soft: #6f7c91;
+    --outlander-blue: #1768ff;
+    --outlander-blue-dark: #0f56db;
+    --outlander-nav-menu-a: #111827;
+    --outlander-nav-menu-b: #1a2436;
+    --outlander-nav-menu-text: #c4cede;
+    --outlander-success: #19a55a;
+    --outlander-warning: #f5a623;
+    --outlander-danger: #ff4d4f;
+    --outlander-danger-soft: #ffe9e9;
+    --outlander-danger-soft: #edf4ff;
+    --outlander-bg-primary: #ffffff;
+    --outlander-bg-secondary: #fbfcff;
+    --outlander-text-primary: #1f2c45;
     --outlander-text-secondary: #5b6d8b;
+    --outlander-border-color: #e5eaf3;
+    --outlander-hover-bg: #fcfdff;
+    --outlander-btn-primary: #1768ff;
+    --outlander-btn-primary-hover: #144ea0;
+    --outlander-status-green: #18a957;
+    --outlander-status-orange: #f5a623;
+    --outlander-status-red: #ff5a5f;
+    --outlander-status-blue: #1aa3b0;
+    --outlander-status-yellow: #f59e0b;
+    --outlander-metric-link: var(--outlander-btn-primary);
+    --outlander-text-blue: #5a90f4;
+    --outlander-app-gradient-start: rgb(251, 253, 255);
+    --outlander-app-gradient-end: rgb(247, 250, 255);
 }
 
     :root[data-bs-theme="dark"] {
-        --outlander-text-primary: #d1d9ea;
-        --outlander-border-color: #313c4e;
-        --outlander-bg-primary: #1b2637;
+        --outlander-bg-app: #111827;
         --outlander-bg-header: #111723;
-        --outlander-hover-bg: rgba(255,255,255,0.1);
+        --outlander-white: #1f2937;
+        --outlander-border: #334155;
+        --outlander-border-strong: #3b475c;
+        --outlander-text-main: #f3f4f6;
+        --outlander-text-soft: #94a3b8;
+        --outlander-nav-menu-a: #0b1220;
+        --outlander-nav-menu-b: #111827;
+        --outlander-nav-menu-text: #cbd5e1;
+        --outlander-danger-soft: #4b1e24;
+        --outlander-danger-soft: #1e3a5f;
+        --outlander-bg-primary: #1b2637;
+        --outlander-bg-secondary: #1f2a3e;
+        --outlander-text-primary: #d1d9ea;
         --outlander-text-secondary: #a6b3c5;
+        --outlander-border-color: #313c4e;
+        --outlander-hover-bg: rgba(255,255,255,0.1);
+        --outlander-btn-primary: #3e8fd1;
+        --outlander-btn-primary-hover: #1a5aa0;
+        --outlander-status-green: #18d991;
+        --outlander-status-orange: #fab005;
+        --outlander-status-red: #ff6666;
+        --outlander-status-blue: #20c9d2;
+        --outlander-status-yellow: #facc15;
+        --outlander-metric-link: var(--outlander-btn-primary);
+        --outlander-app-gradient-start: rgb(33, 37, 41);
+        --outlander-app-gradient-end: rgb(24, 28, 32);
     }
 
+
+html.theme-changing *,
+html.theme-changing *::before,
+html.theme-changing *::after {
+    transition: none !important;
+}
 
 .cursor-pointer {
     cursor: pointer;
@@ -27,4 +83,89 @@
 
 .cursor-help {
     cursor: help;
+}
+
+/* =========================
+   Utilidades globales
+========================= */
+
+.outlander-icon-btn {
+    background: transparent;
+    position: relative;
+    border: 0;
+}
+
+    .outlander-icon-btn:hover {
+        background-color: var(--bs-secondary-bg);
+    }
+
+.outlander-bg-gradient {
+    background: linear-gradient( var(--outlander-app-gradient-start) 0%, var(--outlander-app-gradient-end) 100% );
+}
+
+.outlander-btn-toolbar {
+    height: 44px;
+    min-height: 44px;
+    padding: 0 16px;
+    border-radius: 10px;
+    background: #fff;
+    border-color: #d9e2ee;
+    font-weight: 500;
+}
+
+.outlander-btn-primary-main {
+    height: 44px;
+    min-height: 44px;
+    padding: 0 18px;
+    border-radius: 10px;
+    background: var(--outlander-blue);
+    border-color: var(--outlander-blue);
+    font-weight: 600;
+}
+
+    .outlander-btn-primary-main:hover {
+        background: var(--outlander-blue-dark);
+        border-color: var(--outlander-blue-dark);
+    }
+
+.outlander-btn-icon-square {
+    width: 42px;
+    height: 42px;
+    min-height: 42px;
+    padding: 0;
+    border-radius: 10px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    line-height: 1;
+}
+
+.outlander-btn-default {
+    background-color: var(--bs-body-bg);
+    border: 1px solid var(--outlander-border);
+}
+
+    .outlander-btn-default:hover {
+        background-color: var(--bs-secondary-bg);
+        border: 1px solid var(--bs-dark-border-subtle);
+    }
+
+.outlander-help-circle {
+    border: 0;
+    background: transparent;
+    color: var(--text-blue);
+    font-size: 18px;
+    padding: 0;
+}
+
+.outlander-text-blue {
+    color: var(--outlander-text-blue);
+}
+
+/* =========================
+   Responsive global
+========================= */
+
+@media (max-width: 768px) {
+
 }
