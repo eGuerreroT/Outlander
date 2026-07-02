@@ -187,6 +187,10 @@ The header supports a custom application name.
 
 # Parameters
 
+The NavMenu exposes many configuration parameters.
+
+The most commonly used are:
+
   |Parameter  |Description|
   |-----------|-----------|
   |`BrandText`            | Application title |

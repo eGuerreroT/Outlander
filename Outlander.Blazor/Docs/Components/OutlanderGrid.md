@@ -1,129 +1,342 @@
 # OutlanderGrid
 
-`OutlanderGrid` is an enterprise-ready data grid component for Blazor
-applications focused on productivity and business workflows.
+`OutlanderGrid` is a high-performance data grid component designed for business and enterprise applications.
 
-It supports rich data operations including sorting, filtering, searching,
-selection, export, and responsive rendering.
+It provides built-in support for filtering, sorting, searching, exporting, selection, templating and responsive layouts while keeping the API simple and Blazor-friendly.
 
 ------------------------------------------------------------------------
 
 # Features
 
--   Server-side and client-side data binding
--   Sorting
--   Filtering
--   Global search
--   Row selection
--   Column customization
--   Footer summaries
--   Excel export
--   PDF export
--   Responsive design
--   Bootstrap 5.3 integration
--   Dark theme support
+- Server-side and client-side data binding
+- Sorting
+- Filtering
+- Global search
+- Row selection
+- Focused row
+- Responsive layout
+- Column customization
+- Templates
+- Footer summaries
+- Excel export
+- PDF export
+- Print export
+- Bootstrap 5.3 integration
+- Dark theme support
+- Blazor Server
+- Blazor WebAssembly
+- Blazor Web App
 
 ------------------------------------------------------------------------
 
 # Basic Usage
 
-``` razor
-<OutlanderGrid TItem="OrderDto"
-               Items="@Orders"
-               Pageable="true"
-               Sortable="true"
-               Filterable="true" />
-```
+```razor
+<OutlanderGrid TItem="ServerItem"
+               Items="@Servers">
 
-------------------------------------------------------------------------
+    <Columns>
 
-# Columns
+        <OutlanderGridDataColumn
+            TItem="ServerItem"
+            FieldName="Name" />
 
-Define columns using child content.
+        <OutlanderGridDataColumn
+            TItem="ServerItem"
+            FieldName="Provider" />
 
-``` razor
-<OutlanderGrid TItem="OrderDto" Items="@Orders">
-    <OutlanderGridDataColumn Field="Id" Title="Order #" />
-    <OutlanderGridDataColumn Field="CustomerName" Title="Customer" />
-    <OutlanderGridDataColumn Field="Total" Title="Total" />
+        <OutlanderGridDataColumn
+            TItem="ServerItem"
+            FieldName="Status" />
+
+    </Columns>
+
 </OutlanderGrid>
 ```
 
 ------------------------------------------------------------------------
 
-# Search and Filtering
+# Settings-based Configuration (Recommended)
 
-Enable global search and per-column filtering to improve data discovery.
+Most grid behavior can be configured through the `Settings` section.
 
-Typical configuration:
+```razor
+<OutlanderGrid
+    TItem="ServerItem"
+    Items="@Servers">
 
--   Search box enabled
--   Column filter UI enabled
--   Combined search + filter behavior
+    <Settings>
+
+        <OutlanderGridSearchSettings
+            Show="true" />
+
+        <OutlanderGridFilterSettings
+            Show="true" />
+
+        <OutlanderGridFooterSettings />
+
+        <OutlanderGridExportSettings
+            ShowButtons="true" />
+
+        <OutlanderGridSelectionSettings />
+
+    </Settings>
+
+    <Columns>
+
+        ...
+
+    </Columns>
+
+</OutlanderGrid>
+```
+
+Using settings keeps the grid markup cleaner and groups related configuration together.
+
+------------------------------------------------------------------------
+
+# Toolbar
+
+Additional actions can be placed in the built-in toolbar.
+
+```razor
+<ToolbarTemplate>
+
+    <button class="btn btn-primary">
+
+        Import
+
+    </button>
+
+</ToolbarTemplate>
+```
+
+------------------------------------------------------------------------
+
+# Searching
+
+Enable the built-in search box.
+
+```razor
+<OutlanderGridSearchSettings
+
+    Show="true"
+    NullText="Search..."
+    ParseMode="GridSearchTextParseMode.GroupWordsByAnd" />
+```
+
+The search is automatically applied across all searchable columns.
+
+------------------------------------------------------------------------
+
+# Filtering
+
+Each column can define its own filter behavior.
+
+```razor
+<OutlanderGridDataColumn
+
+    FieldName="MemoryGb"
+    FilterMode="GridFilterMode.Range" />
+```
+
+Custom filter templates are also supported.
+
+```razor
+<FilterTemplate Context="filter">
+
+    <input class="form-control"
+
+           value="@filter.Value"
+
+           @oninput="e => filter.SetValue(e.Value?.ToString())" />
+
+</FilterTemplate>
+```
+
+------------------------------------------------------------------------
+
+# Sorting
+
+Sorting can be enabled globally or configured per column.
+
+```razor
+<OutlanderGridDataColumn
+
+    FieldName="Name"
+
+    AllowSort="true"
+
+    SortOrder="GridColumnSortOrder.Ascending" />
+```
 
 ------------------------------------------------------------------------
 
 # Selection
 
-Selection features support row-based workflows such as:
+Selection is supported through the built-in selection column.
 
--   Bulk actions
--   Batch processing
--   Context operations
+```razor
+<OutlanderGridSelectionColumn
 
-Use selection settings/columns according to your scenario.
+    AllowSelectAllItems="true" />
+```
+
+The selected rows can be synchronized using two-way binding.
+
+```razor
+<OutlanderGrid
+
+    @bind-SelectedItems="SelectedServers" />
+```
 
 ------------------------------------------------------------------------
 
-# Export
+# Focused Row
 
-`OutlanderGrid` supports exporting current dataset views to:
+The focused row can also be synchronized.
 
--   Excel
--   PDF
+```razor
+<OutlanderGrid
 
-Useful for reporting and business distribution workflows.
+    @bind-FocusedRow="FocusedServer" />
+```
+
+------------------------------------------------------------------------
+
+# Templates
+
+The grid provides several customization points.
+
+Supported templates include:
+
+- ToolbarTemplate
+- CellTemplate
+- FilterTemplate
+
+Example:
+
+```razor
+<CellTemplate Context="cell">
+
+    <span class="fw-bold">
+
+        @cell.Highlight(cell.Item.Name)
+
+    </span>
+
+</CellTemplate>
+```
+
+------------------------------------------------------------------------
+
+# Exporting
+
+Built-in exporting supports:
+
+- Excel
+- PDF
+- Print
+
+Example:
+
+```razor
+<OutlanderGridExportSettings
+
+    ShowButtons="true"
+
+    AllowExcel="true"
+
+    AllowPdf="true"
+
+    AllowPrint="true"
+
+    FileName="Servers"
+
+    Title="Servers List" />
+```
+
+------------------------------------------------------------------------
+
+# Column Types
+
+Outlander currently includes:
+
+- OutlanderGridDataColumn
+- OutlanderGridSelectionColumn
+
+Additional column types will be added in future releases.
 
 ------------------------------------------------------------------------
 
 # Parameters
 
-| Parameter      | Description |
-|---------------|-------------|
-| `Items`       | Data source for rendering rows |
-| `TItem`       | Model type of each row |
-| `Sortable`    | Enables sorting behavior |
-| `Filterable`  | Enables filtering behavior |
-| `Searchable`  | Enables global search |
-| `Pageable`    | Enables paging |
-| `Selectable`  | Enables row selection |
+The grid exposes many configuration parameters.
+
+The most commonly used are:
+
+| Parameter | Description |
+|------------|-------------|
+| Items | Data source. |
+| PageSize | Number of rows per page. |
+| EmptyText | Message shown when no records exist. |
+| ShowColumnChooser | Displays the column chooser. |
+| AllowSort | Enables sorting. |
+| AllowFocusedRow | Enables focused row support. |
+| AllowHotTrackRow | Enables row hover highlighting. |
+| ShowFilterRow | Displays the filter row. |
+| ShowSearchBox | Displays the search box. |
+| ShowExportButtons | Displays export buttons. |
 
 ------------------------------------------------------------------------
 
-# Recommendations
+# Common Scenarios
 
-Use `OutlanderGrid` for high-density business data screens such as:
+Typical implementations include:
 
--   Orders
--   Customers
--   Inventory
--   Financial reports
+- Basic grid
+- CRUD applications
+- Reporting dashboards
+- Administration portals
+- ERP systems
+- CRM applications
+- Server-side paging
+- Read-only reporting
+
+------------------------------------------------------------------------
+
+# Performance Notes
+
+The grid is optimized for:
+
+- Large datasets
+- Blazor Server
+- Blazor WebAssembly
+- Minimal rendering
+- Enterprise applications
+
+Virtualization support is planned for a future release.
 
 ------------------------------------------------------------------------
 
 # Troubleshooting
 
-## Grid renders but interactions do not work
-
 Verify:
 
--   Required scripts are loaded
--   Component parameters are configured correctly
--   Data source is not null
+- Bootstrap 5.3+
+- Bootstrap Bundle loaded
+- Outlander.Blazor stylesheet loaded
 
-## Export buttons do not generate files
+For export functionality:
 
-Verify that:
+- Browser popup blocking disabled when printing
+- Export buttons enabled
 
--   Export settings are enabled
--   Export dependencies are correctly registered
+------------------------------------------------------------------------
+
+# Related Documentation
+
+- [Getting Started](../GettingStarted.md)
+- [Themes](../Themes.md)
+- [OutlanderNavMenu](OutlanderNavMenu.md)
+- [OutlanderTopMenu](OutlanderTopMenu.md)

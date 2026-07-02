@@ -119,7 +119,7 @@ system
 For component-specific configuration, see:
 
 -   [OutlanderThemeSelector](Components/OutlanderThemeSelector.md)
-  - 
+
 ## Bootstrap compatibility
 
 The theme system requires Bootstrap 5.3 or later because dark mode

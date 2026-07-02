@@ -1,35 +1,91 @@
 # OutlanderLayout
 
-`OutlanderLayout` is a layout shell component that combines top navigation,
-side navigation, and main content for modern business applications.
+`OutlanderLayout` is the main layout component provided by Outlander.Blazor for building modern business applications.
 
-It is designed to work seamlessly with `OutlanderNavMenu`,
-`OutlanderTopMenu`, and `OutlanderThemeSelector`.
+It provides a complete application shell composed of a navigation area, a top bar, a content area, and an optional footer.
+
+The component is designed to work seamlessly with `OutlanderNavMenu`, `OutlanderTopMenu`, and `OutlanderThemeSelector`, but any custom Blazor content can also be used.
 
 ------------------------------------------------------------------------
 
 # Features
 
--   Complete application shell
--   Integrated top and side navigation
--   Responsive desktop and mobile behavior
--   Collapsible side navigation
--   Mobile drawer support
--   Content area for routed pages
--   Theme-ready structure
--   Bootstrap 5.3 compatible
+- Complete application shell
+- Navigation area
+- Top navigation bar
+- Main content area
+- Optional footer
+- Responsive-ready
+- Works with any Blazor component
+- Fully compatible with OutlanderNavMenu
+- Fully compatible with OutlanderTopMenu
+- Fully compatible with OutlanderThemeSelector
+- Supports Blazor Server, WebAssembly and Blazor Web App
 
 ------------------------------------------------------------------------
 
 # Basic Usage
 
-``` razor
-<OutlanderLayout
-    BrandText="Outlander"
-    Groups="@MenuGroups">
+```razor
+<OutlanderLayout>
+
+    <NavMenu>
+        <OutlanderNavMenu
+            @bind-MobileMenuOpen="mobileMenuOpen"
+            @bind-NavMenuCollapsed="navMenuCollapsed"
+            Groups="NavMenuGroups" />
+    </NavMenu>
+
+    <TopMenu>
+        <OutlanderTopMenu
+            @bind-MobileMenuOpen="mobileMenuOpen"
+            @bind-NavMenuCollapsed="navMenuCollapsed"
+            ShowNavMenuToggle="true"
+            ShowThemeSelector="true" />
+    </TopMenu>
+
     <Body>
         @Body
     </Body>
+
+</OutlanderLayout>
+```
+
+------------------------------------------------------------------------
+
+# Complete Layout Example
+
+```razor
+<OutlanderLayout>
+
+    <NavMenu>
+        <OutlanderNavMenu
+            @bind-MobileMenuOpen="mobileMenuOpen"
+            @bind-NavMenuCollapsed="navMenuCollapsed"
+            BrandText="Admin Template"
+            Groups="NavMenuGroups"
+            FooterItems="NavMenuFooterItems" />
+    </NavMenu>
+
+    <TopMenu>
+        <OutlanderTopMenu
+            @bind-MobileMenuOpen="mobileMenuOpen"
+            @bind-NavMenuCollapsed="navMenuCollapsed"
+            ShowNavMenuToggle="true"
+            ShowThemeSelector="true"
+            CollapseActionsToOffcanvasOnMobile="true"
+            ActionItems="TopActions" />
+    </TopMenu>
+
+    <Body>
+        @Body
+    </Body>
+
+    <Footer>
+        <span>© 2026 My Company</span>
+        <span>Outlander.Blazor v1.0.1</span>
+    </Footer>
+
 </OutlanderLayout>
 ```
 
@@ -37,87 +93,119 @@ It is designed to work seamlessly with `OutlanderNavMenu`,
 
 # Layout Structure
 
-The layout typically includes:
+The component is composed of four independent regions.
 
--   Top menu area
--   Side navigation (NavMenu)
--   Main content container
--   Optional footer/header actions
-
-This structure helps standardize navigation and page composition across
-the application.
-
-------------------------------------------------------------------------
-
-# Menu Integration
-
-`OutlanderLayout` is designed to consume navigation groups and footer
-items used by `OutlanderNavMenu`.
-
-``` csharp
-private IEnumerable<OutlanderNavMenuMenuGroup> MenuGroups =
-[
-    new()
-    {
-        Title = "Operations",
-        Items =
-        [
-            new() { Text = "Dashboard", Icon = "bi-speedometer2", Url = "/" },
-            new() { Text = "Orders", Icon = "bi-cart", Url = "/orders" }
-        ]
-    }
-];
+```
++------------------------------------------------------+
+|                     Top Menu                         |
++-----------+------------------------------------------+
+|           |                                          |
+|           |                                          |
+| Nav Menu  |              Body                        |
+|           |                                          |
+|           |                                          |
++-----------+------------------------------------------+
+|                    Footer (Optional)                 |
++------------------------------------------------------+
 ```
 
-------------------------------------------------------------------------
-
-# Responsive Behavior
-
-The layout automatically adapts between desktop and mobile modes.
-
-Desktop:
-
--   Side navigation can be expanded or collapsed
-
-Mobile:
-
--   Side navigation opens as a drawer
--   Top menu remains the primary entry point
+Each section accepts any Blazor content through `RenderFragment`.
 
 ------------------------------------------------------------------------
 
 # Parameters
 
-| Parameter            | Description |
-|---------------------|-------------|
-| `BrandText`         | Application title displayed in navigation |
-| `Groups`            | Main navigation menu groups |
-| `FooterItems`       | Footer navigation items |
-| `BreakPointForMobile` | Mobile breakpoint in pixels |
-| `Body`              | Main content fragment rendered by the layout |
+| Parameter | Type | Default | Description |
+|-----------|------|---------|-------------|
+| `NavMenu` | `RenderFragment` | — | Content rendered in the navigation area. Typically an `OutlanderNavMenu`. |
+| `TopMenu` | `RenderFragment` | — | Content rendered in the application header. Typically an `OutlanderTopMenu`. |
+| `Body` | `RenderFragment` | — | Main application content. Usually the routed page content. |
+| `Footer` | `RenderFragment` | — | Optional footer displayed at the bottom of the layout. |
 
 ------------------------------------------------------------------------
 
-# Recommendations
+# Using Custom Components
 
-Use `OutlanderLayout` as the main layout in `App.razor` or a custom
-layout component to keep navigation and content composition consistent.
+Although OutlanderLayout is optimized for Outlander components, any Blazor component can be used.
+
+```razor
+<OutlanderLayout>
+
+    <NavMenu>
+        <MyCustomMenu />
+    </NavMenu>
+
+    <TopMenu>
+        <MyToolbar />
+    </TopMenu>
+
+    <Body>
+        <Dashboard />
+    </Body>
+
+</OutlanderLayout>
+```
 
 ------------------------------------------------------------------------
 
-# Troubleshooting
+# Application Shell
 
-## Layout does not render menu correctly
+Unlike the traditional Blazor layout model based on `LayoutComponentBase`, `OutlanderLayout` is implemented as a reusable shell component.
 
-Verify that:
+Each layout section is exposed through a `RenderFragment`, allowing it to be used not only as an application layout, but also as a reusable container inside any page or component.
 
--   `Groups` contains valid items
--   Bootstrap styles are loaded
--   Layout CSS is included in the application
+This approach provides greater flexibility when building dashboards, portals, administration systems, or applications with multiple layout variations.
 
-## Mobile menu does not open
+------------------------------------------------------------------------
 
-Verify that:
+# Responsive Behavior
 
--   Bootstrap JavaScript bundle is loaded
--   Bound state values are updated when toggling menu
+`OutlanderLayout` itself does not impose responsive behavior.
+
+Instead, it delegates responsiveness to the components hosted inside it, such as:
+
+- `OutlanderNavMenu`
+- `OutlanderTopMenu`
+
+This separation keeps the layout simple while allowing each component to manage its own responsive logic.
+
+------------------------------------------------------------------------
+
+# Recommended Composition
+
+The recommended application structure is:
+
+```
+OutlanderLayout
+│
+├── OutlanderNavMenu
+├── OutlanderTopMenu
+│      └── OutlanderThemeSelector
+│
+├── Routed Page
+│
+└── Footer (optional)
+```
+
+This composition provides a complete enterprise application shell with minimal configuration.
+
+------------------------------------------------------------------------
+
+# Notes
+
+- Works with any Blazor hosting model.
+- Supports Blazor Server.
+- Supports Blazor WebAssembly.
+- Supports Blazor Web App.
+- Footer is optional.
+- Any Blazor component can be hosted inside each section.
+
+------------------------------------------------------------------------
+
+# Related Documentation
+
+- [Getting Started](../GettingStarted.md)
+- [Layout](../Layout.md)
+- [OutlanderNavMenu](OutlanderNavMenu.md)
+- [OutlanderTopMenu](OutlanderTopMenu.md)
+- [OutlanderThemeSelector](OutlanderThemeSelector.md)

@@ -21,8 +21,9 @@
   </a>
 </p>
 
-Outlander.Blazor is a modern component library for Blazor applications
-focused on productivity, performance, and enterprise scenarios.
+Outlander.Blazor provides a complete application shell, including responsive navigation, 
+top bars, theme management and enterprise-ready data components, 
+allowing developers to build modern business applications with minimal setup.
 
 The project provides reusable UI components designed to simplify the
 development of business applications such as:
@@ -61,7 +62,7 @@ Features:
 -   Blazor Server support
 -   Blazor WebAssembly support
 
-Documentation: [OutlanderGrid](Docs/Components/OutlanderGrid.md)
+Documentation: [OutlanderGrid](Outlander.Blazor/Docs/Components/OutlanderGrid.md)
 
 ------------------------------------------------------------------------
 
@@ -81,7 +82,7 @@ Features:
 -   Persistent collapsed state
 -   Bootstrap Icons integration
 
-Documentation: [OutlanderNavMenu](Docs/Components/OutlanderNavMenu.md)
+Documentation: [OutlanderNavMenu](Outlander.Blazor/Docs/Components/OutlanderNavMenu.md)
 
 ------------------------------------------------------------------------
 
@@ -98,7 +99,7 @@ Features:
 -   Theme selector integration
 -   Mobile offcanvas actions
 
-Documentation: [OutlanderTopMenu](Docs/Components/OutlanderTopMenu.md)
+Documentation: [OutlanderTopMenu](Outlander.Blazor/Docs/Components/OutlanderTopMenu.md)
 
 ------------------------------------------------------------------------
 
@@ -114,7 +115,7 @@ Features:
 -   Browser persistence using localStorage
 -   Bootstrap 5.3 dark mode support
 
-Documentation: [OutlanderThemeSelector](Docs/Components/OutlanderThemeSelector.md)
+Documentation: [OutlanderThemeSelector](Outlander.Blazor/Docs/Components/OutlanderThemeSelector.md)
 
 ------------------------------------------------------------------------
 
@@ -164,7 +165,7 @@ builder.Services.AddOutlander();
 
 For detailed installation instructions:
 
-[Getting Started](Docs/GettingStarted.md)
+[Getting Started](Outlander.Blazor/Docs/GettingStarted.md)
 
 ------------------------------------------------------------------------
 
@@ -172,16 +173,16 @@ For detailed installation instructions:
 
 ## Components
 
--   [OutlanderGrid](Docs/Components/OutlanderGrid.md)
--   [OutlanderNavMenu](Docs/Components/OutlanderNavMenu.md)
--   [OutlanderTopMenu](Docs/Components/OutlanderTopMenu.md)
--   [OutlanderThemeSelector](Docs/Components/OutlanderThemeSelector.md)
+-   [OutlanderGrid](Outlander.Blazor/Docs/Components/OutlanderGrid.md)
+-   [OutlanderNavMenu](Outlander.Blazor/Docs/Components/OutlanderNavMenu.md)
+-   [OutlanderTopMenu](Outlander.Blazor/Docs/Components/OutlanderTopMenu.md)
+-   [OutlanderThemeSelector](Outlander.Blazor/Docs/Components/OutlanderThemeSelector.md)
 
 ## Guides
 
--   [Getting Started](Docs/GettingStarted.md)
--   [Themes](Docs/Themes.md)
--   [Layout](Docs/Layout.md)
+-   [Getting Started](Outlander.Blazor/Docs/GettingStarted.md)
+-   [Themes](Outlander.Blazor/Docs/Themes.md)
+-   [Layout](Outlander.Blazor/Docs/Layout.md)
 
 ------------------------------------------------------------------------
 
