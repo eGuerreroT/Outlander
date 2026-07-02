@@ -96,63 +96,19 @@
             },
             new OutlanderNavMenuMenuGroup
             {
-                Title = "Infraestructura",
+                Title = "Components",
                 Items =
                 [
                     new OutlanderNavMenuItem
                     {
-                        Text = "Infraestructura",
-                        Icon = "bi-hdd-stack",
-                        Tooltip = "Infraestructura",
+                        Text = "Grid",
+                        Icon = "bi-grid-3x3-gap",
+                        Tooltip = "Grid",
                         IsExpandedByDefault = true,
                         Children =
                         [
-                            new OutlanderNavMenuItem { Text = "Servidores", Icon = "bi-hdd-stack", Url = "#", Tooltip = "Servidores" },
-                            new OutlanderNavMenuItem { Text = "Descubrimiento", Icon = "bi-search", Url = "/discovery", Tooltip = "AutomaticColumns", IsActive = true },
-                            new OutlanderNavMenuItem { Text = "Proveedores Cloud", Icon = "bi-cloud", Url = "#", Tooltip = "Proveedores Cloud" },
-                            new OutlanderNavMenuItem { Text = "Tareas / Sincronización", Icon = "bi-arrow-repeat", Url = "#", Tooltip = "Tareas / Sincronización" }
-                        ]
-                    }
-                ]
-            },
-            new OutlanderNavMenuMenuGroup
-            {
-                Title = "Reportes",
-                Items =
-                [
-                    new OutlanderNavMenuItem
-                    {
-                        Text = "Reportes",
-                        Icon = "bi-bar-chart",
-                        Tooltip = "Reportes",
-                        IsExpandedByDefault = true,
-                        Children =
-                        [
-                            new OutlanderNavMenuItem { Text = "Servidores", Icon = "bi-hdd-stack", Url = "#", Tooltip = "Servidores" },
-                            new OutlanderNavMenuItem { Text = "Línea de tiempo", Icon = "bi-clock-history", Url = "#", Tooltip = "Línea de tiempo" },
-                            new OutlanderNavMenuItem { Text = "Utilidades", Icon = "bi-tools", Url = "#", Tooltip = "Utilidades" },
-                            new OutlanderNavMenuItem { Text = "Tareas / Sincronización", Icon = "bi-arrow-repeat", Url = "#", Tooltip = "Tareas / Sincronización" }
-                        ]
-                    }
-                ]
-            },
-            new OutlanderNavMenuMenuGroup
-            {
-                Title = "Administración",
-                Items =
-                [
-                    new OutlanderNavMenuItem
-                    {
-                        Text = "Administración",
-                        Icon = "bi-shield-lock",
-                        Tooltip = "Administración",
-                        IsExpandedByDefault = true,
-                        Children =
-                        [
-                            new OutlanderNavMenuItem { Text = "Grupos", Icon = "bi-collection", Url = "#", Tooltip = "Grupos" },
-                            new OutlanderNavMenuItem { Text = "Usuarios", Icon = "bi-people", Url = "#", Tooltip = "Usuarios" },
-                            new OutlanderNavMenuItem { Text = "Roles", Icon = "bi-shield-lock", Url = "#", Tooltip = "Roles" },
-                            new OutlanderNavMenuItem { Text = "Auditoría", Icon = "bi-clipboard-check", Url = "#", Tooltip = "Auditoría" }
+                            new OutlanderNavMenuItem { Text = "Custom Columns", Icon = "bi-table", Url = "/", Tooltip = "Custom Columns", IsActive = true },
+                            new OutlanderNavMenuItem { Text = "Automatic Columns", Icon = "bi-grid-3x2", Url = "/AutomaticColumns", Tooltip = "Automatic Columns" },
                         ]
                     }
                 ]

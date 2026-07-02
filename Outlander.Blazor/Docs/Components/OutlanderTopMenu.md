@@ -12,12 +12,13 @@ notification badges, and integration with `OutlanderNavMenu` and
 # Features
 
 -   Responsive top bar
--   Navigation toggle button
+-   Navigation menu toggle button
 -   Left and right content areas
 -   Action buttons
 -   Notification badges
 -   Mobile offcanvas actions
 -   Theme selector integration
+-   Sticky mode support
 -   Bootstrap 5.3 compatible
 -   Bootstrap Icons integration
 
@@ -27,14 +28,13 @@ notification badges, and integration with `OutlanderNavMenu` and
 
 ``` razor
 <OutlanderTopMenu
-    ShowNavToggle="true"
-    OnNavToggle="HandleNavToggle">
+    ShowNavMenuToggle="true"
+    ShowThemeSelector="true"
+    @bind-MobileMenuOpen="MobileMenuOpen"
+    @bind-NavMenuCollapsed="NavMenuCollapsed">
     <LeftContent>
         <span class="fw-semibold">Dashboard</span>
     </LeftContent>
-    <RightContent>
-        <OutlanderThemeSelector />
-    </RightContent>
 </OutlanderTopMenu>
 ```
 
@@ -46,14 +46,16 @@ Use the top menu to control the side navigation state.
 
 ``` razor
 <OutlanderTopMenu
-    ShowNavToggle="true"
-    OnNavToggle="HandleNavToggle" />
+    ShowNavMenuToggle="true"
+    @bind-MobileMenuOpen="MobileMenuOpen"
+    @bind-NavMenuCollapsed="NavMenuCollapsed" />
 ```
 
-The parent component can wire this event to toggle:
+The component automatically:
 
--   `@bind-NavMenuCollapsed`
--   `@bind-MobileMenuOpen`
+-   Toggles the mobile menu on small screens
+-   Toggles the collapsed navigation state on desktop
+-   Persists the collapsed menu state using browser storage
 
 ------------------------------------------------------------------------
 
@@ -62,30 +64,49 @@ The parent component can wire this event to toggle:
 The component supports templated regions for customization.
 
 ``` razor
-<OutlanderTopMenu>
+<OutlanderTopMenu ShowThemeSelector="true">
     <LeftContent>
         <span>Sales Portal</span>
     </LeftContent>
 
     <RightContent>
         <button class="btn btn-outline-secondary btn-sm">Refresh</button>
-        <OutlanderThemeSelector />
     </RightContent>
 </OutlanderTopMenu>
 ```
 
 ------------------------------------------------------------------------
 
-# Action Buttons
+# Action Items
 
-Header actions can be rendered as buttons with optional badges.
+When `RightContent` is not provided, the component can render predefined
+action items using `ActionItems`.
 
-Typical usage includes:
+``` csharp
+private IEnumerable<OutlanderTopMenuActionItem> Actions =
+[
+    new()
+    {
+        Title = "Notifications",
+        Icon = "bi-bell",
+        BadgeText = "3",
+        OnClick = EventCallback.Factory.Create(this, OpenNotifications),
+        KeepVisibleOnMobile = true
+    },
+    new()
+    {
+        Title = "Profile",
+        Icon = "bi-person-circle",
+        OnClick = EventCallback.Factory.Create(this, OpenProfile)
+    }
+];
+```
 
--   Notifications
--   Tasks
--   Messages
--   User profile actions
+``` razor
+<OutlanderTopMenu
+    ActionItems="@Actions"
+    ShowThemeSelector="true" />
+```
 
 ------------------------------------------------------------------------
 
@@ -94,22 +115,43 @@ Typical usage includes:
 In smaller viewports, actions can be collapsed into an offcanvas area
 to keep the top bar clean and accessible.
 
-Recommended:
+This behavior is controlled by:
 
--   Keep primary actions visible
--   Move secondary actions into mobile actions area
+-   `CollapseActionsToOffcanvasOnMobile`
+-   `IncludeLeftContentInMobileOffcanvas`
+-   `MobileOffcanvasTitle`
+
+------------------------------------------------------------------------
+
+# Sticky Mode
+
+Use `Sticky="true"` to keep the top menu visible while scrolling.
+
+``` razor
+<OutlanderTopMenu
+    Sticky="true"
+    ShowNavMenuToggle="true"
+    ShowThemeSelector="true" />
+```
 
 ------------------------------------------------------------------------
 
 # Parameters
 
-| Parameter         | Description |
-|------------------|-------------|
-| `ShowNavToggle`  | Shows the navigation toggle button |
-| `OnNavToggle`    | Event callback fired when toggle is clicked |
-| `LeftContent`    | Custom left header content |
-| `RightContent`   | Custom right header content |
-| `Class`          | Additional CSS classes for styling |
+| Parameter                              | Description |
+|----------------------------------------|-------------|
+| `BreakPointForMobile`                  | Breakpoint used to switch to mobile mode |
+| `ShowThemeSelector`                    | Displays the theme selector |
+| `ShowNavMenuToggle`                    | Displays the navigation toggle button |
+| `Sticky`                               | Keeps the top menu visible during scroll |
+| `CollapseActionsToOffcanvasOnMobile`   | Collapses action items into a mobile offcanvas panel |
+| `IncludeLeftContentInMobileOffcanvas`  | Also renders left content inside the mobile offcanvas |
+| `MobileOffcanvasTitle`                 | Title displayed in the mobile offcanvas panel |
+| `LeftContent`                          | Custom left header content |
+| `RightContent`                         | Custom right header content |
+| `ActionItems`                          | Predefined action items rendered when `RightContent` is not provided |
+| `MobileMenuOpen`                       | Controls the mobile navigation menu open state |
+| `NavMenuCollapsed`                     | Controls the desktop navigation collapsed state |
 
 ------------------------------------------------------------------------
 
@@ -131,8 +173,9 @@ to build complete responsive application shells.
 
 Verify that:
 
--   `OnNavToggle` is wired in the parent component
--   Parent state (`NavMenuCollapsed` / `MobileMenuOpen`) is updated correctly
+-   `ShowNavMenuToggle` is enabled
+-   The parent component binds `@bind-MobileMenuOpen`
+-   The parent component binds `@bind-NavMenuCollapsed`
 
 ## Actions are not visible on mobile
 
@@ -140,3 +183,10 @@ Verify:
 
 -   Bootstrap 5.3+ is loaded
 -   Offcanvas styles/scripts are available
+-   `CollapseActionsToOffcanvasOnMobile` is enabled when needed
+
+## Theme selector is not displayed
+
+Verify that:
+
+-   `ShowThemeSelector="true"` is configured
