@@ -66,10 +66,7 @@
 
     protected override async Task OnAfterRenderAsync(bool firstRender)
     {
-        if (firstRender)
-        {
-            await JS.InvokeVoidAsync("outlander.initTooltips");
-        }
+        await JS.InvokeVoidAsync("outlander.initTooltips");
     }
 
     public ValueTask DisposeAsync()

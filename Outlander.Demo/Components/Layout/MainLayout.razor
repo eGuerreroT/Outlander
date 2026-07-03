@@ -5,7 +5,7 @@
         <OutlanderNavMenu @bind-MobileMenuOpen="mobileMenuOpen"
                           @bind-NavMenuCollapsed="navMenuCollapsed"
                           ShowNavMenuToggle="false"
-                          BrandText="Admin Template"
+                          BrandText="Outlander Blazor"
                           Groups="NavMenuGroups"
                           FooterItems="NavMenuFooterItems" />
     </NavMenu>
@@ -34,7 +34,7 @@
     </Footer>
 </OutlanderLayout>
 
-<div id="blazor-error-ui" data-nosnippet>
+<div id="blazor-error-ui" class="bg-danger-subtle border border-danger-subtle text-danger-emphasis" data-nosnippet>
     An unhandled error has occurred.
     <a href="." class="reload">Reload</a>
     <span class="dismiss">🗙</span>
@@ -104,12 +104,76 @@
                         Text = "Grid",
                         Icon = "bi-grid-3x3-gap",
                         Tooltip = "Grid",
-                        IsExpandedByDefault = true,
                         Children =
                         [
-                            new OutlanderNavMenuItem { Text = "Custom Columns", Icon = "bi-table", Url = "/", Tooltip = "Custom Columns", IsActive = true },
-                            new OutlanderNavMenuItem { Text = "Automatic Columns", Icon = "bi-grid-3x2", Url = "/AutomaticColumns", Tooltip = "Automatic Columns" },
+                            new OutlanderNavMenuItem
+                            {
+                                Text = "Custom Columns",
+                                Icon = "bi-table",
+                                Url = "/",
+                                Tooltip = "Custom Columns",
+                            },
+                            new OutlanderNavMenuItem
+                            {
+                                Text = "Automatic Columns",
+                                Icon = "bi-grid-3x2",
+                                Url = "/AutomaticColumns",
+                                Tooltip = "Automatic Columns"
+                            }
                         ]
+                    },
+                    new OutlanderNavMenuItem
+                    {
+                        Text = "Layout",
+                        Icon = "bi-window-stack",
+                        Tooltip = "Layout",
+                        Children =
+                        [
+                            new OutlanderNavMenuItem
+                            {
+                                Text = "Layout Shell",
+                                Icon = "bi-layout-sidebar-inset",
+                                Url = "/layout-shell",
+                                Tooltip = "Layout Shell"
+                            }
+                        ]
+                    },
+                    new OutlanderNavMenuItem
+                    {
+                        Text = "Navigation",
+                        Icon = "bi-compass",
+                        Tooltip = "Navigation",
+                        Children =
+                        [
+                            new OutlanderNavMenuItem
+                            {
+                                Text = "NavMenu",
+                                Icon = "bi-list",
+                                Url = "/navmenu-demo",
+                                Tooltip = "NavMenu"
+                            },
+                            new OutlanderNavMenuItem
+                            {
+                                Text = "TopMenu",
+                                Icon = "bi-menu-button-wide",
+                                Url = "/topmenu-demo",
+                                Tooltip = "TopMenu"
+                            }
+                        ]
+                    }
+                ]
+            },
+            new OutlanderNavMenuMenuGroup
+            {
+                Title = "Theming",
+                Items =
+                [
+                    new OutlanderNavMenuItem
+                    {
+                        Text = "Theme Selector",
+                        Icon = "bi-circle-half",
+                        Tooltip = "Theme",
+                        Url = "/theme-selector-demo"
                     }
                 ]
             }

@@ -1,0 +1,361 @@
+﻿@page "/theme-selector-demo"
+@using Outlander.Demo.LanguageDefinitions
+@inject IJSRuntime JS
+
+<PageTitle>Theme Selector Demo</PageTitle>
+
+<div class="ol-doc-page">
+
+    <div class="row g-4 align-items-start">
+        <div class="col-xl-8">
+            <div class="mb-4">
+                <div class="d-flex align-items-center gap-3 flex-wrap mb-3">
+                    <h1 class="mb-0">OutlanderThemeSelector</h1>
+                    <span class="bg-body-tertiary btn outlander-btn-default btn-sm rounded-pill">v1.0.0</span>
+                </div>
+
+                <p class="lead text-body-secondary mb-4">
+                    A lightweight theme switcher for toggling between visual modes in Blazor applications.
+                </p>
+
+                <p class="mb-2">
+                    <code>OutlanderThemeSelector</code> provides a simple way to switch between application themes
+                    while keeping the UI consistent across the entire layout.
+                </p>
+                <p class="mb-4">
+                    It is commonly used inside <code>OutlanderTopMenu</code>, but it can also be rendered independently.
+                </p>
+
+                <div class="row g-3">
+                    <div class="col-sm-6 col-lg-3">
+                        <div class="ol-region-pill">
+                            <div class="ol-region-icon"><i class="bi bi-circle-half"></i></div>
+                            <div>
+                                <div class="fw-semibold">Theme Toggle</div>
+                                <small class="text-body-secondary">Switch visual modes</small>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-sm-6 col-lg-3">
+                        <div class="ol-region-pill">
+                            <div class="ol-region-icon"><i class="bi bi-palette"></i></div>
+                            <div>
+                                <div class="fw-semibold">Consistent UI</div>
+                                <small class="text-body-secondary">Unified application styling</small>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-sm-6 col-lg-3">
+                        <div class="ol-region-pill">
+                            <div class="ol-region-icon"><i class="bi bi-window"></i></div>
+                            <div>
+                                <div class="fw-semibold">Standalone Use</div>
+                                <small class="text-body-secondary">Works outside the top bar</small>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-sm-6 col-lg-3">
+                        <div class="ol-region-pill">
+                            <div class="ol-region-icon"><i class="bi bi-moon-stars"></i></div>
+                            <div>
+                                <div class="fw-semibold">Light / Dark</div>
+                                <small class="text-body-secondary">Application-wide theme support</small>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-xl-4">
+            <div class="card ol-side-card">
+                <div class="card-body">
+                    <h5 class="mb-3">Key Features</h5>
+
+                    <ul class="list-unstyled mb-0 ol-feature-list">
+                        <li><i class="bi bi-check-circle-fill"></i> Light and dark mode switching</li>
+                        <li><i class="bi bi-check-circle-fill"></i> Compact UI footprint</li>
+                        <li><i class="bi bi-check-circle-fill"></i> Top menu integration</li>
+                        <li><i class="bi bi-check-circle-fill"></i> Standalone rendering support</li>
+                        <li><i class="bi bi-check-circle-fill"></i> Consistent with Outlander visual language</li>
+                        <li><i class="bi bi-check-circle-fill"></i> Bootstrap 5.3+</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="border-0 card mt-4 shadow-none">
+        <div class="bg-transparent border-0 card-header pb-0">
+            <ul class="nav ol-doc-tabs" id="themeSelectorTabs" role="tablist">
+                <li class="nav-item" role="presentation">
+                    <button class="nav-link ol-doc-tab active"
+                            id="preview-tab"
+                            data-bs-toggle="tab"
+                            data-bs-target="#preview-tab-pane"
+                            type="button"
+                            role="tab"
+                            aria-controls="preview-tab-pane"
+                            aria-selected="true">
+                        Preview
+                    </button>
+                </li>
+                <li class="nav-item" role="presentation">
+                    <button class="nav-link ol-doc-tab"
+                            id="razor-tab"
+                            data-bs-toggle="tab"
+                            data-bs-target="#razor-tab-pane"
+                            type="button"
+                            role="tab"
+                            aria-controls="razor-tab-pane"
+                            aria-selected="false">
+                        Razor
+                    </button>
+                </li>
+                <li class="nav-item" role="presentation">
+                    <button class="nav-link ol-doc-tab"
+                            id="csharp-tab"
+                            data-bs-toggle="tab"
+                            data-bs-target="#csharp-tab-pane"
+                            type="button"
+                            role="tab"
+                            aria-controls="csharp-tab-pane"
+                            aria-selected="false">
+                        C#
+                    </button>
+                </li>
+            </ul>
+        </div>
+
+        <div class="outlander-border card-body rounded">
+            <div class="tab-content" id="themeSelectorTabsContent">
+
+                <div class="tab-pane fade show active"
+                     id="preview-tab-pane"
+                     role="tabpanel"
+                     aria-labelledby="preview-tab"
+                     tabindex="0">
+
+                    <div class="ol-theme-preview">
+                        <div class="ol-theme-preview-toolbar">
+                            <div class="fw-semibold">Application Header</div>
+
+                            <div class="btn-group">
+                                <button type="button"
+                                        class="btn outlander-btn-default dropdown-toggle"
+                                        data-bs-toggle="dropdown"
+                                        aria-expanded="false"
+                                        title="Change theme">
+                                    <i class="bi bi-circle-half"></i>
+                                </button>
+                                <ul class="dropdown-menu dropdown-menu-end">
+                                    <li>
+                                        <button class="dropdown-item d-flex align-items-center justify-content-between px-3 py-2 small">
+                                            <span class="d-inline-flex align-items-center gap-2">
+                                                <i class="bi bi-sun"></i>
+                                                <span>Claro</span>
+                                            </span>
+                                        </button>
+                                    </li>
+                                    <li>
+                                        <button class="dropdown-item d-flex align-items-center justify-content-between px-3 py-2 small">
+                                            <span class="d-inline-flex align-items-center gap-2">
+                                                <i class="bi bi-moon-stars"></i>
+                                                <span>Oscuro</span>
+                                            </span>
+                                        </button>
+                                    </li>
+                                    <li>
+                                        <button class="dropdown-item d-flex align-items-center justify-content-between px-3 py-2 small">
+                                            <span class="d-inline-flex align-items-center gap-2">
+                                                <i class="bi bi-circle-half"></i>
+                                                <span>Sistema</span>
+                                            </span>
+                                            <i class="bi bi-check2"></i>
+                                        </button>
+                                    </li>
+                                </ul>
+                            </div>
+                        </div>
+
+                        <div class="ol-theme-preview-body">
+                            <div class="row g-3">
+                                <div class="col-md-6">
+                                    <div class="ol-theme-surface">
+                                        <div class="fw-semibold mb-2">Light Theme</div>
+                                        <p class="mb-0 text-body-secondary">
+                                            Bright surfaces, soft borders, and clean contrast for daytime use.
+                                        </p>
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="ol-theme-surface ol-theme-surface-dark">
+                                        <div class="fw-semibold mb-2 text-white">Dark Theme</div>
+                                        <p class="mb-0 text-white-50">
+                                            Deep surfaces and balanced contrast for focused low-light usage.
+                                        </p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="tab-pane fade"
+                     id="razor-tab-pane"
+                     role="tabpanel"
+                     aria-labelledby="razor-tab"
+                     tabindex="0">
+
+                    <div class="ol-code-card">
+                        <div class="ol-code-card-body">
+                            <button class="btn btn-sm ol-copy-btn @(copiedBlock == CodeBlockType.Razor ? "copied" : null)"
+                                    @onclick="() => CopyCodeAsync(razorCode, CodeBlockType.Razor)">
+                                <i class="bi @(copiedBlock == CodeBlockType.Razor ? "bi-check2" : "bi-copy") me-1"></i>
+                                @(copiedBlock == CodeBlockType.Razor ? "Copied" : "Copy")
+                            </button>
+
+                            <CodeHighlighter Content="@razorCode"
+                                             LanguageDefinition="@(new OutlanderRazorLanguageDefinition())" />
+                        </div>
+                    </div>
+                </div>
+
+                <div class="tab-pane fade"
+                     id="csharp-tab-pane"
+                     role="tabpanel"
+                     aria-labelledby="csharp-tab"
+                     tabindex="0">
+
+                    <div class="ol-code-card">
+                        <div class="ol-code-card-body">
+                            <button class="btn btn-sm ol-copy-btn @(copiedBlock == CodeBlockType.CSharp ? "copied" : null)"
+                                    @onclick="() => CopyCodeAsync(csharpCode, CodeBlockType.CSharp)">
+                                <i class="bi @(copiedBlock == CodeBlockType.CSharp ? "bi-check2" : "bi-copy") me-1"></i>
+                                @(copiedBlock == CodeBlockType.CSharp ? "Copied" : "Copy")
+                            </button>
+
+                            <CodeHighlighter Content="@csharpCode"
+                                             LanguageDefinition="@(new OutlanderCSharpLanguageDefinition())" />
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+    <div class="row g-4 mt-1">
+        <div class="col-lg-6">
+            <div class="card h-100">
+                <div class="card-body">
+                    <h5 class="mb-3 fw-bold">Theme Selector Layout</h5>
+
+                    <div class="ol-anatomy">
+                        <div class="ol-anatomy-top">Trigger Button</div>
+                        <div class="ol-anatomy-middle">
+                            <div class="ol-anatomy-nav">Current Mode</div>
+                            <div class="ol-anatomy-body">Theme Options</div>
+                        </div>
+                        <div class="ol-anatomy-footer">Application-Wide Theme Update</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-lg-6">
+            <div class="card h-100">
+                <div class="card-body">
+                    <h5 class="mb-3 fw-bold">Main Elements</h5>
+
+                    <div class="table-responsive ol-rounded-table">
+                        <table class="table align-middle mb-0">
+                            <thead>
+                                <tr>
+                                    <th scope="col" class="bg-secondary-subtle">Element</th>
+                                    <th scope="col" class="bg-secondary-subtle">Description</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td><span class="fw-semibold text-primary">Trigger</span></td>
+                                    <td>Displays the control used to open or activate theme selection.</td>
+                                </tr>
+                                <tr>
+                                    <td><span class="fw-semibold text-primary">Current Theme</span></td>
+                                    <td>Represents the currently active application theme.</td>
+                                </tr>
+                                <tr>
+                                    <td><span class="fw-semibold">Theme Options</span></td>
+                                    <td>Provides the available visual modes that the user can choose from.</td>
+                                </tr>
+                                <tr>
+                                    <td><span class="fw-semibold text-success">Theme State</span></td>
+                                    <td>Applies the selected mode consistently across the application layout.</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="alert alert-warning mt-4">
+        <div class="d-flex align-items-center gap-2 mb-3">
+            <i class="bi bi-info-circle text-warning"></i>
+            <h5 class="mb-0">Notes</h5>
+        </div>
+
+        <ul class="mb-0">
+            <li>The theme selector is commonly rendered inside <strong>OutlanderTopMenu</strong>.</li>
+            <li>Use a consistent theme strategy across layout, cards, tables, and navigation components.</li>
+            <li>Light and dark modes should share the same spacing, typography, and structural patterns.</li>
+            <li>A compact trigger works best for top bar placement and mobile responsiveness.</li>
+        </ul>
+    </div>
+
+</div>
+
+@code {
+    private CodeBlockType? copiedBlock;
+
+    private enum CodeBlockType
+    {
+        Razor,
+        CSharp
+    }
+
+    private async Task CopyCodeAsync(string text, CodeBlockType blockType)
+    {
+        await JS.InvokeVoidAsync("navigator.clipboard.writeText", text);
+
+        copiedBlock = blockType;
+        StateHasChanged();
+
+        await Task.Delay(2000);
+
+        if (copiedBlock == blockType)
+        {
+            copiedBlock = null;
+            StateHasChanged();
+        }
+    }
+
+    private string razorCode = """
+        <OutlanderThemeSelector />
+    """;
+
+    private string csharpCode = """
+        // In most scenarios, no additional C# code is required.
+        // The component can be rendered directly inside a layout or top menu.
+
+        protected override void OnInitialized()
+        {
+            base.OnInitialized();
+        }
+    """;
+}

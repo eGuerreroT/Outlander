@@ -1,0 +1,18 @@
+﻿.ol-navmenu-preview {
+    display: flex;
+    min-height: 620px;
+    border: 1px solid var(--ol-border);
+    border-radius: 1rem;
+    overflow: hidden;
+    background: var(--ol-surface);
+}
+
+.ol-navmenu-preview-main {
+    background: var(--ol-surface-alt);
+    min-width: 0;
+}
+
+.ol-preview-footer-actions {
+    border-top: 1px solid rgba(255,255,255,.08);
+    padding-top: 1rem;
+}

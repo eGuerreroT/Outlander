@@ -42,7 +42,31 @@ window.outlander = {
         if (!window.bootstrap) return;
 
         document.querySelectorAll('[data-bs-toggle="tooltip"], [data-bs-title]').forEach(el => {
+            const existing = bootstrap.Tooltip.getInstance(el);
+
+            if (existing) {
+                existing.hide();
+                existing.dispose();
+            }
+
             bootstrap.Tooltip.getOrCreateInstance(el);
+        });
+
+        document.querySelectorAll('.tooltip.show').forEach(el => {
+            const instance = bootstrap.Tooltip.getInstance(el);
+            if (instance) {
+                instance.hide();
+            }
+        });
+    },
+    clearTooltips: function () {
+        if (!window.bootstrap) return;
+
+        document.querySelectorAll('.tooltip.show').forEach(el => {
+            const instance = bootstrap.Tooltip.getInstance(el);
+            if (instance) {
+                instance.hide();
+            }
         });
     },
 };

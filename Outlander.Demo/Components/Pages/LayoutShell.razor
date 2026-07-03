@@ -1,0 +1,539 @@
+﻿@page "/layout-shell"
+@using Outlander.Demo.LanguageDefinitions
+@inject IJSRuntime JS
+
+<PageTitle>Layout Shell</PageTitle>
+
+<div class="ol-doc-page">
+
+    <div class="row g-4 align-items-start">
+        <div class="col-xl-8">
+            <div class="mb-4">
+                <div class="d-flex align-items-center gap-3 flex-wrap mb-3">
+                    <h1 class="mb-0">OutlanderLayout</h1>
+                    <span class="bg-body-tertiary btn outlander-btn-default btn-sm rounded-pill">v1.0.0</span>
+                </div>
+
+                <p class="lead text-body-secondary mb-4">
+                    A responsive application shell for building modern business applications with Blazor.
+                </p>
+
+                <p class="mb-2">
+                    <code>OutlanderLayout</code> provides the base application structure used by Outlander.Blazor.
+                </p>
+                <p class="mb-4">
+                    It organizes your application into four logical regions:
+                </p>
+
+                <div class="row g-3">
+                    <div class="col-sm-6 col-lg-3">
+                        <div class="ol-region-pill">
+                            <div class="ol-region-icon"><i class="bi bi-layout-sidebar-inset"></i></div>
+                            <div>
+                                <div class="fw-semibold">NavMenu</div>
+                                <small class="text-body-secondary">Navigation area</small>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-sm-6 col-lg-3">
+                        <div class="ol-region-pill">
+                            <div class="ol-region-icon"><i class="bi bi-menu-button-wide"></i></div>
+                            <div>
+                                <div class="fw-semibold">TopMenu</div>
+                                <small class="text-body-secondary">Header area</small>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-sm-6 col-lg-3">
+                        <div class="ol-region-pill">
+                            <div class="ol-region-icon"><i class="bi bi-file-earmark-text"></i></div>
+                            <div>
+                                <div class="fw-semibold">Body</div>
+                                <small class="text-body-secondary">Main content</small>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-sm-6 col-lg-3">
+                        <div class="ol-region-pill">
+                            <div class="ol-region-icon"><i class="bi bi-display"></i></div>
+                            <div>
+                                <div class="fw-semibold">Footer</div>
+                                <small class="text-body-secondary">Footer area</small>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-xl-4">
+            <div class="card ol-side-card">
+                <div class="card-body">
+                    <h5 class="mb-3">Key Features</h5>
+
+                    <ul class="list-unstyled mb-0 ol-feature-list">
+                        <li><i class="bi bi-check-circle-fill"></i> Responsive layout</li>
+                        <li><i class="bi bi-check-circle-fill"></i> Flexible content regions</li>
+                        <li><i class="bi bi-check-circle-fill"></i> Custom navigation</li>
+                        <li><i class="bi bi-check-circle-fill"></i> Sticky header</li>
+                        <li><i class="bi bi-check-circle-fill"></i> Optional footer</li>
+                        <li><i class="bi bi-check-circle-fill"></i> Bootstrap 5.3+</li>
+                        <li><i class="bi bi-check-circle-fill"></i> Blazor Server</li>
+                        <li><i class="bi bi-check-circle-fill"></i> Blazor WebAssembly</li>
+                        <li><i class="bi bi-check-circle-fill"></i> Blazor Web App</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="border-0 card mt-4 shadow-none">
+        <div class="bg-transparent border-0 card-header pb-0">
+            <ul class="nav ol-doc-tabs" id="layoutShellTabs" role="tablist">
+                <li class="nav-item" role="presentation">
+                    <button class="nav-link ol-doc-tab active"
+                            id="preview-tab"
+                            data-bs-toggle="tab"
+                            data-bs-target="#preview-tab-pane"
+                            type="button"
+                            role="tab"
+                            aria-controls="preview-tab-pane"
+                            aria-selected="true">
+                        Preview
+                    </button>
+                </li>
+                <li class="nav-item" role="presentation">
+                    <button class="nav-link ol-doc-tab"
+                            id="razor-tab"
+                            data-bs-toggle="tab"
+                            data-bs-target="#razor-tab-pane"
+                            type="button"
+                            role="tab"
+                            aria-controls="razor-tab-pane"
+                            aria-selected="false">
+                        Razor
+                    </button>
+                </li>
+                <li class="nav-item" role="presentation">
+                    <button class="nav-link ol-doc-tab"
+                            id="csharp-tab"
+                            data-bs-toggle="tab"
+                            data-bs-target="#csharp-tab-pane"
+                            type="button"
+                            role="tab"
+                            aria-controls="csharp-tab-pane"
+                            aria-selected="false">
+                        C#
+                    </button>
+                </li>
+            </ul>
+        </div>
+
+        <div class="outlander-border card-body rounded">
+            <div class="tab-content" id="layoutShellTabsContent">
+
+                <div class="tab-pane fade show active"
+                     id="preview-tab-pane"
+                     role="tabpanel"
+                     aria-labelledby="preview-tab"
+                     tabindex="0">
+
+                    <div class="ol-preview-shell">
+                        <div class="ol-preview-sidebar">
+                            <div class="ol-preview-brand">
+                                <i class="bi bi-box"></i>
+                                <span>My App</span>
+                            </div>
+
+                            <div class="ol-preview-menu-group">
+                                <div class="ol-preview-menu-title">GENERAL</div>
+                                <div class="ol-preview-menu-item active">
+                                    <i class="bi bi-grid"></i>
+                                    <span>Dashboard</span>
+                                </div>
+                                <div class="ol-preview-menu-item">
+                                    <i class="bi bi-graph-up"></i>
+                                    <span>Analytics</span>
+                                </div>
+                                <div class="ol-preview-menu-item">
+                                    <i class="bi bi-file-earmark-text"></i>
+                                    <span>Reports</span>
+                                </div>
+                            </div>
+
+                            <div class="ol-preview-menu-group">
+                                <div class="ol-preview-menu-title">MANAGEMENT</div>
+                                <div class="ol-preview-menu-item">
+                                    <i class="bi bi-people"></i>
+                                    <span>Customers</span>
+                                </div>
+                                <div class="ol-preview-menu-item">
+                                    <i class="bi bi-box-seam"></i>
+                                    <span>Products</span>
+                                </div>
+                                <div class="ol-preview-menu-item">
+                                    <i class="bi bi-cart3"></i>
+                                    <span>Orders</span>
+                                </div>
+                            </div>
+
+                            <div class="ol-preview-menu-group">
+                                <div class="ol-preview-menu-title">CONFIGURATION</div>
+                                <div class="ol-preview-menu-item">
+                                    <i class="bi bi-gear"></i>
+                                    <span>Settings</span>
+                                </div>
+                                <div class="ol-preview-menu-item">
+                                    <i class="bi bi-shield-check"></i>
+                                    <span>Permissions</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="ol-preview-main">
+                            <div class="ol-preview-topbar">
+                                <div class="d-flex align-items-center gap-3">
+                                    <button class="btn btn-sm btn-light outlander-border">
+                                        <i class="bi bi-list"></i>
+                                    </button>
+                                    <div class="fw-semibold">Dashboard</div>
+                                </div>
+
+                                <div class="d-flex align-items-center gap-2">
+                                    <div class="ol-preview-search">Search...</div>
+                                    <button class="btn btn-sm btn-light outlander-border"><i class="bi bi-bell"></i></button>
+                                    <button class="btn btn-sm btn-light outlander-border"><i class="bi bi-envelope"></i></button>
+                                    <div class="ol-preview-avatar">AD</div>
+                                </div>
+                            </div>
+
+                            <div class="ol-preview-body">
+                                <h4 class="mb-3">Dashboard</h4>
+
+                                <div class="row g-3 mb-3">
+                                    <div class="col-md-3">
+                                        <div class="ol-stat-card">
+                                            <div class="ol-stat-value">$12,458</div>
+                                            <div class="ol-stat-label">Total Revenue</div>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-3">
+                                        <div class="ol-stat-card">
+                                            <div class="ol-stat-value">1,245</div>
+                                            <div class="ol-stat-label">New Customers</div>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-3">
+                                        <div class="ol-stat-card">
+                                            <div class="ol-stat-value">3,456</div>
+                                            <div class="ol-stat-label">Orders</div>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-3">
+                                        <div class="ol-stat-card">
+                                            <div class="ol-stat-value">98.5%</div>
+                                            <div class="ol-stat-label">Satisfaction</div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="row g-3">
+                                    <div class="col-lg-8">
+                                        <div class="ol-panel-card">
+                                            <div class="fw-semibold mb-3">Sales Overview</div>
+                                            <div class="ol-fake-chart">
+                                                <div class="ol-fake-line"></div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-lg-4">
+                                        <div class="ol-panel-card">
+                                            <div class="fw-semibold mb-3">Recent Orders</div>
+                                            <div class="ol-order-item">#ORD-001 <span>$1,240.00</span></div>
+                                            <div class="ol-order-item">#ORD-002 <span>$980.50</span></div>
+                                            <div class="ol-order-item">#ORD-003 <span>$1,560.00</span></div>
+                                            <div class="ol-order-item">#ORD-004 <span>$750.00</span></div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="ol-preview-footer">
+                                <span>© 2025 Outlander.Blazor. All rights reserved.</span>
+                                <div class="d-flex gap-3">
+                                    <span>Privacy</span>
+                                    <span>Terms</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="tab-pane fade"
+                     id="razor-tab-pane"
+                     role="tabpanel"
+                     aria-labelledby="razor-tab"
+                     tabindex="0">
+
+                    <div class="ol-code-card">
+                        <div class="ol-code-card-body">
+                            <button class="btn btn-sm ol-copy-btn @(copiedBlock == CodeBlockType.Razor ? "copied" : null)"
+                                    @onclick="() => CopyCodeAsync(razorCode, CodeBlockType.Razor)">
+                                <i class="bi @(copiedBlock == CodeBlockType.Razor ? "bi-check2" : "bi-copy") me-1"></i>
+                                @(copiedBlock == CodeBlockType.Razor ? "Copied" : "Copy")
+                            </button>
+                            <CodeHighlighter Content="@razorCode"
+                                             LanguageDefinition="@(new OutlanderRazorLanguageDefinition())" />
+                        </div>
+                    </div>
+                </div>
+
+                <div class="tab-pane fade"
+                     id="csharp-tab-pane"
+                     role="tabpanel"
+                     aria-labelledby="csharp-tab"
+                     tabindex="0">
+
+                    <div class="ol-code-card">
+                        <div class="ol-code-card-body">
+                            <button class="btn btn-sm ol-copy-btn @(copiedBlock == CodeBlockType.CSharp ? "copied" : null)"
+                                    @onclick="() => CopyCodeAsync(csharpCode, CodeBlockType.CSharp)">
+                                <i class="bi @(copiedBlock == CodeBlockType.CSharp ? "bi-check2" : "bi-copy") me-1"></i>
+                                @(copiedBlock == CodeBlockType.CSharp ? "Copied" : "Copy")
+                            </button>
+                            <CodeHighlighter Content="@csharpCode"
+                                             LanguageDefinition="@(new OutlanderCSharpLanguageDefinition())" />
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+    <div class="row g-4 mt-1">
+        <div class="col-lg-6">
+            <div class="card h-100">
+                <div class="card-body">
+                    <h5 class="mb-3 fw-bold">Component Anatomy</h5>
+
+                    <div class="ol-anatomy">
+                        <div class="ol-anatomy-top">TopMenu</div>
+                        <div class="ol-anatomy-middle">
+                            <div class="ol-anatomy-nav">NavMenu</div>
+                            <div class="ol-anatomy-body">Body</div>
+                        </div>
+                        <div class="ol-anatomy-footer">Footer</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-lg-6">
+            <div class="card h-100">
+                <div class="card-body">
+                    <h5 class="mb-3 fw-bold">Main Regions</h5>
+
+                    <div class="table-responsive ol-rounded-table">
+                        <table class="table align-middle mb-0">
+                            <thead>
+                                <tr>
+                                    <th scope="col" class="bg-secondary-subtle">Region</th>
+                                    <th scope="col" class="bg-secondary-subtle">Description</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td><span class="fw-semibold text-primary">NavMenu</span></td>
+                                    <td>Left-side navigation area. Ideal for menus and groups.</td>
+                                </tr>
+                                <tr>
+                                    <td><span class="fw-semibold text-primary">TopMenu</span></td>
+                                    <td>Top header area. Includes actions, search, and user menu.</td>
+                                </tr>
+                                <tr>
+                                    <td><span class="fw-semibold">Body</span></td>
+                                    <td>Main application content. Pages are rendered here.</td>
+                                </tr>
+                                <tr>
+                                    <td><span class="fw-semibold text-success">Footer</span></td>
+                                    <td>Optional footer area. Useful for additional information.</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="alert alert-warning mt-4">
+        <div class="d-flex align-items-center gap-2 mb-3">
+            <i class="bi bi-info-circle text-warning"></i>
+            <h5 class="mb-0">Notes</h5>
+        </div>
+
+        <ul class="mb-0">
+            <li>The <strong>Footer</strong> is optional.</li>
+            <li>You can place any Blazor component inside each region.</li>
+            <li>It works with any routing configuration.</li>
+            <li>Fully responsive and adaptable to different screen sizes.</li>
+        </ul>
+    </div>
+
+</div>
+
+@code {
+    private CodeBlockType? copiedBlock;
+
+    private enum CodeBlockType
+    {
+        Razor,
+        CSharp
+    }
+
+    private async Task CopyCodeAsync(string text, CodeBlockType blockType)
+    {
+        await JS.InvokeVoidAsync("navigator.clipboard.writeText", text);
+
+        copiedBlock = blockType;
+        StateHasChanged();
+
+        await Task.Delay(2000);
+
+        if (copiedBlock == blockType)
+        {
+            copiedBlock = null;
+            StateHasChanged();
+        }
+    }
+
+    private string razorCode = """
+        <OutlanderLayout>
+            <NavMenu>
+                <OutlanderNavMenu
+                    @bind-MobileMenuOpen="mobileMenuOpen"
+                    @bind-NavMenuCollapsed="navMenuCollapsed"
+                    Groups="NavMenuGroups" />
+            </NavMenu>
+
+            <TopMenu>
+                <OutlanderTopMenu
+                    @bind-MobileMenuOpen="mobileMenuOpen"
+                    @bind-NavMenuCollapsed="navMenuCollapsed"
+                    ShowNavMenuToggle="true"
+                    ShowThemeSelector="true" />
+            </TopMenu>
+
+            <Body>
+                @Body
+            </Body>
+
+            <Footer>
+                <span>Footer content</span>
+            </Footer>
+        </OutlanderLayout>
+    """;
+
+    private string csharpCode = """
+        private bool mobileMenuOpen;
+        private bool navMenuCollapsed;
+
+        private List<OutlanderNavMenuMenuGroup> NavMenuGroups = [];
+        
+        protected override void OnInitialized()
+        {
+            NavMenuGroups =
+            [
+                new OutlanderNavMenuMenuGroup
+                {
+                    Title = "Principal",
+                    Items =
+                    [
+                        new OutlanderNavMenuItem
+                        {
+                            Text = "Dashboard",
+                            Icon = "bi-grid",
+                            Url = "#",
+                            Tooltip = "Dashboard"
+                        }
+                    ]
+                },
+                new OutlanderNavMenuMenuGroup
+                {
+                    Title = "Components",
+                    Items =
+                    [
+                        new OutlanderNavMenuItem
+                        {
+                            Text = "Grid",
+                            Icon = "bi-grid-3x3-gap",
+                            Tooltip = "Grid",
+                            IsExpandedByDefault = true,
+                            Children =
+                            [
+                                new OutlanderNavMenuItem
+                                {
+                                    Text = "Custom Columns",
+                                    Icon = "bi-table",
+                                    Url = "/",
+                                    Tooltip = "Custom Columns",
+                                    IsActive = true
+                                },
+                                new OutlanderNavMenuItem
+                                {
+                                    Text = "Automatic Columns",
+                                    Icon = "bi-grid-3x2",
+                                    Url = "/AutomaticColumns",
+                                    Tooltip = "Automatic Columns"
+                                }
+                            ]
+                        },
+                        new OutlanderNavMenuItem
+                        {
+                            Text = "Layout",
+                            Icon = "bi-window-stack",
+                            Tooltip = "Layout",
+                            Children =
+                            [
+                                new OutlanderNavMenuItem
+                                {
+                                    Text = "Layout Shell",
+                                    Icon = "bi-layout-sidebar-inset",
+                                    Url = "/layout-shell",
+                                    Tooltip = "Layout Shell"
+                                }
+                            ]
+                        },
+                        new OutlanderNavMenuItem
+                        {
+                            Text = "Navigation",
+                            Icon = "bi-compass",
+                            Tooltip = "Navigation",
+                            Children =
+                            [
+                                new OutlanderNavMenuItem
+                                {
+                                    Text = "NavMenu",
+                                    Icon = "bi-list",
+                                    Url = "/navmenu-demo",
+                                    Tooltip = "NavMenu"
+                                },
+                                new OutlanderNavMenuItem
+                                {
+                                    Text = "TopMenu",
+                                    Icon = "bi-menu-button-wide",
+                                    Url = "/topmenu-demo",
+                                    Tooltip = "TopMenu"
+                                }
+                            ]
+                        }
+                    ]
+                }
+            ];
+        }
+    """;
+}

@@ -44,4 +44,8 @@
     /// Indicates whether the item has child items.
     /// </summary>
     public bool HasChildren => Children.Count > 0;
+
+    internal bool IsRouteActive { get; set; }
+    internal bool HasActiveDescendant { get; set; }
+    internal bool IsExpanded { get; set; }
 }

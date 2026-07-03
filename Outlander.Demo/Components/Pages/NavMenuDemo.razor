@@ -1,0 +1,439 @@
+﻿@page "/navmenu-demo"
+@using Outlander.Demo.LanguageDefinitions
+@inject IJSRuntime JS
+
+<PageTitle>NavMenu Demo</PageTitle>
+
+<div class="ol-doc-page">
+
+    <div class="row g-4 align-items-start">
+        <div class="col-xl-8">
+            <div class="mb-4">
+                <div class="d-flex align-items-center gap-3 flex-wrap mb-3">
+                    <h1 class="mb-0">OutlanderNavMenu</h1>
+                    <span class="bg-body-tertiary btn outlander-btn-default btn-sm rounded-pill">v1.0.0</span>
+                </div>
+
+                <p class="lead text-body-secondary mb-4">
+                    A responsive navigation component for modern business applications built with Blazor.
+                </p>
+
+                <p class="mb-2">
+                    <code>OutlanderNavMenu</code> provides a flexible sidebar navigation experience with support for
+                    groups, nested items, mobile mode, and persistent collapsed state.
+                </p>
+                <p class="mb-4">
+                    It helps organize your application structure into clear, scalable navigation sections.
+                </p>
+
+                <div class="row g-3">
+                    <div class="col-sm-6 col-lg-3">
+                        <div class="ol-region-pill">
+                            <div class="ol-region-icon"><i class="bi bi-columns-gap"></i></div>
+                            <div>
+                                <div class="fw-semibold">Groups</div>
+                                <small class="text-body-secondary">Organized menu sections</small>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-sm-6 col-lg-3">
+                        <div class="ol-region-pill">
+                            <div class="ol-region-icon"><i class="bi bi-diagram-3"></i></div>
+                            <div>
+                                <div class="fw-semibold">Nested Items</div>
+                                <small class="text-body-secondary">Hierarchical navigation</small>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-sm-6 col-lg-3">
+                        <div class="ol-region-pill">
+                            <div class="ol-region-icon"><i class="bi bi-phone"></i></div>
+                            <div>
+                                <div class="fw-semibold">Mobile Mode</div>
+                                <small class="text-body-secondary">Responsive drawer behavior</small>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-sm-6 col-lg-3">
+                        <div class="ol-region-pill">
+                            <div class="ol-region-icon"><i class="bi bi-layout-sidebar-inset"></i></div>
+                            <div>
+                                <div class="fw-semibold">Collapsed State</div>
+                                <small class="text-body-secondary">Persistent sidebar state</small>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-xl-4">
+            <div class="card ol-side-card">
+                <div class="card-body">
+                    <h5 class="mb-3">Key Features</h5>
+
+                    <ul class="list-unstyled mb-0 ol-feature-list">
+                        <li><i class="bi bi-check-circle-fill"></i> Responsive sidebar navigation</li>
+                        <li><i class="bi bi-check-circle-fill"></i> Grouped menu sections</li>
+                        <li><i class="bi bi-check-circle-fill"></i> Nested child items</li>
+                        <li><i class="bi bi-check-circle-fill"></i> Footer actions</li>
+                        <li><i class="bi bi-check-circle-fill"></i> Mobile drawer support</li>
+                        <li><i class="bi bi-check-circle-fill"></i> Persistent collapsed state</li>
+                        <li><i class="bi bi-check-circle-fill"></i> Bootstrap 5.3+</li>
+                        <li><i class="bi bi-check-circle-fill"></i> Bootstrap Icons integration</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="border-0 card mt-4 shadow-none">
+        <div class="bg-transparent border-0 card-header pb-0">
+            <ul class="nav ol-doc-tabs" id="navMenuTabs" role="tablist">
+                <li class="nav-item" role="presentation">
+                    <button class="nav-link ol-doc-tab active"
+                            id="preview-tab"
+                            data-bs-toggle="tab"
+                            data-bs-target="#preview-tab-pane"
+                            type="button"
+                            role="tab"
+                            aria-controls="preview-tab-pane"
+                            aria-selected="true">
+                        Preview
+                    </button>
+                </li>
+                <li class="nav-item" role="presentation">
+                    <button class="nav-link ol-doc-tab"
+                            id="razor-tab"
+                            data-bs-toggle="tab"
+                            data-bs-target="#razor-tab-pane"
+                            type="button"
+                            role="tab"
+                            aria-controls="razor-tab-pane"
+                            aria-selected="false">
+                        Razor
+                    </button>
+                </li>
+                <li class="nav-item" role="presentation">
+                    <button class="nav-link ol-doc-tab"
+                            id="csharp-tab"
+                            data-bs-toggle="tab"
+                            data-bs-target="#csharp-tab-pane"
+                            type="button"
+                            role="tab"
+                            aria-controls="csharp-tab-pane"
+                            aria-selected="false">
+                        C#
+                    </button>
+                </li>
+            </ul>
+        </div>
+
+        <div class="outlander-border card-body rounded">
+            <div class="tab-content" id="navMenuTabsContent">
+
+                <div class="tab-pane fade show active"
+                     id="preview-tab-pane"
+                     role="tabpanel"
+                     aria-labelledby="preview-tab"
+                     tabindex="0">
+
+                    <div class="ol-navmenu-preview">
+                        <div class="ol-preview-sidebar">
+                            <div class="ol-preview-brand">
+                                <i class="bi bi-box"></i>
+                                <span>My App</span>
+                            </div>
+
+                            <div class="ol-preview-menu-group">
+                                <div class="ol-preview-menu-title">GENERAL</div>
+                                <div class="ol-preview-menu-item active">
+                                    <i class="bi bi-grid"></i>
+                                    <span>Dashboard</span>
+                                </div>
+                                <div class="ol-preview-menu-item">
+                                    <i class="bi bi-graph-up"></i>
+                                    <span>Analytics</span>
+                                </div>
+                                <div class="ol-preview-menu-item">
+                                    <i class="bi bi-file-earmark-text"></i>
+                                    <span>Reports</span>
+                                </div>
+                            </div>
+
+                            <div class="ol-preview-menu-group">
+                                <div class="ol-preview-menu-title">COMPONENTS</div>
+                                <div class="ol-preview-menu-item">
+                                    <i class="bi bi-grid-3x3-gap"></i>
+                                    <span>Grid</span>
+                                </div>
+                                <div class="ol-preview-menu-item ps-4">
+                                    <i class="bi bi-table"></i>
+                                    <span>Custom Columns</span>
+                                </div>
+                                <div class="ol-preview-menu-item ps-4">
+                                    <i class="bi bi-grid-3x2"></i>
+                                    <span>Automatic Columns</span>
+                                </div>
+                            </div>
+
+                            <div class="ol-preview-menu-group">
+                                <div class="ol-preview-menu-title">CONFIGURATION</div>
+                                <div class="ol-preview-menu-item">
+                                    <i class="bi bi-gear"></i>
+                                    <span>Settings</span>
+                                </div>
+                                <div class="ol-preview-menu-item">
+                                    <i class="bi bi-life-preserver"></i>
+                                    <span>Help</span>
+                                </div>
+                            </div>
+
+                            <div class="ol-preview-footer-actions mt-auto">
+                                <div class="ol-preview-menu-item">
+                                    <i class="bi bi-person-circle"></i>
+                                    <span>Profile</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="ol-preview-main ol-navmenu-preview-main">
+                            <div class="d-flex align-items-center justify-content-center h-100 text-body-secondary">
+                                NavMenu preview inside application layout
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="tab-pane fade"
+                     id="razor-tab-pane"
+                     role="tabpanel"
+                     aria-labelledby="razor-tab"
+                     tabindex="0">
+
+                    <div class="ol-code-card">
+                        <div class="ol-code-card-body">
+                            <button class="btn btn-sm ol-copy-btn @(copiedBlock == CodeBlockType.Razor ? "copied" : null)"
+                                    @onclick="() => CopyCodeAsync(razorCode, CodeBlockType.Razor)">
+                                <i class="bi @(copiedBlock == CodeBlockType.Razor ? "bi-check2" : "bi-copy") me-1"></i>
+                                @(copiedBlock == CodeBlockType.Razor ? "Copied" : "Copy")
+                            </button>
+
+                            <CodeHighlighter Content="@razorCode"
+                                             LanguageDefinition="@(new OutlanderRazorLanguageDefinition())" />
+                        </div>
+                    </div>
+                </div>
+
+                <div class="tab-pane fade"
+                     id="csharp-tab-pane"
+                     role="tabpanel"
+                     aria-labelledby="csharp-tab"
+                     tabindex="0">
+
+                    <div class="ol-code-card">
+                        <div class="ol-code-card-body">
+                            <button class="btn btn-sm ol-copy-btn @(copiedBlock == CodeBlockType.CSharp ? "copied" : null)"
+                                    @onclick="() => CopyCodeAsync(csharpCode, CodeBlockType.CSharp)">
+                                <i class="bi @(copiedBlock == CodeBlockType.CSharp ? "bi-check2" : "bi-copy") me-1"></i>
+                                @(copiedBlock == CodeBlockType.CSharp ? "Copied" : "Copy")
+                            </button>
+
+                            <CodeHighlighter Content="@csharpCode"
+                                             LanguageDefinition="@(new OutlanderCSharpLanguageDefinition())" />
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+    <div class="row g-4 mt-1">
+        <div class="col-lg-6">
+            <div class="card h-100">
+                <div class="card-body">
+                    <h5 class="mb-3 fw-bold">Navigation Layout</h5>
+
+                    <div class="ol-anatomy">
+                        <div class="ol-anatomy-top">Brand</div>
+                        <div class="ol-anatomy-middle">
+                            <div class="ol-anatomy-nav">Menu Groups</div>
+                            <div class="ol-anatomy-body">Items / Nested Items</div>
+                        </div>
+                        <div class="ol-anatomy-footer">Footer Items</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-lg-6">
+            <div class="card h-100">
+                <div class="card-body">
+                    <h5 class="mb-3 fw-bold">Main Elements</h5>
+
+                    <div class="table-responsive ol-rounded-table">
+                        <table class="table align-middle mb-0">
+                            <thead>
+                                <tr>
+                                    <th scope="col" class="bg-secondary-subtle">Element</th>
+                                    <th scope="col" class="bg-secondary-subtle">Description</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td><span class="fw-semibold text-primary">BrandText</span></td>
+                                    <td>Displays the application name or brand in the navigation header.</td>
+                                </tr>
+                                <tr>
+                                    <td><span class="fw-semibold text-primary">Groups</span></td>
+                                    <td>Defines the main navigation structure using grouped menu sections.</td>
+                                </tr>
+                                <tr>
+                                    <td><span class="fw-semibold">Children</span></td>
+                                    <td>Represents nested items inside a parent navigation entry.</td>
+                                </tr>
+                                <tr>
+                                    <td><span class="fw-semibold">NavMenuCollapsed</span></td>
+                                    <td>Controls whether the navigation menu is shown in collapsed mode.</td>
+                                </tr>
+                                <tr>
+                                    <td><span class="fw-semibold text-success">MobileMenuOpen</span></td>
+                                    <td>Controls whether the mobile navigation drawer is currently open.</td>
+                                </tr>
+                                <tr>
+                                    <td><span class="fw-semibold text-success">FooterItems</span></td>
+                                    <td>Displays secondary actions at the bottom of the navigation menu.</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="alert alert-warning mt-4">
+        <div class="d-flex align-items-center gap-2 mb-3">
+            <i class="bi bi-info-circle text-warning"></i>
+            <h5 class="mb-0">Notes</h5>
+        </div>
+
+        <ul class="mb-0">
+            <li>Use <strong>Groups</strong> to organize large applications into clear navigation sections.</li>
+            <li>Use <strong>Children</strong> for hierarchical navigation and feature subsections.</li>
+            <li><strong>FooterItems</strong> are ideal for profile, settings, and help actions.</li>
+            <li><strong>NavMenuCollapsed</strong> and <strong>MobileMenuOpen</strong> are typically coordinated with <strong>OutlanderTopMenu</strong>.</li>
+        </ul>
+    </div>
+
+</div>
+
+@code {
+    private CodeBlockType? copiedBlock;
+
+    private enum CodeBlockType
+    {
+        Razor,
+        CSharp
+    }
+
+    private async Task CopyCodeAsync(string text, CodeBlockType blockType)
+    {
+        await JS.InvokeVoidAsync("navigator.clipboard.writeText", text);
+
+        copiedBlock = blockType;
+        StateHasChanged();
+
+        await Task.Delay(2000);
+
+        if (copiedBlock == blockType)
+        {
+            copiedBlock = null;
+            StateHasChanged();
+        }
+    }
+
+    private string razorCode = """
+        <OutlanderNavMenu
+            @bind-MobileMenuOpen="mobileMenuOpen"
+            @bind-NavMenuCollapsed="navMenuCollapsed"
+            BrandText="My App"
+            Groups="NavMenuGroups"
+            FooterItems="NavMenuFooterItems" />
+    """;
+
+    private string csharpCode = """
+        private bool mobileMenuOpen;
+        private bool navMenuCollapsed;
+
+        private List<OutlanderNavMenuMenuGroup> NavMenuGroups = [];
+        private List<OutlanderNavMenuItem> NavMenuFooterItems = [];
+
+        protected override void OnInitialized()
+        {
+            NavMenuGroups =
+            [
+                new OutlanderNavMenuMenuGroup
+                {
+                    Title = "General",
+                    Items =
+                    [
+                        new OutlanderNavMenuItem
+                        {
+                            Text = "Dashboard",
+                            Icon = "bi-grid",
+                            Url = "/"
+                        },
+                        new OutlanderNavMenuItem
+                        {
+                            Text = "Analytics",
+                            Icon = "bi-graph-up",
+                            Url = "/analytics"
+                        }
+                    ]
+                },
+                new OutlanderNavMenuMenuGroup
+                {
+                    Title = "Components",
+                    Items =
+                    [
+                        new OutlanderNavMenuItem
+                        {
+                            Text = "Grid",
+                            Icon = "bi-grid-3x3-gap",
+                            Children =
+                            [
+                                new OutlanderNavMenuItem
+                                {
+                                    Text = "Custom Columns",
+                                    Icon = "bi-table",
+                                    Url = "/"
+                                },
+                                new OutlanderNavMenuItem
+                                {
+                                    Text = "Automatic Columns",
+                                    Icon = "bi-grid-3x2",
+                                    Url = "/AutomaticColumns"
+                                }
+                            ]
+                        }
+                    ]
+                }
+            ];
+
+            NavMenuFooterItems =
+            [
+                new OutlanderNavMenuItem
+                {
+                    Text = "Profile",
+                    Icon = "bi-person-circle",
+                    Url = "/profile"
+                }
+            ];
+        }
+    """;
+}

@@ -17,7 +17,7 @@
     <PackageRequireLicenseAcceptance>False</PackageRequireLicenseAcceptance>
 	<GenerateDocumentationFile>true</GenerateDocumentationFile>
     <GeneratePackageOnBuild>True</GeneratePackageOnBuild>
-	<VersionPrefix>1.0.15</VersionPrefix>
+	<VersionPrefix>1.0.20</VersionPrefix>
   </PropertyGroup>
 
   <ItemGroup>

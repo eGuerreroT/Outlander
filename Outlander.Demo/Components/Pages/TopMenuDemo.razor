@@ -1,0 +1,381 @@
+﻿@page "/topmenu-demo"
+@using Outlander.Demo.LanguageDefinitions
+@inject IJSRuntime JS
+
+<PageTitle>TopMenu Demo</PageTitle>
+
+<div class="ol-doc-page">
+
+    <div class="row g-4 align-items-start">
+        <div class="col-xl-8">
+            <div class="mb-4">
+                <div class="d-flex align-items-center gap-3 flex-wrap mb-3">
+                    <h1 class="mb-0">OutlanderTopMenu</h1>
+                    <span class="bg-body-tertiary btn outlander-btn-default btn-sm rounded-pill">v1.0.0</span>
+                </div>
+
+                <p class="lead text-body-secondary mb-4">
+                    A responsive top navigation component for application headers in modern Blazor solutions.
+                </p>
+
+                <p class="mb-2">
+                    <code>OutlanderTopMenu</code> provides a flexible top bar experience with support for navigation toggles,
+                    custom content regions, action items, theme switching, and mobile offcanvas actions.
+                </p>
+                <p class="mb-4">
+                    It helps centralize header interactions in a clean and responsive layout.
+                </p>
+
+                <div class="row g-3">
+                    <div class="col-sm-6 col-lg-3">
+                        <div class="ol-region-pill">
+                            <div class="ol-region-icon"><i class="bi bi-list"></i></div>
+                            <div>
+                                <div class="fw-semibold">Nav Toggle</div>
+                                <small class="text-body-secondary">Sidebar control</small>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-sm-6 col-lg-3">
+                        <div class="ol-region-pill">
+                            <div class="ol-region-icon"><i class="bi bi-layout-text-sidebar"></i></div>
+                            <div>
+                                <div class="fw-semibold">Content Slots</div>
+                                <small class="text-body-secondary">Left and right content</small>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-sm-6 col-lg-3">
+                        <div class="ol-region-pill">
+                            <div class="ol-region-icon"><i class="bi bi-lightbulb"></i></div>
+                            <div>
+                                <div class="fw-semibold">Theme Selector</div>
+                                <small class="text-body-secondary">Built-in integration</small>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-sm-6 col-lg-3">
+                        <div class="ol-region-pill">
+                            <div class="ol-region-icon"><i class="bi bi-phone"></i></div>
+                            <div>
+                                <div class="fw-semibold">Mobile Actions</div>
+                                <small class="text-body-secondary">Offcanvas-friendly actions</small>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-xl-4">
+            <div class="card ol-side-card">
+                <div class="card-body">
+                    <h5 class="mb-3">Key Features</h5>
+
+                    <ul class="list-unstyled mb-0 ol-feature-list">
+                        <li><i class="bi bi-check-circle-fill"></i> Responsive top bar</li>
+                        <li><i class="bi bi-check-circle-fill"></i> Nav menu toggle button</li>
+                        <li><i class="bi bi-check-circle-fill"></i> Left and right content slots</li>
+                        <li><i class="bi bi-check-circle-fill"></i> Action items support</li>
+                        <li><i class="bi bi-check-circle-fill"></i> Mobile offcanvas behavior</li>
+                        <li><i class="bi bi-check-circle-fill"></i> Theme selector integration</li>
+                        <li><i class="bi bi-check-circle-fill"></i> Sticky mode support</li>
+                        <li><i class="bi bi-check-circle-fill"></i> Bootstrap 5.3+</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="border-0 card mt-4 shadow-none">
+        <div class="bg-transparent border-0 card-header pb-0">
+            <ul class="nav ol-doc-tabs" id="topMenuTabs" role="tablist">
+                <li class="nav-item" role="presentation">
+                    <button class="nav-link ol-doc-tab active"
+                            id="preview-tab"
+                            data-bs-toggle="tab"
+                            data-bs-target="#preview-tab-pane"
+                            type="button"
+                            role="tab"
+                            aria-controls="preview-tab-pane"
+                            aria-selected="true">
+                        Preview
+                    </button>
+                </li>
+                <li class="nav-item" role="presentation">
+                    <button class="nav-link ol-doc-tab"
+                            id="razor-tab"
+                            data-bs-toggle="tab"
+                            data-bs-target="#razor-tab-pane"
+                            type="button"
+                            role="tab"
+                            aria-controls="razor-tab-pane"
+                            aria-selected="false">
+                        Razor
+                    </button>
+                </li>
+                <li class="nav-item" role="presentation">
+                    <button class="nav-link ol-doc-tab"
+                            id="csharp-tab"
+                            data-bs-toggle="tab"
+                            data-bs-target="#csharp-tab-pane"
+                            type="button"
+                            role="tab"
+                            aria-controls="csharp-tab-pane"
+                            aria-selected="false">
+                        C#
+                    </button>
+                </li>
+            </ul>
+        </div>
+
+        <div class="outlander-border card-body rounded">
+            <div class="tab-content" id="topMenuTabsContent">
+
+                <div class="tab-pane fade show active"
+                     id="preview-tab-pane"
+                     role="tabpanel"
+                     aria-labelledby="preview-tab"
+                     tabindex="0">
+
+                    <div class="ol-topmenu-preview">
+                        <div class="ol-topmenu-preview-bar">
+                            <div class="d-flex align-items-center gap-2 flex-wrap">
+                                <button class="btn btn-sm btn-light outlander-border">
+                                    <i class="bi bi-list"></i>
+                                </button>
+
+                                <div class="ol-topmenu-preview-left">
+                                    <span class="fw-semibold">Dashboard</span>
+                                    <span class="text-body-secondary small">Overview</span>
+                                </div>
+                            </div>
+
+                            <div class="d-flex align-items-center gap-2 flex-wrap justify-content-end">
+                                <button class="btn btn-sm btn-light outlander-border">
+                                    <i class="bi bi-search"></i>
+                                </button>
+
+                                <button class="btn btn-sm btn-light outlander-border position-relative">
+                                    <i class="bi bi-bell"></i>
+                                    <span class="ol-topmenu-badge">3</span>
+                                </button>
+
+                                <button class="btn btn-sm btn-light outlander-border">
+                                    <i class="bi bi-moon-stars"></i>
+                                </button>
+
+                                <button class="btn btn-sm btn-light outlander-border">
+                                    <i class="bi bi-person-circle"></i>
+                                    <span class="ms-2">Admin</span>
+                                </button>
+                            </div>
+                        </div>
+
+                        <div class="ol-topmenu-preview-body">
+                            <div class="text-body-secondary">
+                                TopMenu preview inside application header
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="tab-pane fade"
+                     id="razor-tab-pane"
+                     role="tabpanel"
+                     aria-labelledby="razor-tab"
+                     tabindex="0">
+
+                    <div class="ol-code-card">
+                        <div class="ol-code-card-body">
+                            <button class="btn btn-sm ol-copy-btn @(copiedBlock == CodeBlockType.Razor ? "copied" : null)"
+                                    @onclick="() => CopyCodeAsync(razorCode, CodeBlockType.Razor)">
+                                <i class="bi @(copiedBlock == CodeBlockType.Razor ? "bi-check2" : "bi-copy") me-1"></i>
+                                @(copiedBlock == CodeBlockType.Razor ? "Copied" : "Copy")
+                            </button>
+
+                            <CodeHighlighter Content="@razorCode"
+                                             LanguageDefinition="@(new OutlanderRazorLanguageDefinition())" />
+                        </div>
+                    </div>
+                </div>
+
+                <div class="tab-pane fade"
+                     id="csharp-tab-pane"
+                     role="tabpanel"
+                     aria-labelledby="csharp-tab"
+                     tabindex="0">
+
+                    <div class="ol-code-card">
+                        <div class="ol-code-card-body">
+                            <button class="btn btn-sm ol-copy-btn @(copiedBlock == CodeBlockType.CSharp ? "copied" : null)"
+                                    @onclick="() => CopyCodeAsync(csharpCode, CodeBlockType.CSharp)">
+                                <i class="bi @(copiedBlock == CodeBlockType.CSharp ? "bi-check2" : "bi-copy") me-1"></i>
+                                @(copiedBlock == CodeBlockType.CSharp ? "Copied" : "Copy")
+                            </button>
+
+                            <CodeHighlighter Content="@csharpCode"
+                                             LanguageDefinition="@(new OutlanderCSharpLanguageDefinition())" />
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+    <div class="row g-4 mt-1">
+        <div class="col-lg-6">
+            <div class="card h-100">
+                <div class="card-body">
+                    <h5 class="mb-3 fw-bold">Top Bar Layout</h5>
+
+                    <div class="ol-topmenu-anatomy">
+                        <div class="ol-topmenu-anatomy-row">
+                            <div class="ol-topmenu-anatomy-toggle">Nav Toggle</div>
+                            <div class="ol-topmenu-anatomy-left">LeftContent</div>
+                            <div class="ol-topmenu-anatomy-right">RightContent / ActionItems / ThemeSelector</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-lg-6">
+            <div class="card h-100">
+                <div class="card-body">
+                    <h5 class="mb-3 fw-bold">Main Elements</h5>
+
+                    <div class="table-responsive ol-rounded-table">
+                        <table class="table align-middle mb-0">
+                            <thead>
+                                <tr>
+                                    <th scope="col" class="bg-secondary-subtle">Element</th>
+                                    <th scope="col" class="bg-secondary-subtle">Description</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td><span class="fw-semibold text-primary">ShowNavMenuToggle</span></td>
+                                    <td>Displays the button used to expand, collapse, or open the navigation menu.</td>
+                                </tr>
+                                <tr>
+                                    <td><span class="fw-semibold text-primary">ShowThemeSelector</span></td>
+                                    <td>Displays the built-in theme selector inside the top bar.</td>
+                                </tr>
+                                <tr>
+                                    <td><span class="fw-semibold">LeftContent</span></td>
+                                    <td>Renders custom content on the left side of the header.</td>
+                                </tr>
+                                <tr>
+                                    <td><span class="fw-semibold">RightContent</span></td>
+                                    <td>Renders fully custom content on the right side of the header.</td>
+                                </tr>
+                                <tr>
+                                    <td><span class="fw-semibold text-success">ActionItems</span></td>
+                                    <td>Displays predefined actions when <code>RightContent</code> is not supplied.</td>
+                                </tr>
+                                <tr>
+                                    <td><span class="fw-semibold text-success">CollapseActionsToOffcanvasOnMobile</span></td>
+                                    <td>Moves actions into a mobile offcanvas panel on smaller screens.</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="alert alert-warning mt-4">
+        <div class="d-flex align-items-center gap-2 mb-3">
+            <i class="bi bi-info-circle text-warning"></i>
+            <h5 class="mb-0">Notes</h5>
+        </div>
+
+        <ul class="mb-0">
+            <li><strong>RightContent</strong> overrides <strong>ActionItems</strong>.</li>
+            <li>Use <strong>KeepVisibleOnMobile</strong> for high-priority actions.</li>
+            <li>Enable <strong>ShowNavMenuToggle</strong> when pairing the component with <strong>OutlanderNavMenu</strong>.</li>
+            <li>Use <strong>CollapseActionsToOffcanvasOnMobile</strong> to keep the header clean on smaller screens.</li>
+        </ul>
+    </div>
+
+</div>
+
+@code {
+    private CodeBlockType? copiedBlock;
+
+    private enum CodeBlockType
+    {
+        Razor,
+        CSharp
+    }
+
+    private async Task CopyCodeAsync(string text, CodeBlockType blockType)
+    {
+        await JS.InvokeVoidAsync("navigator.clipboard.writeText", text);
+
+        copiedBlock = blockType;
+        StateHasChanged();
+
+        await Task.Delay(2000);
+
+        if (copiedBlock == blockType)
+        {
+            copiedBlock = null;
+            StateHasChanged();
+        }
+    }
+
+    private string razorCode = """
+        <OutlanderTopMenu
+            @bind-MobileMenuOpen="mobileMenuOpen"
+            @bind-NavMenuCollapsed="navMenuCollapsed"
+            ShowNavMenuToggle="true"
+            ShowThemeSelector="true"
+            CollapseActionsToOffcanvasOnMobile="true"
+            ActionItems="TopActions" />
+    """;
+
+    private string csharpCode = """
+        private bool mobileMenuOpen;
+        private bool navMenuCollapsed;
+
+        private List<OutlanderTopMenuActionItem> TopActions = [];
+
+        protected override void OnInitialized()
+        {
+            TopActions =
+            [
+                new OutlanderTopMenuActionItem
+                {
+                    Title = "Notifications",
+                    Icon = "bi-bell",
+                    BadgeText = "3",
+                    OnClick = EventCallback.Factory.Create(this, ShowNotifications)
+                },
+                new OutlanderTopMenuActionItem
+                {
+                    Title = "Theme",
+                    Icon = "bi-moon-stars",
+                    OnClick = EventCallback.Factory.Create(this, ToggleTheme)
+                },
+                new OutlanderTopMenuActionItem
+                {
+                    Title = "Profile",
+                    Icon = "bi-person-circle",
+                    OnClick = EventCallback.Factory.Create(this, OpenProfile),
+                    KeepVisibleOnMobile = true
+                }
+            ];
+        }
+
+        private Task ShowNotifications() => Task.CompletedTask;
+        private Task ToggleTheme() => Task.CompletedTask;
+        private Task OpenProfile() => Task.CompletedTask;
+    """;
+}

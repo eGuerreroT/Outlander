@@ -2,11 +2,21 @@
 
 @inherits Base.OutlanderComponentBase
 
+@using Microsoft.AspNetCore.Components.Routing
+@inject NavigationManager NavigationManager
+
 <div class="outlander-nav-menu  @(NavMenuCollapsed ? "outlander-nav-menu-collapsed" : "") @(MobileMenuOpen ? "mobile-menu-open" : "") @(IsActuallyCollapsed ? "collapsed" : "") @(initialized ? "" : "opacity-0")">
     <div class="outlander-nav-menu-brand">
         <div class="brand-area">
             <div class="brand-icon">
-                <i class="bi bi-boxes"></i>
+                @if (BrandContent is not null)
+                {
+                    @BrandContent
+                }
+                else
+                {
+                    <img class="img-fluid" src="_content/Outlander.Blazor/imgs/icon.png" />
+                }
             </div>
 
             @if (!IsActuallyCollapsed)
@@ -42,7 +52,7 @@
                         {
                             <div class="menu-group menu-group-has-flyout">
                                 <div class="flyout-wrapper">
-                                    <button class="submenu-toggle @(IsExpanded(item) ? "open" : "")"
+                                    <button class="submenu-toggle @(IsExpanded(item) ? "open" : "") @(item.HasActiveDescendant ? "active-parent" : "")"
                                             @onclick="() => ToggleItem(item)"
                                             data-bs-toggle="tooltip"
                                             data-bs-placement="right"
@@ -68,7 +78,7 @@
                                         <div class="submenu-list">
                                             @foreach (var child in item.Children)
                                             {
-                                                <a class="menu-link @(child.IsActive ? "active" : "")"
+                                                <a class="menu-link @(child.IsRouteActive ? "active" : "")"
                                                        href="@(child.Url ?? "#")"
                                                        data-bs-toggle="tooltip"
                                                        data-bs-placement="right"
@@ -87,7 +97,7 @@
 
                                             @foreach (var child in item.Children)
                                             {
-                                                <a class="menu-link @(child.IsActive ? "active" : "")"
+                                                <a class="menu-link @(child.IsRouteActive ? "active" : "")"
                                                        href="@(child.Url ?? "#")">
                                                     <i class="bi @child.Icon"></i>
                                                     <span>@child.Text</span>
@@ -100,7 +110,7 @@
                         }
                         else
                         {
-                            <a class="menu-link @(item.IsActive ? "active" : "")"
+                            <a class="menu-link @(item.IsRouteActive ? "active" : "")"
                                    href="@(item.Url ?? "#")"
                                    data-bs-toggle="tooltip"
                                    data-bs-placement="right"
@@ -185,7 +195,7 @@
                 }
                 else
                 {
-                    <a class="menu-link @(item.IsActive ? "active" : "")"
+                    <a class="menu-link @(item.IsRouteActive ? "active" : "")"
                            href="@(item.Url ?? "#")"
                            data-bs-toggle="tooltip"
                            data-bs-placement="right"
@@ -272,6 +282,13 @@
     public string BrandText { get; set; } = "Outlander";
 
     /// <summary>
+    /// Gets or sets custom content rendered before <see cref="BrandText"/>.
+    /// Typically used to display a company logo, an icon, or any custom markup.
+    /// </summary>
+    [Parameter]
+    public RenderFragment? BrandContent { get; set; }
+
+    /// <summary>
     /// Gets or sets the collection of menu groups displayed in the navigation menu.
     /// Each group can contain menu items and nested child items.
     /// </summary>
@@ -296,12 +313,11 @@
 
     protected override void OnParametersSet()
     {
-        expandedItems.Clear();
-
         if (Groups is not null)
         {
             foreach (var item in Groups.SelectMany(g => g.Items))
             {
+                ResetComputedStates(item);
                 RegisterExpandedItems(item);
             }
         }
@@ -310,9 +326,23 @@
         {
             foreach (var item in FooterItems)
             {
+                ResetComputedStates(item);
                 RegisterExpandedItems(item);
             }
         }
+
+        UpdateActiveStates();
+    }
+
+    protected override void OnInitialized()
+    {
+        NavigationManager.LocationChanged += OnLocationChanged;
+    }
+
+    private void OnLocationChanged(object? sender, LocationChangedEventArgs e)
+    {
+        UpdateActiveStates();
+        InvokeAsync(StateHasChanged);
     }
 
     protected override async Task OnAfterRenderAsync(bool firstRender)
@@ -354,7 +384,131 @@
         }
     }
 
-    private bool IsExpanded(OutlanderNavMenuItem item) => expandedItems.Contains(item.Id);
+    private bool IsExpanded(OutlanderNavMenuItem item) => item.IsExpanded;
+
+    private void ResetComputedStates(OutlanderNavMenuItem item)
+    {
+        item.IsRouteActive = false;
+        item.HasActiveDescendant = false;
+        item.IsExpanded = false;
+
+        foreach (var child in item.Children)
+        {
+            ResetComputedStates(child);
+        }
+    }
+
+    private void UpdateActiveStates()
+    {
+        var currentPath = GetCurrentRelativePath();
+
+        if (Groups is not null)
+        {
+            foreach (var item in Groups.SelectMany(g => g.Items))
+            {
+                EvaluateItem(item, currentPath);
+            }
+        }
+
+        if (FooterItems is not null)
+        {
+            foreach (var item in FooterItems)
+            {
+                EvaluateItem(item, currentPath);
+            }
+        }
+    }
+
+    private bool EvaluateItem(OutlanderNavMenuItem item, string currentPath)
+    {
+        item.IsRouteActive = item.IsActive || (IsNavigableUrl(item.Url) && IsExactMatch(currentPath, item.Url!));
+
+        var hasActiveChild = false;
+
+        foreach (var child in item.Children)
+        {
+            if (EvaluateItem(child, currentPath))
+            {
+                hasActiveChild = true;
+            }
+        }
+
+        item.HasActiveDescendant = hasActiveChild;
+        item.IsExpanded = item.IsExpandedByDefault || expandedItems.Contains(item.Id) || hasActiveChild;
+
+        return item.IsRouteActive || item.HasActiveDescendant;
+    }
+
+    private string GetCurrentRelativePath()
+    {
+        var relativePath = NavigationManager.ToBaseRelativePath(NavigationManager.Uri);
+
+        if (string.IsNullOrWhiteSpace(relativePath))
+            return "/";
+
+        var path = "/" + relativePath;
+
+        var queryIndex = path.IndexOf('?');
+        if (queryIndex >= 0)
+            path = path[..queryIndex];
+
+        var fragmentIndex = path.IndexOf('#');
+        if (fragmentIndex >= 0)
+            path = path[..fragmentIndex];
+
+        return NormalizePath(path);
+    }
+
+    private static bool IsExactMatch(string currentPath, string itemUrl)
+    {
+        var normalizedItemPath = NormalizePath(itemUrl);
+        return string.Equals(currentPath, normalizedItemPath, StringComparison.OrdinalIgnoreCase);
+    }
+
+    private static bool IsNavigableUrl(string? url)
+    {
+        if (string.IsNullOrWhiteSpace(url))
+            return false;
+
+        var trimmed = url.Trim();
+
+        if (trimmed == "#")
+            return false;
+
+        if (trimmed.StartsWith("javascript:", StringComparison.OrdinalIgnoreCase))
+            return false;
+
+        return true;
+    }
+
+    private static string NormalizePath(string? path)
+    {
+        if (string.IsNullOrWhiteSpace(path))
+            return "/";
+
+        var normalized = path.Trim();
+
+        if (Uri.TryCreate(normalized, UriKind.Absolute, out var absoluteUri))
+        {
+            normalized = absoluteUri.AbsolutePath;
+        }
+
+        var queryIndex = normalized.IndexOf('?');
+        if (queryIndex >= 0)
+            normalized = normalized[..queryIndex];
+
+        var fragmentIndex = normalized.IndexOf('#');
+        if (fragmentIndex >= 0)
+            normalized = normalized[..fragmentIndex];
+
+        if (!normalized.StartsWith('/'))
+            normalized = "/" + normalized;
+
+        if (normalized.Length > 1)
+            normalized = normalized.TrimEnd('/');
+
+        return normalized;
+    }
 
     private void ToggleItem(OutlanderNavMenuItem item)
     {
@@ -367,6 +521,8 @@
         {
             expandedItems.Remove(item.Id);
         }
+
+        UpdateActiveStates();
     }
 
     private async Task CloseMobileMenu()
@@ -415,6 +571,7 @@
         
     public async ValueTask DisposeAsync()
     {
+        NavigationManager.LocationChanged -= OnLocationChanged;
         dotNetRef?.Dispose();
 
         if (_module is null)

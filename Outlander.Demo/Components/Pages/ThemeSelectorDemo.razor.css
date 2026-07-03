@@ -1,0 +1,38 @@
+﻿.ol-theme-preview {
+    border: 1px solid var(--ol-border);
+    border-radius: 1rem;
+    overflow: hidden;
+    background: var(--ol-surface);
+    min-height: 320px;
+}
+
+.ol-theme-preview-toolbar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 1rem;
+    padding: 1rem 1.25rem;
+    background: var(--ol-surface);
+    border-bottom: 1px solid var(--ol-border);
+    flex-wrap: wrap;
+}
+
+.ol-theme-preview-body {
+    padding: 1.25rem;
+    background: var(--ol-surface-alt);
+}
+
+.ol-theme-surface {
+    background: #ffffff;
+    color: #0f172a;
+    border: 1px solid rgba(15, 23, 42, 0.08);
+    border-radius: 1rem;
+    padding: 1.25rem;
+    min-height: 160px;
+}
+
+.ol-theme-surface-dark {
+    background: #0f172a;
+    color: #ffffff;
+    border-color: rgba(148, 163, 184, 0.16);
+}
