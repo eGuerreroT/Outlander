@@ -1,0 +1,416 @@
+﻿@page "/tags-multiselect-demo"
+@using Outlander.Demo.LanguageDefinitions
+@inject IJSRuntime JS
+
+<PageTitle>Tags MultiSelect Demo</PageTitle>
+
+<div class="ol-doc-page">
+
+    <div class="row g-4 align-items-start">
+        <div class="col-xl-8">
+            <div class="mb-4">
+                <div class="d-flex align-items-center gap-3 flex-wrap mb-3">
+                    <h1 class="mb-0">TagsMultiSelect</h1>
+                    <span class="bg-body-tertiary btn outlander-btn-default btn-sm rounded-pill">v1.0.0</span>
+                </div>
+
+                <p class="lead text-body-secondary mb-4">
+                    A flexible multi-select tags input with free-text support for Blazor forms.
+                </p>
+
+                <p class="mb-2">
+                    <code>TagsMultiSelect</code> allows users to select predefined tags and also create new ones
+                    using keyboard shortcuts such as <code>Enter</code>, <code>Tab</code>, or <code>Space</code>.
+                </p>
+                <p class="mb-4">
+                    It is ideal for metadata fields, labels, filters, and categorization workflows.
+                </p>
+
+                <div class="row g-3">
+                    <div class="col-sm-6 col-lg-3">
+                        <div class="ol-region-pill">
+                            <div class="ol-region-icon"><i class="bi bi-tags"></i></div>
+                            <div>
+                                <div class="fw-semibold">Multi Select</div>
+                                <small class="text-body-secondary">Pick one or many tags</small>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-sm-6 col-lg-3">
+                        <div class="ol-region-pill">
+                            <div class="ol-region-icon"><i class="bi bi-keyboard"></i></div>
+                            <div>
+                                <div class="fw-semibold">Free Text</div>
+                                <small class="text-body-secondary">Create tags with the keyboard</small>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-sm-6 col-lg-3">
+                        <div class="ol-region-pill">
+                            <div class="ol-region-icon"><i class="bi bi-check2-circle"></i></div>
+                            <div>
+                                <div class="fw-semibold">Two-way Binding</div>
+                                <small class="text-body-secondary">Bind selected and available tags</small>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-sm-6 col-lg-3">
+                        <div class="ol-region-pill">
+                            <div class="ol-region-icon"><i class="bi bi-sliders"></i></div>
+                            <div>
+                                <div class="fw-semibold">Configurable</div>
+                                <small class="text-body-secondary">Optional custom-tag persistence</small>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-xl-4">
+            <div class="card ol-side-card">
+                <div class="card-body">
+                    <h5 class="mb-3">Key Features</h5>
+
+                    <ul class="list-unstyled mb-0 ol-feature-list">
+                        <li><i class="bi bi-check-circle-fill"></i> Multi-tag selection</li>
+                        <li><i class="bi bi-check-circle-fill"></i> Free-text tag creation</li>
+                        <li><i class="bi bi-check-circle-fill"></i> Enter / Tab / Space shortcuts</li>
+                        <li><i class="bi bi-check-circle-fill"></i> Close on blur and outside interactions</li>
+                        <li><i class="bi bi-check-circle-fill"></i> Escape key closes dropdown and clears pending input</li>
+                        <li><i class="bi bi-check-circle-fill"></i> Arrow Up / Arrow Down keyboard navigation</li>
+                        <li><i class="bi bi-check-circle-fill"></i> Enter selects highlighted option from filtered results</li>
+                        <li><i class="bi bi-check-circle-fill"></i> Case-insensitive deduplication + normalized free-text values</li>
+                        <li><i class="bi bi-check-circle-fill"></i> Optional custom-tag persistence in available list</li>
+                        <li><i class="bi bi-check-circle-fill"></i> Two-way binding for SelectedTags and AvailableTags</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="border-0 card mt-4 shadow-none">
+        <div class="bg-transparent border-0 card-header pb-0">
+            <ul class="nav ol-doc-tabs" id="tagsMultiSelectTabs" role="tablist">
+                <li class="nav-item" role="presentation">
+                    <button class="nav-link ol-doc-tab active"
+                            id="preview-tab"
+                            data-bs-toggle="tab"
+                            data-bs-target="#preview-tab-pane"
+                            type="button"
+                            role="tab"
+                            aria-controls="preview-tab-pane"
+                            aria-selected="true">
+                        Preview
+                    </button>
+                </li>
+                <li class="nav-item" role="presentation">
+                    <button class="nav-link ol-doc-tab"
+                            id="razor-tab"
+                            data-bs-toggle="tab"
+                            data-bs-target="#razor-tab-pane"
+                            type="button"
+                            role="tab"
+                            aria-controls="razor-tab-pane"
+                            aria-selected="false">
+                        Razor
+                    </button>
+                </li>
+                <li class="nav-item" role="presentation">
+                    <button class="nav-link ol-doc-tab"
+                            id="csharp-tab"
+                            data-bs-toggle="tab"
+                            data-bs-target="#csharp-tab-pane"
+                            type="button"
+                            role="tab"
+                            aria-controls="csharp-tab-pane"
+                            aria-selected="false">
+                        C#
+                    </button>
+                </li>
+            </ul>
+        </div>
+
+        <div class="outlander-border card-body rounded">
+            <div class="tab-content" id="tagsMultiSelectTabsContent">
+
+                <div class="tab-pane fade show active"
+                     id="preview-tab-pane"
+                     role="tabpanel"
+                     aria-labelledby="preview-tab"
+                     tabindex="0">
+
+                    <div class="ol-tags-preview">
+                        <div class="ol-tags-preview-toolbar">
+                            <div class="fw-semibold">Tag Editor</div>
+                            <span class="bg-danger-subtle border border-danger-subtle text-danger-emphasis rounded-pill px-2 d-inline-flex gap-2 align-items-center">
+                                <span class="badge-dot bg-success bg-gradient"></span>Interactive Preview
+                            </span>
+                        </div>
+
+                        <div class="ol-tags-preview-body">
+                            <OutlanderTagsMultiSelect Caption="Tags"
+                                             Placeholder="Type and press Enter, Tab, or Space..."
+                                             @bind-SelectedTags="ModelSelectedTags"
+                                             @bind-AvailableTags="ModelAvailableTags"
+                                             PersistCustomTagsInAvailableTags="true" />
+
+                            <div class="row g-3 mt-1">
+                                <div class="col-lg-6">
+                                    <div class="ol-tags-state">
+                                        <div class="fw-semibold mb-2">SelectedTags</div>
+                                        @if (ModelSelectedTags.Any())
+                                        {
+                                            <div class="d-flex flex-wrap gap-2">
+                                                @foreach (var tag in ModelSelectedTags)
+                                                {
+                                                    <span class="badge rounded-pill text-bg-warning">@tag</span>
+                                                }
+                                            </div>
+                                        }
+                                        else
+                                        {
+                                            <p class="mb-0 text-body-secondary small">No selected tags.</p>
+                                        }
+                                    </div>
+                                </div>
+
+                                <div class="col-lg-6">
+                                    <div class="ol-tags-state">
+                                        <div class="fw-semibold mb-2">AvailableTags</div>
+                                        @if (ModelAvailableTags.Any())
+                                        {
+                                            <div class="d-flex flex-wrap gap-2">
+                                                @foreach (var tag in ModelAvailableTags)
+                                                {
+                                                    <span class="badge rounded-pill text-bg-light border">@tag</span>
+                                                }
+                                            </div>
+                                        }
+                                        else
+                                        {
+                                            <p class="mb-0 text-body-secondary small">No available tags.</p>
+                                        }
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="tab-pane fade"
+                     id="razor-tab-pane"
+                     role="tabpanel"
+                     aria-labelledby="razor-tab"
+                     tabindex="0">
+
+                    <div class="ol-code-card">
+                        <div class="ol-code-card-body">
+                            <button class="btn btn-sm ol-copy-btn @(copiedBlock == CodeBlockType.Razor ? "copied" : null)"
+                                    @onclick="() => CopyCodeAsync(razorCode, CodeBlockType.Razor)">
+                                <i class="bi @(copiedBlock == CodeBlockType.Razor ? "bi-check2" : "bi-copy") me-1"></i>
+                                @(copiedBlock == CodeBlockType.Razor ? "Copied" : "Copy")
+                            </button>
+
+                            <CodeHighlighter Content="@razorCode"
+                                             LanguageDefinition="@(new OutlanderRazorLanguageDefinition())" />
+                        </div>
+                    </div>
+                </div>
+
+                <div class="tab-pane fade"
+                     id="csharp-tab-pane"
+                     role="tabpanel"
+                     aria-labelledby="csharp-tab"
+                     tabindex="0">
+
+                    <div class="ol-code-card">
+                        <div class="ol-code-card-body">
+                            <button class="btn btn-sm ol-copy-btn @(copiedBlock == CodeBlockType.CSharp ? "copied" : null)"
+                                    @onclick="() => CopyCodeAsync(csharpCode, CodeBlockType.CSharp)">
+                                <i class="bi @(copiedBlock == CodeBlockType.CSharp ? "bi-check2" : "bi-copy") me-1"></i>
+                                @(copiedBlock == CodeBlockType.CSharp ? "Copied" : "Copy")
+                            </button>
+
+                            <CodeHighlighter Content="@csharpCode"
+                                             LanguageDefinition="@(new OutlanderCSharpLanguageDefinition())" />
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+    <div class="card mt-4">
+        <div class="card-body">
+            <h5 class="mb-3 fw-bold">Keyboard Shortcuts</h5>
+
+            <div class="table-responsive ol-rounded-table">
+                <table class="table align-middle mb-0">
+                    <thead>
+                        <tr>
+                            <th scope="col" class="bg-secondary-subtle">Key</th>
+                            <th scope="col" class="bg-secondary-subtle">Behavior</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td><kbd>Enter</kbd></td>
+                            <td>Selects highlighted option or creates a tag from current input.</td>
+                        </tr>
+                        <tr>
+                            <td><kbd>Tab</kbd></td>
+                            <td>Creates a tag from current input and continues focus navigation.</td>
+                        </tr>
+                        <tr>
+                            <td><kbd>Space</kbd></td>
+                            <td>Creates a tag when the input contains meaningful text.</td>
+                        </tr>
+                        <tr>
+                            <td><kbd>↑</kbd> / <kbd>↓</kbd></td>
+                            <td>Moves highlight through filtered dropdown options.</td>
+                        </tr>
+                        <tr>
+                            <td><kbd>Esc</kbd></td>
+                            <td>Closes dropdown and clears pending input text.</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <div class="row g-4 mt-1">
+        <div class="col-lg-6">
+            <div class="card h-100">
+                <div class="card-body">
+                    <h5 class="mb-3 fw-bold">Component Anatomy</h5>
+
+                    <div class="ol-anatomy">
+                        <div class="ol-anatomy-top">Caption Label</div>
+                        <div class="ol-anatomy-middle">
+                            <div class="ol-anatomy-nav">Selected Chips</div>
+                            <div class="ol-anatomy-body">Free-Text Input + Dropdown</div>
+                        </div>
+                        <div class="ol-anatomy-footer">SelectedTags / AvailableTags Sync</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-lg-6">
+            <div class="card h-100">
+                <div class="card-body">
+                    <h5 class="mb-3 fw-bold">Main Elements</h5>
+
+                    <div class="table-responsive ol-rounded-table">
+                        <table class="table align-middle mb-0">
+                            <thead>
+                                <tr>
+                                    <th scope="col" class="bg-secondary-subtle">Element</th>
+                                    <th scope="col" class="bg-secondary-subtle">Description</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td><span class="fw-semibold text-primary">Caption</span></td>
+                                    <td>Displays the field label for the tags control.</td>
+                                </tr>
+                                <tr>
+                                    <td><span class="fw-semibold text-primary">Selected Chips</span></td>
+                                    <td>Shows currently selected tags with remove actions.</td>
+                                </tr>
+                                <tr>
+                                    <td><span class="fw-semibold">Free Input</span></td>
+                                    <td>Accepts custom text and converts it to tags on key actions.</td>
+                                </tr>
+                                <tr>
+                                    <td><span class="fw-semibold text-success">Dropdown List</span></td>
+                                    <td>Lists predefined tags and allows toggling selection state.</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="alert alert-warning mt-4">
+        <div class="d-flex align-items-center gap-2 mb-3">
+            <i class="bi bi-info-circle text-warning"></i>
+            <h5 class="mb-0">Notes</h5>
+        </div>
+
+        <ul class="mb-0">
+            <li>Use <strong>@@bind-SelectedTags</strong> and <strong>@@bind-AvailableTags</strong> for full two-way synchronization.</li>
+            <li>The dropdown closes automatically when the component loses focus or when users interact outside the input flow.</li>
+            <li>Press <strong>Escape</strong> to close the dropdown and clear pending free-text input.</li>
+            <li>Use <strong>Arrow Up</strong> / <strong>Arrow Down</strong> to navigate options and <strong>Enter</strong> to select the highlighted item.</li>
+            <li>Free-text values are normalized (trimmed and internal spaces collapsed) before insertion.</li>
+            <li>Duplicate tags are prevented using case-insensitive comparison.</li>
+            <li>Set <strong>PersistCustomTagsInAvailableTags</strong> to control whether custom tags are appended to the available options list.</li>
+        </ul>
+    </div>
+
+</div>
+
+@code {
+    private CodeBlockType? copiedBlock;
+
+    private enum CodeBlockType
+    {
+        Razor,
+        CSharp
+    }
+
+    private List<string> ModelAvailableTags { get; set; } = new()
+    {
+        "Backend", "Frontend", "UI", "Bug", "Feature", "Urgent"
+    };
+
+    private List<string> ModelSelectedTags { get; set; } = new()
+    {
+        "UI", "Feature"
+    };
+
+    private async Task CopyCodeAsync(string text, CodeBlockType blockType)
+    {
+        await JS.InvokeVoidAsync("navigator.clipboard.writeText", text);
+
+        copiedBlock = blockType;
+        StateHasChanged();
+
+        await Task.Delay(2000);
+
+        if (copiedBlock == blockType)
+        {
+            copiedBlock = null;
+            StateHasChanged();
+        }
+    }
+
+    private string razorCode = """
+        <TagsMultiSelect Caption="Tags"
+                         Placeholder="Type and press Enter, Tab, or Space..."
+                         @bind-SelectedTags="ModelSelectedTags"
+                         @bind-AvailableTags="ModelAvailableTags"
+                         PersistCustomTagsInAvailableTags="true" />
+    """;
+
+    private string csharpCode = """
+        private List<string> ModelAvailableTags { get; set; } = new()
+        {
+            "Backend", "Frontend", "UI", "Bug", "Feature", "Urgent"
+        };
+
+        private List<string> ModelSelectedTags { get; set; } = new()
+        {
+            "UI", "Feature"
+        };
+    """;
+}

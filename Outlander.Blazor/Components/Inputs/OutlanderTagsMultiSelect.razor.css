@@ -1,0 +1,66 @@
+.outlander-tags-select-box {
+    min-height: 46px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 10px;
+    cursor: pointer;
+}
+
+.outlander-tags-select-values {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    width: 100%;
+    align-items: center;
+}
+
+.outlander-tags-chip {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    font-weight: 500;
+}
+
+.outlander-tags-btn-close-chip {
+    border: 0;
+    background: transparent;
+    color: inherit;
+    padding: 0;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.outlander-tags-select-input {
+    border: none;
+    outline: none;
+    background: transparent;
+    min-width: 180px;
+    flex: 1;
+    padding: 2px 0;
+}
+
+    .outlander-tags-select-input::placeholder {
+        color: var(--bs-secondary-color);
+    }
+
+.outlander-tags-select-caret {
+    margin-left: auto;
+    color: var(--bs-secondary-color);
+}
+
+.outlander-tags-dropdown {
+    margin-top: 6px;
+    border-radius: 12px;
+    max-height: 240px;
+    overflow-y: auto;
+    z-index: 1080;
+    background-clip: border-box;
+}
+
+    .outlander-tags-dropdown .dropdown-item.active,
+    .outlander-tags-dropdown .dropdown-item:active {
+        background-color: var(--bs-primary-bg-subtle);
+        color: var(--bs-emphasis-color);
+    }

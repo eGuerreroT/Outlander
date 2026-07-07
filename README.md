@@ -137,6 +137,7 @@ Add the required namespaces to `_Imports.razor`:
 @using Outlander.Blazor
 @using Outlander.Blazor.Components
 @using Outlander.Blazor.Components.Layout
+@using Outlander.Blazor.Components.Inputs
 ```
 
 Add the Outlander stylesheet:
@@ -177,6 +178,7 @@ For detailed installation instructions:
 -   [OutlanderNavMenu](Outlander.Blazor/Docs/Components/OutlanderNavMenu.md)
 -   [OutlanderTopMenu](Outlander.Blazor/Docs/Components/OutlanderTopMenu.md)
 -   [OutlanderThemeSelector](Outlander.Blazor/Docs/Components/OutlanderThemeSelector.md)
+-   OutlanderTagsMultiSelect
 
 ## Guides
 

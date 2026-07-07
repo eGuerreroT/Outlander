@@ -17,7 +17,16 @@
     <PackageRequireLicenseAcceptance>False</PackageRequireLicenseAcceptance>
 	<GenerateDocumentationFile>true</GenerateDocumentationFile>
     <GeneratePackageOnBuild>True</GeneratePackageOnBuild>
-	<VersionPrefix>1.0.20</VersionPrefix>
+	<VersionPrefix>1.1.1</VersionPrefix>
+
+	<PackageReleaseNotes>
+		Update components.
+		1. TagsMultiSelect
+		- Expanded component demo and documentation.
+		- Added improved dropdown close behavior on focus loss/outside interaction.
+		- Added keyboard support: Escape, Arrow Up/Down navigation, and Enter selection.
+		- Improved input/tag handling and overall UX consistency.
+	</PackageReleaseNotes>
   </PropertyGroup>
 
   <ItemGroup>

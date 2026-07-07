@@ -1,0 +1,355 @@
+@namespace Outlander.Blazor.Components.Inputs
+
+<div class="mb-3 position-relative outlander-tags-select-root" tabindex="0"
+     @onfocusin="HandleFocusIn"
+     @onfocusout="HandleFocusOut"
+     @onkeydown="HandleRootKeyDown">
+
+    @if (!string.IsNullOrWhiteSpace(Caption))
+    {
+        <div class="outlander-tags-caption-wraper w-100" @onclick="CloseDropdown">
+            <label class="col-form-label fw-medium">@Caption</label>
+        </div>
+    }
+
+    <div class="form-control outlander-tags-select-box" @onclick="ToggleDropdown">
+        <div class="outlander-tags-select-values">
+            @if (SelectedTagsView.Any())
+            {
+                @foreach (var tag in SelectedTagsView)
+                {
+                    <span class="outlander-tags-chip bg-gradient bg-opacity-50 bg-warning border border-warning-subtle ms-2 px-2 py-1 rounded-pill small text-bg-warning">
+                        @tag
+                        <button type="button"
+                                class="outlander-tags-btn-close-chip"
+                                @onclick:stopPropagation="true"
+                                @onclick="() => RemoveTag(tag)">
+                            <i class="bi bi-x"></i>
+                        </button>
+                    </span>
+                }
+            }
+
+            <input class="outlander-tags-select-input"
+                   placeholder="@Placeholder"
+                   @bind="InputValue"
+                   @bind:event="oninput"
+                   @onkeydown="HandleInputKeyDown"
+                   @onblur="HandleInputBlur"
+                   @onclick="OpenDropdown"
+                   @onclick:stopPropagation="true" />
+        </div>
+
+        <span class="outlander-tags-select-caret">
+            <i class="bi bi-chevron-down"></i>
+        </span>
+    </div>
+
+    @if (DropdownOpen)
+    {
+        <div class="dropdown-menu show w-100 outlander-tags-dropdown">
+            @for (var i = 0; i < FilteredAvailableTags.Count; i++)
+            {
+                var tag = FilteredAvailableTags[i];
+                var isHighlighted = i == _highlightedIndex;
+
+                <button type="button"
+                        class="dropdown-item d-flex align-items-center justify-content-between @(isHighlighted ? "active" : null)"
+                        @onclick="() => ToggleTag(tag)">
+                    <span>@tag</span>
+
+                    @if (ContainsIgnoreCase(SelectedTagsView, tag))
+                    {
+                        <i class="bi bi-check2 text-primary"></i>
+                    }
+                </button>
+            }
+
+            @if (!FilteredAvailableTags.Any())
+            {
+                <div class="dropdown-item-text text-body-secondary small">
+                    No matches
+                </div>
+            }
+        </div>
+    }
+</div>
+
+@code {
+    private bool DropdownOpen;    
+    private bool _isFocusInside;
+    private int _highlightedIndex = -1;
+
+    // Internal defensive state
+    private List<string> _selectedTags = new();
+    private List<string> _availableTags = new();
+    private string _inputValue = string.Empty;
+
+    private string InputValue
+    {
+        get => _inputValue;
+        set
+        {
+            _inputValue = value;
+
+            // Open dropdown while typing and keep highlighted item in sync
+            DropdownOpen = true;
+            _highlightedIndex = FilteredAvailableTags.Any() ? 0 : -1;
+        }
+    }
+
+    private List<string> FilteredAvailableTags =>
+        string.IsNullOrWhiteSpace(InputValue)
+            ? _availableTags
+            : _availableTags
+                .Where(t => t.Contains(InputValue, StringComparison.OrdinalIgnoreCase))
+                .ToList();
+
+    /// <summary>
+    /// Read-only view of selected tags.
+    /// </summary>
+    private IReadOnlyCollection<string> SelectedTagsView => _selectedTags.AsReadOnly();
+
+    /// <summary>
+    /// Read-only view of available tags.
+    /// </summary>
+    private IReadOnlyCollection<string> AvailableTagsView => _availableTags.AsReadOnly();
+
+    /// <summary>
+    /// Label text displayed above the control.
+    /// </summary>
+    [Parameter] public string Caption { get; set; } = "Tags";
+
+    /// <summary>
+    /// Placeholder text shown in the free-text input.
+    /// </summary>
+    [Parameter] public string Placeholder { get; set; } = "Type and press Enter, Tab, or Space...";
+
+    /// <summary>
+    /// Source list of tags shown in the dropdown.
+    /// </summary>
+    [Parameter] public IReadOnlyCollection<string>? AvailableTags { get; set; }
+
+    /// <summary>
+    /// Currently selected tags.
+    /// Includes both predefined tags and user-entered free text values.
+    /// </summary>
+    [Parameter] public IReadOnlyCollection<string>? SelectedTags { get; set; }
+
+    /// <summary>
+    /// When true, user-entered free-text tags are also added
+    /// to the available tags list shown in the dropdown.
+    /// </summary>
+    [Parameter] public bool PersistCustomTagsInAvailableTags { get; set; } = true;
+
+    /// <summary>
+    /// Raised when the selected tags collection changes.
+    /// Emits a new list instance to avoid exposing internal mutable references.
+    /// </summary>
+    [Parameter] public EventCallback<List<string>> SelectedTagsChanged { get; set; }
+
+    /// <summary>
+    /// Raised when the available tags collection changes
+    /// (for example, when persisting custom user-entered tags).
+    /// </summary>
+    [Parameter] public EventCallback<List<string>> AvailableTagsChanged { get; set; }
+
+    protected override void OnParametersSet()
+    {
+        _selectedTags = (SelectedTags ?? Array.Empty<string>()).ToList();
+        _availableTags = (AvailableTags ?? Array.Empty<string>()).ToList();
+
+        if (_highlightedIndex >= FilteredAvailableTags.Count)
+            _highlightedIndex = FilteredAvailableTags.Any() ? 0 : -1;
+    }
+
+    private void ToggleDropdown()
+    {
+        DropdownOpen = !DropdownOpen;
+
+        if (DropdownOpen)
+            _highlightedIndex = FilteredAvailableTags.Any() ? 0 : -1;
+    }
+
+    private async Task HandleInputKeyDown(KeyboardEventArgs e)
+    {
+        var options = FilteredAvailableTags;
+        var hasOptions = options.Count > 0;
+
+        if (e.Key == "Escape")
+        {
+            InputValue = string.Empty;
+            _highlightedIndex = -1;
+            CloseDropdown();
+            return;
+        }
+
+        if (e.Key == "ArrowDown")
+        {
+            if (!DropdownOpen)
+                DropdownOpen = true;
+
+            if (hasOptions)
+                _highlightedIndex = _highlightedIndex < options.Count - 1 ? _highlightedIndex + 1 : 0;
+
+            return;
+        }
+
+        if (e.Key == "ArrowUp")
+        {
+            if (!DropdownOpen)
+                DropdownOpen = true;
+
+            if (hasOptions)
+                _highlightedIndex = _highlightedIndex > 0 ? _highlightedIndex - 1 : options.Count - 1;
+
+            return;
+        }
+
+        if (e.Key == "Enter")
+        {
+            if (DropdownOpen && hasOptions && _highlightedIndex >= 0 && _highlightedIndex < options.Count)
+            {
+                await ToggleTag(options[_highlightedIndex]);
+                _highlightedIndex = -1;
+                return;
+            }
+
+            await AddCustomTag(InputValue);
+            _highlightedIndex = -1;
+            return;
+        }
+
+        if (e.Key == "Tab")
+        {
+            await AddCustomTag(InputValue);
+            _highlightedIndex = -1;
+            return;
+        }
+
+        if (e.Key == " " && !string.IsNullOrWhiteSpace(InputValue))
+        {
+            await AddCustomTag(InputValue);
+            _highlightedIndex = -1;
+        }
+    }
+
+    private void HandleRootKeyDown(KeyboardEventArgs e)
+    {
+        if (e.Key == "Escape")
+        {
+            InputValue = string.Empty;
+            _highlightedIndex = -1;
+            CloseDropdown();
+        }
+    }
+
+    private async Task HandleInputBlur(FocusEventArgs _)
+    {
+        await AddCustomTag(InputValue);
+    }
+
+    private async Task AddCustomTag(string? rawValue)
+    {
+        var tag = NormalizeTag(rawValue);
+
+        if (string.IsNullOrWhiteSpace(tag))
+            return;
+
+        var selectionChanged = false;
+        var availableChanged = false;
+
+        var nextSelected = _selectedTags.ToList();
+        var nextAvailable = _availableTags.ToList();
+
+        if (!ContainsIgnoreCase(nextSelected, tag))
+        {
+            nextSelected.Add(tag);
+            _selectedTags = nextSelected;
+            selectionChanged = true;
+        }
+
+        if (PersistCustomTagsInAvailableTags && !ContainsIgnoreCase(nextAvailable, tag))
+        {
+            nextAvailable.Add(tag);
+            _availableTags = nextAvailable;
+            availableChanged = true;
+        }
+
+        if (selectionChanged)
+            await SelectedTagsChanged.InvokeAsync(_selectedTags.ToList());
+
+        if (availableChanged)
+            await AvailableTagsChanged.InvokeAsync(_availableTags.ToList());
+
+        InputValue = string.Empty;
+    }
+
+    private async Task ToggleTag(string tag)
+    {
+        var nextSelected = _selectedTags.ToList();
+        var existing = nextSelected.FirstOrDefault(t => string.Equals(t, tag, StringComparison.OrdinalIgnoreCase));
+
+        if (existing is not null)
+            nextSelected.Remove(existing);
+        else
+            nextSelected.Add(tag);
+
+        _selectedTags = nextSelected;
+        await SelectedTagsChanged.InvokeAsync(_selectedTags.ToList());
+    }
+
+    private async Task RemoveTag(string tag)
+    {
+        var nextSelected = _selectedTags.ToList();
+        var existing = nextSelected.FirstOrDefault(t => string.Equals(t, tag, StringComparison.OrdinalIgnoreCase));
+
+        if (existing is null)
+            return;
+
+        nextSelected.Remove(existing);
+        _selectedTags = nextSelected;
+        await SelectedTagsChanged.InvokeAsync(_selectedTags.ToList());
+    }
+
+    private static string NormalizeTag(string? value)
+    {
+        if (string.IsNullOrWhiteSpace(value))
+            return string.Empty;
+
+        return string.Join(' ', value.Trim().Split(' ', StringSplitOptions.RemoveEmptyEntries));
+    }
+
+    private static bool ContainsIgnoreCase(IEnumerable<string> source, string value)
+        => source.Any(x => string.Equals(x, value, StringComparison.OrdinalIgnoreCase));
+
+    private void HandleFocusIn(FocusEventArgs _)
+    {
+        _isFocusInside = true;
+    }
+
+    private async Task HandleFocusOut(FocusEventArgs _)
+    {
+        _isFocusInside = false;
+        await Task.Delay(80);
+
+        if (!_isFocusInside && DropdownOpen)
+        {
+            DropdownOpen = false;
+            _highlightedIndex = -1;
+            await InvokeAsync(StateHasChanged);
+        }
+    }
+
+    private void CloseDropdown()
+    {
+        if (DropdownOpen)
+            DropdownOpen = false;
+    }
+
+    private void OpenDropdown()
+    {
+        if (!DropdownOpen)
+            DropdownOpen = true;
+    }
+}
