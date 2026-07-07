@@ -33,7 +33,7 @@ namespace Outlander.Demo.LanguageDefinitions
             PrioKeyword, "keyword", null),
         new(@"<([A-Z][a-zA-Z0-9]*)>", PrioKnownType, "type known", null),
         new(
-            @"\b(string|String|int|Int32|bool|Boolean|List|Dictionary|IEnumerable|Task|Object|object|decimal|Decimal|double|Double|float|Single|char|Char|byte|Byte|sbyte|SByte|short|Int16|ushort|UInt16|uint|UInt32|long|Int64|ulong|UInt64|OutlanderGrid|OutlanderGridDataColumn|OutlanderGridExportSettings|OutlanderGridFilterSettings|OutlanderGridFooterSettings|OutlanderGridSearchSettings|OutlanderGridSelectionColumn|OutlanderGridSelectionSettings|OutlanderNavMenu|OutlanderNavMenuItem|OutlanderNavMenuMenuGroup|OutlanderTopMenu|OutlanderTopMenuActionItem|OutlanderLayout|OutlanderThemeSelector|OutlanderTagsMultiSelect)\b",
+            @"\b(string|String|int|Int32|bool|Boolean|List|Dictionary|IEnumerable|DateTime|Task|Object|object|decimal|Decimal|double|Double|float|Single|char|Char|byte|Byte|sbyte|SByte|short|Int16|ushort|UInt16|uint|UInt32|long|Int64|ulong|UInt64|OutlanderGrid|OutlanderGridDataColumn|OutlanderGridExportSettings|OutlanderGridFilterSettings|OutlanderGridFooterSettings|OutlanderGridSearchSettings|OutlanderGridSelectionColumn|OutlanderGridSelectionSettings|OutlanderNavMenu|OutlanderNavMenuItem|OutlanderNavMenuMenuGroup|OutlanderTopMenu|OutlanderTopMenuActionItem|OutlanderLayout|OutlanderThemeSelector|OutlanderTagsMultiSelect)\b",
             PrioKnownType, "type known", null),
         new(@"\b\d+(\.\d+)?([eE][+-]?\d+)?([fFdDmM])?\b", PrioNumber, "number", null),
         new(@"0x[0-9a-fA-F]+\b", PrioNumber, "number", null),

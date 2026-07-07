@@ -1,8 +1,8 @@
-﻿@page "/AutomaticColumns"
+﻿@page "/"
 @using Outlander.Demo.LanguageDefinitions
 @inject IJSRuntime JS
 
-<PageTitle>Automatic Columns</PageTitle>
+<PageTitle>Home</PageTitle>
 
 <div class="ol-doc-page">
 
@@ -11,58 +11,58 @@
             <div class="mb-4">
                 <div class="d-flex align-items-center gap-3 flex-wrap mb-3">
                     <h1 class="mb-0">OutlanderGrid</h1>
-                    <span class="bg-body-tertiary btn outlander-btn-default btn-sm rounded-pill">Automatic Columns</span>
+                    <span class="bg-body-tertiary btn outlander-btn-default btn-sm rounded-pill">Custom Columns</span>
                 </div>
 
                 <p class="lead text-body-secondary mb-4">
-                    Quick grid setup using field-based columns with minimal configuration.
+                    Advanced data grid demo with templates, filtering, sorting, search, export and selection.
                 </p>
 
                 <p class="mb-2">
-                    This demo shows how to define <code>OutlanderGridDataColumn</code> entries by <code>FieldName</code>
-                    and let the grid handle rendering, filtering, and paging with a clean setup.
+                    This page demonstrates a fully customized <code>OutlanderGrid</code> using
+                    custom cell templates, custom filter templates, toolbar actions, and export options.
                 </p>
                 <p class="mb-4">
-                    Ideal for admin tables and internal tools where speed and maintainability are key.
+                    Use it as a reference for production-ready business tables in Blazor.
                 </p>
 
                 <div class="row g-3">
                     <div class="col-sm-6 col-lg-3">
                         <div class="ol-region-pill">
-                            <div class="ol-region-icon"><i class="bi bi-lightning-charge"></i></div>
-                            <div>
-                                <div class="fw-semibold">Fast Setup</div>
-                                <small class="text-body-secondary">Field-based column declarations</small>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="col-sm-6 col-lg-3">
-                        <div class="ol-region-pill">
                             <div class="ol-region-icon"><i class="bi bi-funnel"></i></div>
                             <div>
                                 <div class="fw-semibold">Filtering</div>
-                                <small class="text-body-secondary">Built-in filter row support</small>
+                                <small class="text-body-secondary">Column filter row + custom templates</small>
                             </div>
                         </div>
                     </div>
 
                     <div class="col-sm-6 col-lg-3">
                         <div class="ol-region-pill">
-                            <div class="ol-region-icon"><i class="bi bi-columns-gap"></i></div>
+                            <div class="ol-region-icon"><i class="bi bi-sort-down"></i></div>
                             <div>
-                                <div class="fw-semibold">Structured</div>
-                                <small class="text-body-secondary">Consistent tabular layout</small>
+                                <div class="fw-semibold">Sorting</div>
+                                <small class="text-body-secondary">Single and multi-column sort support</small>
                             </div>
                         </div>
                     </div>
 
                     <div class="col-sm-6 col-lg-3">
                         <div class="ol-region-pill">
-                            <div class="ol-region-icon"><i class="bi bi-list-check"></i></div>
+                            <div class="ol-region-icon"><i class="bi bi-search"></i></div>
                             <div>
-                                <div class="fw-semibold">Focused + Selected</div>
-                                <small class="text-body-secondary">State binding ready</small>
+                                <div class="fw-semibold">Search</div>
+                                <small class="text-body-secondary">Global search across columns</small>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-sm-6 col-lg-3">
+                        <div class="ol-region-pill">
+                            <div class="ol-region-icon"><i class="bi bi-download"></i></div>
+                            <div>
+                                <div class="fw-semibold">Export</div>
+                                <small class="text-body-secondary">Excel, PDF and print export</small>
                             </div>
                         </div>
                     </div>
@@ -75,14 +75,14 @@
                 <div class="card-body">
                     <h5 class="mb-3">Key Features</h5>
                     <ul class="list-unstyled mb-0 ol-feature-list">
-                        <li><i class="bi bi-check-circle-fill"></i> Fast setup with FieldName-based columns</li>
-                        <li><i class="bi bi-check-circle-fill"></i> Minimal boilerplate configuration</li>
-                        <li><i class="bi bi-check-circle-fill"></i> Built-in filter row support</li>
-                        <li><i class="bi bi-check-circle-fill"></i> Range filtering for numeric/date fields</li>
-                        <li><i class="bi bi-check-circle-fill"></i> Focused row and selected items binding</li>
-                        <li><i class="bi bi-check-circle-fill"></i> Automatic highlighted rendering fallback</li>
-                        <li><i class="bi bi-check-circle-fill"></i> Built-in paging and summary footer</li>
-                        <li><i class="bi bi-check-circle-fill"></i> Clean baseline for internal CRUD screens</li>
+                        <li><i class="bi bi-check-circle-fill"></i> Custom cell and filter templates per column</li>
+                        <li><i class="bi bi-check-circle-fill"></i> Global search with configurable parse mode</li>
+                        <li><i class="bi bi-check-circle-fill"></i> Display-based sorting and filtering selectors</li>
+                        <li><i class="bi bi-check-circle-fill"></i> Row selection (row/page/processed scope)</li>
+                        <li><i class="bi bi-check-circle-fill"></i> Focused row and optional hot-track behavior</li>
+                        <li><i class="bi bi-check-circle-fill"></i> Export dropdown (Excel / PDF / Print)</li>
+                        <li><i class="bi bi-check-circle-fill"></i> Column chooser with visibility control</li>
+                        <li><i class="bi bi-check-circle-fill"></i> Paging summary + page-size selector</li>
                     </ul>
                 </div>
             </div>
@@ -91,7 +91,7 @@
 
     <div class="border-0 card mt-4 shadow-none">
         <div class="bg-transparent border-0 card-header pb-0">
-            <ul class="nav ol-doc-tabs" id="gridAutoTabs" role="tablist">
+            <ul class="nav ol-doc-tabs" id="gridCustomTabs" role="tablist">
                 <li class="nav-item" role="presentation">
                     <button class="nav-link ol-doc-tab active"
                             id="preview-tab"
@@ -132,7 +132,7 @@
         </div>
 
         <div class="outlander-border card-body rounded">
-            <div class="tab-content" id="gridAutoTabsContent">
+            <div class="tab-content" id="gridCustomTabsContent">
 
                 <div class="tab-pane fade show active"
                      id="preview-tab-pane"
@@ -142,7 +142,7 @@
 
                     <div class="ol-tags-preview">
                         <div class="ol-tags-preview-toolbar">
-                            <div class="fw-semibold">Grid with automatic columns</div>
+                            <div class="fw-semibold">Grid with custom columns</div>
                             <span class="bg-danger-subtle border border-danger-subtle text-danger-emphasis rounded-pill px-2 d-inline-flex gap-2 align-items-center">
                                 <span class="badge-dot bg-success bg-gradient"></span>Interactive Preview
                             </span>
@@ -150,43 +150,195 @@
 
                         <div class="ol-tags-preview-body">
                             <OutlanderGrid TItem="ServerItem"
-                                           Items="@ServersA"
-                                           @bind-FocusedRow="@FocusedServerA"
-                                           @bind-SelectedItems="@SelectedServersA"
+                                           Items="@ServersB"
+                                           RowClick="OnRowClick"
+                                           RowDoubleClick="OnRowDoubleClick"
+                                           AllowSort="true"
+                                           AllowHotTrackRow="true"
+                                           AllowFocusedRow="true"
+                                           @bind-FocusedRow="@FocusedServerB"
+                                           @bind-SelectedItems="@SelectedServersB"
+                                           ShowSearchBox="true"
+                                           SearchBoxNullText="Search in all columns..."
+                                           SearchBoxText=""
+                                           ShowExportButtons="true"
+                                           ExcelExportMode="OutlanderGridExportMode.Data"
+                                           PdfExportMode="OutlanderGridExportMode.Data"
+                                           PrintExportMode="OutlanderGridExportMode.Data"
+                                           ExportFileName="Servers"
+                                           ExportTitle="Servers List"
+                                           SearchBoxParseMode="GridSearchTextParseMode.GroupWordsByAnd"
+                                           PageSize="@PageSize"
+                                           PageSizeChanged="OnPageSizeChanged"
+                                           ShowPageSizeSelector="true"
+                                           ShowColumnChooser="true"
                                            ShowFilterRow="true"
-                                           PageSize="7"
-                                           EmptyText="Servers not found.">
-
+                                           EmptyText="No Records.">
+                                <ToolbarTemplate>
+                                    <div class="d-flex align-items-center gap-2 flex-wrap justify-content-end">
+                                        <button class="btn btn-primary"
+                                                data-bs-toggle="modal"
+                                                data-bs-target="#importServersModal"
+                                                disabled="@(SelectedServersB.Count == 0)">
+                                            <i class="bi bi-download me-2"></i>
+                                            <span>Import @SelectedServersB.Count Selected</span>
+                                        </button>
+                                    </div>
+                                </ToolbarTemplate>
                                 <Columns>
+                                    <OutlanderGridSelectionColumn TItem="ServerItem"
+                                                                  Width="48px"
+                                                                  AllowSelectAllItems="true" />
 
                                     <OutlanderGridDataColumn TItem="ServerItem"
-                                                             FieldName="Name" />
+                                                             FieldName="Name"
+                                                             Caption="Name"
+                                                             AllowFilter="true"
+                                                             AllowSort="true"
+                                                             SortMode="GridColumnSortMode.DisplayText"
+                                                             SortOrder="GridColumnSortOrder.Ascending"
+                                                             SortIndex="1"
+                                                             SortTextSelector="item => item.Name"
+                                                             FilterTextSelector="item => item.Name">
+                                        <FilterTemplate Context="filter">
+                                            <input class="form-control form-control-sm"
+                                                   placeholder="Filter by Name..."
+                                                   value="@filter.Value"
+                                                   @oninput="e => filter.SetValue(e.Value?.ToString())" />
+                                        </FilterTemplate>
+                                        <CellTemplate Context="cell">
+                                            <div class="name-cell">
+                                                @cell.Highlight(cell.Item.Name)
+                                                @if (cell.Item.IsNew)
+                                                {
+                                                    <span class="bg-danger bg-opacity-10 text-danger border border-danger-subtle px-2 py-1 small rounded-pill ms-2">NUEVO</span>
+                                                }
+                                            </div>
+                                        </CellTemplate>
+                                    </OutlanderGridDataColumn>
 
                                     <OutlanderGridDataColumn TItem="ServerItem"
-                                                             FieldName="Provider" />
+                                                             FieldName="Provider"
+                                                             Caption="Provider"
+                                                             AllowFilter="true"
+                                                             AllowSort="true"
+                                                             SortMode="GridColumnSortMode.DisplayText"
+                                                             SortTextSelector="item => item.Provider"
+                                                             FilterTextSelector="item => item.Provider">
+                                        <FilterTemplate Context="filter">
+                                            <select class="form-select form-select-sm"
+                                                    value="@filter.Value"
+                                                    @onchange="e => filter.SetValue(e.Value?.ToString())">
+                                                <option value="">Todos</option>
+                                                <option value="VMware">VMware</option>
+                                                <option value="Alibaba">Alibaba</option>
+                                            </select>
+                                        </FilterTemplate>
+                                        <CellTemplate Context="cell">
+                                            <div class="provider-cell">
+                                                <span class="provider-mini @cell.Item.BootStrapIcon">@cell.Item.Abreviature</span>
+                                                <span>@cell.Highlight(cell.Item.Provider)</span>
+                                            </div>
+                                        </CellTemplate>
+                                    </OutlanderGridDataColumn>
 
                                     <OutlanderGridDataColumn TItem="ServerItem"
-                                                             FieldName="Status" />
+                                                             FieldName="Status"
+                                                             Caption="Status"
+                                                             AllowFilter="true"
+                                                             AllowSort="true"
+                                                             SortMode="GridColumnSortMode.DisplayText"
+                                                             SortTextSelector="item => item.Status"
+                                                             FilterTextSelector="item => item.Status">
+                                        <FilterTemplate Context="filter">
+                                            <select class="form-select form-select-sm"
+                                                    value="@filter.Value"
+                                                    @onchange="e => filter.SetValue(e.Value?.ToString())">
+                                                <option value="">Todos</option>
+                                                <option value="Running">Running</option>
+                                                <option value="Powered Off">Powered Off</option>
+                                            </select>
+                                        </FilterTemplate>
+                                        <CellTemplate Context="cell">
+                                            <div class="status-cell">
+                                                <span class="status-dot @(cell.Item.Status == "Running" ? "status-green" : "status-orange")"></span>
+                                                <span>@cell.Highlight(cell.Item.Status)</span>
+                                            </div>
+                                        </CellTemplate>
+                                    </OutlanderGridDataColumn>
 
                                     <OutlanderGridDataColumn TItem="ServerItem"
-                                                             FieldName="Ip" />
+                                                             FieldName="Ip"
+                                                             Caption="IP"
+                                                             AllowFilter="true"
+                                                             AllowSort="true"
+                                                             FilterTextSelector="item => item.Ip">
+                                        <FilterTemplate Context="filter">
+                                            <input class="form-control form-control-sm"
+                                                   placeholder="IP..."
+                                                   value="@filter.Value"
+                                                   @oninput="e => filter.SetValue(e.Value?.ToString())" />
+                                        </FilterTemplate>
+                                    </OutlanderGridDataColumn>
 
                                     <OutlanderGridDataColumn TItem="ServerItem"
-                                                             FieldName="Cluster" />
+                                                             FieldName="Cluster"
+                                                             Caption="Cluster / Resource"
+                                                             AllowFilter="true"
+                                                             AllowSort="true"
+                                                             SortMode="GridColumnSortMode.DisplayText"
+                                                             SortTextSelector="item => item.Cluster"
+                                                             FilterTextSelector="item => item.Cluster">
+                                        <FilterTemplate Context="filter">
+                                            <input class="form-control form-control-sm"
+                                                   placeholder="Cluster..."
+                                                   value="@filter.Value"
+                                                   @oninput="e => filter.SetValue(e.Value?.ToString())" />
+                                        </FilterTemplate>
+                                    </OutlanderGridDataColumn>
 
                                     <OutlanderGridDataColumn TItem="ServerItem"
-                                                             FieldName="OperatingSystem" />
+                                                             FieldName="OperatingSystem"
+                                                             Caption="Operating System"
+                                                             AllowFilter="true"
+                                                             AllowSort="true"
+                                                             SortMode="GridColumnSortMode.DisplayText"
+                                                             FilterMode="GridFilterMode.Range"
+                                                             SortTextSelector='item => $"{item.Provider}-({item.OperatingSystem})"'
+                                                             FilterTextSelector='item => $"{item.Provider}-({item.OperatingSystem})"'>
+                                        <CellTemplate Context="cell">
+                                            <div class="status-cell">
+                                                <span class="fw-bold">@cell.Highlight(cell.Item.Provider + "-")</span>
+                                                <span>@cell.Highlight(cell.Item.OperatingSystem)</span>
+                                            </div>
+                                        </CellTemplate>
+                                    </OutlanderGridDataColumn>
 
                                     <OutlanderGridDataColumn TItem="ServerItem"
-                                                             FieldName="IsNew" />
+                                                             FieldName="_registered"
+                                                             Caption="Registered"
+                                                             AllowSort="false"
+                                                             FilterTextSelector='item => "No"'>
+                                        <CellTemplate Context="cell">
+                                            <span class="bg-danger bg-opacity-10 border border-danger-subtle fw-normal px-2 py-1 rounded small text-danger">
+                                                @cell.Highlight("No")
+                                            </span>
+                                        </CellTemplate>
+                                    </OutlanderGridDataColumn>
 
                                     <OutlanderGridDataColumn TItem="ServerItem"
-                                                             FieldName="MemoryGb"
-                                                             FilterMode="GridFilterMode.Range" />
-
-                                    <OutlanderGridDataColumn TItem="ServerItem"
-                                                             FieldName="CreatedAt"
-                                                             FilterMode="GridFilterMode.Range" />
+                                                             FieldName="_actions"
+                                                             Caption="Action"
+                                                             AllowFilter="false"
+                                                             AllowSort="false"
+                                                             AllowExport="false"
+                                                             Width="90px">
+                                        <CellTemplate Context="cell">
+                                            <button class="btn btn-default btn-default-sm app-grid-export-ignore">
+                                                <i class="bi bi-download"></i>
+                                            </button>
+                                        </CellTemplate>
+                                    </OutlanderGridDataColumn>
                                 </Columns>
                             </OutlanderGrid>
                         </div>
@@ -243,10 +395,11 @@
                 <div class="card-body">
                     <h5 class="mb-3 fw-bold">Grid Layout</h5>
                     <div class="ol-anatomy">
-                        <div class="ol-anatomy-top">Grid Container</div>
-                        <div class="ol-anatomy-nav">FieldName Columns + Optional Filter Row</div>
-                        <div class="ol-anatomy-middle ol-anatomy-body">Automatic Cell Rendering + Selection/Focus State</div>
-                        <div class="ol-anatomy-footer">Summary + Pagination</div>
+                        <div class="ol-anatomy-top">Primary Toolbar (Page Size / Export / Custom Actions)</div>
+                        <div class="ol-anatomy-nav">Secondary Toolbar (Search / Select Scope / Column Chooser)</div>
+
+                        <div class="ol-anatomy-middle ol-anatomy-body">Grid Surface (Sortable Headers + Filters + Templated Cells)</div>
+                        <div class="ol-anatomy-footer">Footer (Summary + Pagination)</div>
                     </div>
                 </div>
             </div>
@@ -267,28 +420,32 @@
                             </thead>
                             <tbody>
                                 <tr>
-                                    <td><span class="fw-semibold text-primary">FieldName Columns</span></td>
-                                    <td>Maps each column directly to a model property name.</td>
+                                    <td><span class="fw-semibold text-primary">ToolbarTemplate</span></td>
+                                    <td>Injects custom actions such as import/export workflows.</td>
                                 </tr>
                                 <tr>
-                                    <td><span class="fw-semibold text-primary">Auto Filter Editors</span></td>
-                                    <td>Generates built-in filter controls when filtering is enabled.</td>
+                                    <td><span class="fw-semibold text-primary">Selection System</span></td>
+                                    <td>Supports row, current page, and processed-items selection scopes.</td>
                                 </tr>
                                 <tr>
-                                    <td><span class="fw-semibold">Range Filters</span></td>
-                                    <td>Uses <code>GridFilterMode.Range</code> for <code>MemoryGb</code> and <code>CreatedAt</code>.</td>
+                                    <td><span class="fw-semibold">Header Sorting</span></td>
+                                    <td>Sortable headers with visual sort-state indicator.</td>
                                 </tr>
                                 <tr>
-                                    <td><span class="fw-semibold text-success">FocusedRow Binding</span></td>
-                                    <td>Keeps current row context synchronized with page state.</td>
+                                    <td><span class="fw-semibold text-success">Filter Row</span></td>
+                                    <td>Uses custom FilterTemplate or automatic filter UI per column.</td>
                                 </tr>
                                 <tr>
-                                    <td><span class="fw-semibold text-success">SelectedItems Binding</span></td>
-                                    <td>Tracks selected records for downstream bulk operations.</td>
+                                    <td><span class="fw-semibold text-success">CellTemplate</span></td>
+                                    <td>Custom rendering for badges, icons, statuses, and command cells.</td>
                                 </tr>
                                 <tr>
-                                    <td><span class="fw-semibold">EmptyText</span></td>
-                                    <td>Displays a full-width fallback row when no records match.</td>
+                                    <td><span class="fw-semibold text-success">Export Menu</span></td>
+                                    <td>Per-format export actions with configurable visibility and mode.</td>
+                                </tr>
+                                <tr>
+                                    <td><span class="fw-semibold">Column Chooser</span></td>
+                                    <td>Toggles column visibility while preserving at least one visible column.</td>
                                 </tr>
                             </tbody>
                         </table>
@@ -305,14 +462,14 @@
         </div>
 
         <ul class="mb-0">
-            <li><strong>FieldName</strong> property lookup is reflection-based and case-insensitive.</li>
-            <li>Automatic columns are ideal as a baseline; move to templates only when custom UX is needed.</li>
-            <li>Use <strong>GridFilterMode.Range</strong> on numeric/date columns for clearer filtering behavior.</li>
-            <li>Use <strong>@@bind-FocusedRow</strong> and <strong>@@bind-SelectedItems</strong> to externalize grid state.</li>
-            <li>Keep model property names stable—they are the contract for automatic column definitions.</li>
+            <li>Use <strong>@@bind-SelectedItems</strong> and <strong>@@bind-FocusedRow</strong> for full state synchronization.</li>
+            <li>Set <strong>AllowExport="false"</strong> on utility/action columns to keep exported files clean.</li>
+            <li>Use <strong>SortTextSelector</strong> / <strong>FilterTextSelector</strong> when rendered text differs from the raw field value.</li>
+            <li><strong>ShowFilterRow</strong> renders filter editors only for visible columns that allow filtering.</li>
+            <li>Search behavior is controlled by <strong>SearchBoxParseMode</strong> (important for multi-word queries).</li>
+            <li>The grid auto-adjusts current page when total pages change after filtering/searching.</li>
         </ul>
     </div>
-
 </div>
 
 @code {
@@ -340,7 +497,7 @@
         public decimal MemoryGb { get; set; }
     }
 
-    private List<ServerItem> ServersA = new()
+    private List<ServerItem> ServersB = new()
     {
         new() { Name = "vm-prod-01", Provider = "VMware", Status = "Running", Ip = "10.10.10.10", Cluster = "Cluster-Prod", OperatingSystem = "Ubuntu 22.04", IsNew = true, Selected = true, BootStrapIcon = "provider-badge-primary", Abreviature = "vm", CreatedAt = new DateTime(2026, 05, 29), MemoryGb = 16 },
         new() { Name = "vm-prod-01", Provider = "VMware", Status = "Running", Ip = "10.10.10.10", Cluster = "Cluster-Prod", OperatingSystem = "Ubuntu 22.04", IsNew = true, Selected = true, BootStrapIcon = "provider-badge-primary", Abreviature = "vm", CreatedAt = new DateTime(2026, 04, 29), MemoryGb = 20 },
@@ -373,7 +530,29 @@
     };
 
     private ServerItem? FocusedServerA { get; set; }
-    private IList<ServerItem> SelectedServersA { get; set; } = new List<ServerItem>();
+
+    private ServerItem? FocusedServerB { get; set; }
+    private IList<ServerItem> SelectedServersB { get; set; } = new List<ServerItem>();
+
+    private int PageSize = 10;
+
+    private Task OnPageSizeChanged(int value)
+    {
+        PageSize = value;
+        return Task.CompletedTask;
+    }
+
+    private Task OnRowClick(ServerItem item)
+    {
+        Console.WriteLine($"Click en: {item.Name}");
+        return Task.CompletedTask;
+    }
+
+    private Task OnRowDoubleClick(ServerItem item)
+    {
+        Console.WriteLine($"Double click en: {item.Name}");
+        return Task.CompletedTask;
+    }
 
     private async Task CopyCodeAsync(string text, CodeBlockType blockType)
     {
@@ -393,22 +572,22 @@
 
     private string razorCode = """
         <OutlanderGrid TItem="ServerItem"
-                       Items="@ServersA"
-                       @bind-FocusedRow="@FocusedServerA"
-                       @bind-SelectedItems="@SelectedServersA"
+                       Items="@ServersB"
+                       RowClick="OnRowClick"
+                       RowDoubleClick="OnRowDoubleClick"
+                       AllowSort="true"
+                       AllowHotTrackRow="true"
+                       AllowFocusedRow="true"
+                       @bind-FocusedRow="@FocusedServerB"
+                       @bind-SelectedItems="@SelectedServersB"
+                       ShowSearchBox="true"
+                       ShowExportButtons="true"
                        ShowFilterRow="true"
-                       PageSize="7"
-                       EmptyText="Servers not found.">
+                       ShowColumnChooser="true"
+                       PageSize="@PageSize"
+                       PageSizeChanged="OnPageSizeChanged">
             <Columns>
-                <OutlanderGridDataColumn TItem="ServerItem" FieldName="Name" />
-                <OutlanderGridDataColumn TItem="ServerItem" FieldName="Provider" />
-                <OutlanderGridDataColumn TItem="ServerItem" FieldName="Status" />
-                <OutlanderGridDataColumn TItem="ServerItem" FieldName="Ip" />
-                <OutlanderGridDataColumn TItem="ServerItem" FieldName="Cluster" />
-                <OutlanderGridDataColumn TItem="ServerItem" FieldName="OperatingSystem" />
-                <OutlanderGridDataColumn TItem="ServerItem" FieldName="IsNew" />
-                <OutlanderGridDataColumn TItem="ServerItem" FieldName="MemoryGb" FilterMode="GridFilterMode.Range" />
-                <OutlanderGridDataColumn TItem="ServerItem" FieldName="CreatedAt" FilterMode="GridFilterMode.Range" />
+                <!-- Custom columns -->
             </Columns>
         </OutlanderGrid>
     """;
@@ -427,7 +606,7 @@
             public decimal MemoryGb { get; set; }
         }
 
-        private List<ServerItem> ServersA = new()
+        private List<ServerItem> ServersB = new()
         {
             new() { Name = "vm-prod-01", Provider = "VMware", Status = "Running", Ip = "10.10.10.10", Cluster = "Cluster-Prod", OperatingSystem = "Ubuntu 22.04", IsNew = true, Selected = true, BootStrapIcon = "provider-badge-primary", Abreviature = "vm", CreatedAt = new DateTime(2026, 05, 29), MemoryGb = 16 },
             new() { Name = "vm-prod-01", Provider = "VMware", Status = "Running", Ip = "10.10.10.10", Cluster = "Cluster-Prod", OperatingSystem = "Ubuntu 22.04", IsNew = true, Selected = true, BootStrapIcon = "provider-badge-primary", Abreviature = "vm", CreatedAt = new DateTime(2026, 04, 29), MemoryGb = 20 },

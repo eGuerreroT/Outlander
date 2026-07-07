@@ -73,7 +73,7 @@
     background-color: var(--ch-background);
     color: var(--outlander-text-primary) !important;
     padding: 1em;
-    overflow-x: auto;
+    overflow-x: hidden;
     border-radius: 5px;
     font-family: Consolas, Monaco, 'Andale Mono', 'Ubuntu Mono', monospace;
     font-size: 0.9em;
@@ -83,7 +83,7 @@
 }
 
 .code-highlighter-code {
-    white-space: pre;
+    white-space: pre-wrap !important;
 }
 
 .code-highlighter-loading {
