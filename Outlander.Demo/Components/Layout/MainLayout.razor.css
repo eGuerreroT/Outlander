@@ -36,6 +36,14 @@ main {
         text-overflow: ellipsis;
     }
 
+.logo {
+    transition: transform .4s ease-in-out;
+}
+
+    .logo:hover {
+        transform: rotate(-5deg) scale(1.5);
+    }
+
 @media (max-width: 640.98px) {
     .top-row {
         justify-content: space-between;

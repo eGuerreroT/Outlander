@@ -1,25 +1,13 @@
 
-<p align="center">
-  <img src="Assets/Social_Media.png" width="80%" />
-</p>
+![Outlander.Blazor](https://raw.githubusercontent.com/eGuerreroT/Outlander/master/Assets/Social_Media.png)
 
-<h1 align="center">Outlander.Blazor</h1>
+# Outlander Blazor
 
-<h2 align="center">
-  Build Business Applications Faster with Blazor
-</h2>
+## Build Business Applications Faster with Blazor
 
-<p align="center">
-  <a href="https://www.nuget.org/packages/Outlander.Blazor">
-    <img src="https://img.shields.io/nuget/v/Outlander.Blazor.svg" alt="NuGet Version" />
-  </a>
-  <a href="https://www.nuget.org/packages/Outlander.Blazor">
-    <img src="https://img.shields.io/nuget/dt/Outlander.Blazor.svg" alt="NuGet Downloads" />
-  </a>
-  <a href="https://github.com/eGuerreroT/Outlander/blob/master/LICENSE">
-    <img src="https://img.shields.io/github/license/eGuerreroT/Outlander.svg" alt="License" />
-  </a>
-</p>
+[![NuGet Version](https://img.shields.io/nuget/v/Outlander.Blazor.svg)](https://www.nuget.org/packages/Outlander.Blazor)
+[![NuGet Downloads](https://img.shields.io/nuget/dt/Outlander.Blazor.svg)](https://www.nuget.org/packages/Outlander.Blazor)
+[![License](https://img.shields.io/github/license/eGuerreroT/Outlander.svg)](https://github.com/eGuerreroT/Outlander/blob/master/LICENSE)
 
 Outlander.Blazor provides a complete application shell, including responsive navigation, 
 top bars, theme management and enterprise-ready data components, 

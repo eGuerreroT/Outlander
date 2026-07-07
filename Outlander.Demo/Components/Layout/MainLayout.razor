@@ -7,7 +7,8 @@
                           ShowNavMenuToggle="false"
                           BrandText="Outlander Blazor"
                           Groups="NavMenuGroups"
-                          FooterItems="NavMenuFooterItems" />
+                          FooterItems="NavMenuFooterItems"
+                          BrandContent="@BrandIcon" />
     </NavMenu>
 
     <TopMenu>
@@ -51,6 +52,8 @@
     private Task OpenDocs() => Task.CompletedTask;
     private Task ShowNotifications() => Task.CompletedTask;
     private Task OpenProfile() => Task.CompletedTask;
+
+    RenderFragment BrandIcon => @<img class="img-fluid logo" src="Icon.png" />;
 
     protected override void OnInitialized()
     {
