@@ -4,7 +4,7 @@
 # Outlander Blazor
 
 ## Build Business Applications Faster with Blazor
-
+![TFMs](https://img.shields.io/badge/TFMs-net8.0%20%7C%20net9.0%20%7C%20net10.0-blue)
 [![NuGet Version](https://img.shields.io/nuget/v/Outlander.Blazor.svg)](https://www.nuget.org/packages/Outlander.Blazor)
 [![NuGet Downloads](https://img.shields.io/nuget/dt/Outlander.Blazor.svg)](https://www.nuget.org/packages/Outlander.Blazor)
 [![License](https://img.shields.io/github/license/eGuerreroT/Outlander.svg)](https://github.com/eGuerreroT/Outlander/blob/master/LICENSE)

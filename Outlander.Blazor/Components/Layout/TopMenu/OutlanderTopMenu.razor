@@ -60,8 +60,14 @@
                             title="@item.Title"
                             @onclick="item.OnClick">
                         <span class="d-inline-flex align-items-center gap-2">
-                            <i class="bi @item.Icon"></i>
-                            <span>@item.Title</span>
+                            @if (!string.IsNullOrWhiteSpace(item.Icon))
+                            {
+                                <i class="bi @item.Icon"></i>
+                            }
+                            @if (!string.IsNullOrWhiteSpace(item.Title))
+                            {
+                                <span>@item.Title</span>
+                            }
                         </span>
 
                         @if (!string.IsNullOrWhiteSpace(item.BadgeText))

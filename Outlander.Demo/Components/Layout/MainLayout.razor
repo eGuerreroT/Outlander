@@ -1,5 +1,7 @@
 ﻿@inherits LayoutComponentBase
 
+@inject IJSRuntime JS
+
 <OutlanderLayout>
     <NavMenu>
         <OutlanderNavMenu @bind-MobileMenuOpen="mobileMenuOpen"
@@ -17,8 +19,30 @@
                           ShowNavMenuToggle="true"
                           ShowThemeSelector="true"
                           CollapseActionsToOffcanvasOnMobile="true"
-                          IncludeLeftContentInMobileOffcanvas="false"
-                          ActionItems="TopActions" />
+                          IncludeLeftContentInMobileOffcanvas="false">
+
+            <RightContent>
+                <button class="outlander-icon-btn btn outlander-btn-default"
+                        title="GitHub"
+                        @onclick="OpenGitHub">
+                    <span class="d-inline-flex align-items-center gap-2">
+                        <i class="bi bi-github"></i>
+                        <span>GitHub</span>
+                    </span>
+
+                </button>
+
+                <button class="outlander-icon-btn btn outlander-btn-default"
+                        title="Nuget"
+                        @onclick="OpenNuget">
+                    <span class="d-inline-flex align-items-center gap-2">
+                        <img class="ico-nuget" src="https://avatars.githubusercontent.com/u/968310?s=48&v=4" height="16" />
+                        <span>Nuget</span>
+                    </span>
+
+                </button>
+            </RightContent>
+        </OutlanderTopMenu>
     </TopMenu>
 
     <Body>
@@ -30,7 +54,10 @@
             © 2026 My Outlander Company
         </span>
         <span>
-            Outlander.Blazor v1.0.1
+            <img src="https://img.shields.io/badge/TFMs-net8.0%20%7C%20net9.0%20%7C%20net10.0-blue" />
+            <img src="https://img.shields.io/nuget/v/Outlander.Blazor.svg" />
+            <img src="https://img.shields.io/nuget/dt/Outlander.Blazor.svg" />
+            <img src="https://img.shields.io/github/license/eGuerreroT/Outlander.svg" />
         </span>
     </Footer>
 </OutlanderLayout>
@@ -45,10 +72,11 @@
     private bool mobileMenuOpen;
     private bool navMenuCollapsed;
 
-    private List<OutlanderTopMenuActionItem> TopActions = [];
     private List<OutlanderNavMenuMenuGroup> NavMenuGroups = [];
     private List<OutlanderNavMenuItem> NavMenuFooterItems = [];
 
+    private async Task OpenGitHub() => await JS.InvokeVoidAsync("open", "https://github.com/eGuerreroT/Outlander", "_blank");
+    private async Task OpenNuget() => await JS.InvokeVoidAsync("open", "https://www.nuget.org/packages/Outlander.Blazor", "_blank");
     private Task OpenDocs() => Task.CompletedTask;
     private Task ShowNotifications() => Task.CompletedTask;
     private Task OpenProfile() => Task.CompletedTask;
@@ -57,30 +85,6 @@
 
     protected override void OnInitialized()
     {
-        TopActions =
-        [
-            new OutlanderTopMenuActionItem
-            {
-                Title = "Docs",
-                Icon = "bi-journal-text",
-                OnClick = EventCallback.Factory.Create(this, OpenDocs)
-            },
-            new OutlanderTopMenuActionItem
-            {
-                Title = "Notificaciones",
-                Icon = "bi-bell",
-                BadgeText = "3",
-                OnClick = EventCallback.Factory.Create(this, ShowNotifications)
-            },
-            new OutlanderTopMenuActionItem
-            {
-                Title = "Usuario",
-                Icon = "bi-person-circle",
-                OnClick = EventCallback.Factory.Create(this, OpenProfile),
-                KeepVisibleOnMobile = true
-            }
-        ];
-
         NavMenuGroups =
         [
             new OutlanderNavMenuMenuGroup
