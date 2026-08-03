@@ -13,9 +13,7 @@ public partial class OutlanderGrid<TItem>
             var end = Math.Min(TotalPages, start + maxVisiblePages - 1);
 
             if ((end - start + 1) < maxVisiblePages)
-            {
                 start = Math.Max(1, end - maxVisiblePages + 1);
-            }
 
             return Enumerable.Range(start, end - start + 1);
         }
@@ -23,35 +21,48 @@ public partial class OutlanderGrid<TItem>
 
     private async Task HandlePageSizeChanged(ChangeEventArgs e)
     {
-        if (int.TryParse(e.Value?.ToString(), out var newSize))
-        {
-            PageSize = newSize;
-            CurrentPage = 1;
-            await PageSizeChanged.InvokeAsync(newSize);
-        }
+        if (!int.TryParse(e.Value?.ToString(), out var newSize))
+            return;
+
+        PageSize = newSize;
+        CurrentPage = 1;
+
+        await PageSizeChanged.InvokeAsync(newSize);
+
+        if (IsServerMode)
+            await LoadServerDataAsync();
     }
 
-    private void PreviousPage()
+    private async Task PreviousPageAsync()
     {
-        if (!IsFirstPage)
-        {
-            CurrentPage--;
-        }
+        if (IsFirstPage)
+            return;
+
+        CurrentPage--;
+
+        if (IsServerMode)
+            await LoadServerDataAsync();
     }
 
-    private void NextPage()
+    private async Task NextPageAsync()
     {
-        if (!IsLastPage)
-        {
-            CurrentPage++;
-        }
+        if (IsLastPage)
+            return;
+
+        CurrentPage++;
+
+        if (IsServerMode)
+            await LoadServerDataAsync();
     }
 
-    private void GoToPage(int page)
+    private async Task GoToPageAsync(int page)
     {
-        if (page >= 1 && page <= TotalPages)
-        {
-            CurrentPage = page;
-        }
+        if (page < 1 || page > TotalPages)
+            return;
+
+        CurrentPage = page;
+
+        if (IsServerMode)
+            await LoadServerDataAsync();
     }
 }

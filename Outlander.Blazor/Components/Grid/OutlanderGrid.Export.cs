@@ -7,9 +7,34 @@ public partial class OutlanderGrid<TItem>
     private IReadOnlyList<OutlanderGridColumnDefinition<TItem>> ExportableColumns =>
         [.. VisibleColumnsDefinition.Where(c => c.AllowExport && !c.IsSelectionColumn)];
 
-    private IEnumerable<TItem> GetExportItems()
+    private async Task<IEnumerable<TItem>> GetExportItemsAsync()
     {
-        return ProcessedItems;
+        if (!IsServerMode)
+            return ProcessedItems;
+
+        if (ResolvedServerExportScope == OutlanderGridExportScope.CurrentPage)
+            return PagedItems;
+
+        // AllFiltered in server mode
+        if (OnReadExport is null)
+            return PagedItems;
+
+        var request = new OutlanderGridExportRequest
+        {
+            SearchText = SearchBoxText ?? string.Empty,
+            SortField = _sortFieldName,
+            SortOrder = _sortOrder,
+            Filters = _filters.ToDictionary(
+                x => x.Key,
+                x => new OutlanderGridFilterValue
+                {
+                    Value = x.Value.Value,
+                    ValueTo = x.Value.ValueTo
+                })
+        };
+
+        var rows = await OnReadExport(request);
+        return rows ?? Array.Empty<TItem>();
     }
 
     private object? GetExportValue(TItem item, OutlanderGridColumnDefinition<TItem> column)
@@ -54,10 +79,10 @@ public partial class OutlanderGrid<TItem>
         return [.. ExportableColumns.Select(GetExportHeader)];
     }
 
-    private List<List<string>> BuildExportRows()
+    private async Task<List<List<string>>> BuildExportRowsAsync()
     {
         var columns = ExportableColumns;
-        var items = GetExportItems();
+        var items = await GetExportItemsAsync();
 
         var rows = new List<List<string>>();
 
@@ -88,7 +113,7 @@ public partial class OutlanderGrid<TItem>
             default:
                 {
                     var headers = BuildExportHeaders();
-                    var rows = BuildExportRows();
+                    var rows = await BuildExportRowsAsync();
 
                     await _module.InvokeVoidAsync(
                         "exportExcel",
@@ -104,7 +129,7 @@ public partial class OutlanderGrid<TItem>
                 {
                     // Por ahora usamos Data también, hasta tener una estrategia WYSIWYG real para Excel.
                     var headers = BuildExportHeaders();
-                    var rows = BuildExportRows();
+                    var rows = await BuildExportRowsAsync();
 
                     await _module.InvokeVoidAsync(
                         "exportExcel",
@@ -140,7 +165,7 @@ public partial class OutlanderGrid<TItem>
             default:
                 {
                     var headers = BuildExportHeaders();
-                    var rows = BuildExportRows();
+                    var rows = await BuildExportRowsAsync();
 
                     await _module.InvokeVoidAsync(
                         "exportPdf",
@@ -175,7 +200,7 @@ public partial class OutlanderGrid<TItem>
             default:
                 {
                     var headers = BuildExportHeaders();
-                    var rows = BuildExportRows();
+                    var rows = await BuildExportRowsAsync();
 
                     await _module.InvokeVoidAsync(
                         "printGrid",

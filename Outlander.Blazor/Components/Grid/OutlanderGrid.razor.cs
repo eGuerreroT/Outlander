@@ -24,6 +24,11 @@ public partial class OutlanderGrid<TItem> : IAsyncDisposable
 
     private int CurrentPage { get; set; } = 1;
 
+    // Server-side state
+    private IReadOnlyList<TItem> _serverItems = Array.Empty<TItem>();
+    private int _serverTotalCount;
+    private bool _isLoadingServerData;
+
     private IReadOnlyList<OutlanderGridColumnDefinition<TItem>> AllColumnsDefinition => _columns;
     private IReadOnlyList<OutlanderGridColumnDefinition<TItem>> VisibleColumnsDefinition => [.. _columns.Where(c => c.Visible)];
     private int ResolvedColumnCount => Math.Max(1, VisibleColumnsDefinition.Count);
@@ -33,9 +38,19 @@ public partial class OutlanderGrid<TItem> : IAsyncDisposable
 
     private bool IsRowInteractive => AllowFocusedRow || AllowHotTrackRow || RowClick.HasDelegate || RowDoubleClick.HasDelegate;
 
-    private IEnumerable<TItem> ProcessedItems => ApplySorting(ApplyGlobalSearch(ApplyFilters(Items)));
-    private int TotalItems => ProcessedItems.Count();
-    private IEnumerable<TItem> PagedItems => ProcessedItems.Skip((CurrentPage - 1) * PageSize).Take(PageSize);
+    private bool IsServerMode => DataMode == OutlanderGridDataMode.Server;
+
+
+    // Client-side processing pipeline
+    private IEnumerable<TItem> ClientProcessedItems => ApplySorting(ApplyGlobalSearch(ApplyFilters(Items)));
+
+    // Unified views
+    private IEnumerable<TItem> ProcessedItems => IsServerMode ? _serverItems : ClientProcessedItems;
+    private int TotalItems => IsServerMode ? _serverTotalCount : ClientProcessedItems.Count();
+    private IEnumerable<TItem> PagedItems => IsServerMode
+        ? _serverItems
+        : ClientProcessedItems.Skip((CurrentPage - 1) * PageSize).Take(PageSize);
+
     private int TotalPages => Math.Max(1, (int)Math.Ceiling(TotalItems / (double)PageSize));
     private bool IsFirstPage => CurrentPage <= 1;
     private bool IsLastPage => CurrentPage >= TotalPages;
@@ -89,9 +104,23 @@ public partial class OutlanderGrid<TItem> : IAsyncDisposable
 
     /// <summary>
     /// Gets or sets the collection of items rendered by the grid.
+    /// In <see cref="OutlanderGridDataMode.Server"/>, this parameter is optional.
     /// </summary>
-    [Parameter, EditorRequired]
+    [Parameter]
     public IEnumerable<TItem> Items { get; set; } = [];
+
+    /// <summary>
+    /// Gets or sets how the grid obtains and processes data.
+    /// </summary>
+    [Parameter]
+    public OutlanderGridDataMode DataMode { get; set; } = OutlanderGridDataMode.Client;
+
+    /// <summary>
+    /// Gets or sets the callback used to retrieve paged data when
+    /// <see cref="DataMode"/> is <see cref="OutlanderGridDataMode.Server"/>.
+    /// </summary>
+    [Parameter]
+    public Func<OutlanderGridDataRequest, Task<OutlanderGridDataResult<TItem>>>? OnRead { get; set; }
 
     /// <summary>
     /// Gets or sets the child column definitions declared inside the grid.
@@ -411,6 +440,20 @@ public partial class OutlanderGrid<TItem> : IAsyncDisposable
     [Parameter]
     public string NextPageText { get; set; } = "Next";
 
+    private OutlanderGridExportScope ResolvedServerExportScope => _exportSettings?.ServerExportScope ?? ServerExportScope;
+
+    /// <summary>
+    /// Gets or sets which scope is exported when using server-side mode.
+    /// </summary>
+    [Parameter]
+    public OutlanderGridExportScope ServerExportScope { get; set; } = OutlanderGridExportScope.CurrentPage;
+
+    /// <summary>
+    /// Gets or sets the callback used to retrieve all filtered rows for export in server-side mode.
+    /// </summary>
+    [Parameter]
+    public Func<OutlanderGridExportRequest, Task<IReadOnlyList<TItem>>>? OnReadExport { get; set; }
+
     protected override async Task OnAfterRenderAsync(bool firstRender)
     {
         if (firstRender)
@@ -418,6 +461,12 @@ public partial class OutlanderGrid<TItem> : IAsyncDisposable
             _module = await JS.InvokeAsync<IJSObjectReference>("import", "/_content/Outlander.Blazor/Components/Grid/OutlanderGrid.razor.js");
 
             await _module.InvokeVoidAsync("ensureBootStrapLibraries");
+
+            if (IsServerMode)
+            {
+                await LoadServerDataAsync();
+                await InvokeAsync(StateHasChanged);
+            }
         }
 
         await UpdateSelectionCheckboxStatesAsync();
@@ -425,9 +474,49 @@ public partial class OutlanderGrid<TItem> : IAsyncDisposable
 
     protected override void OnParametersSet()
     {
+        if (IsServerMode && OnRead is null)
+            throw new InvalidOperationException("When DataMode is Server, OnRead must be provided.");
+
         if (CurrentPage > TotalPages)
-        {
             CurrentPage = TotalPages;
+    }
+
+    private async Task LoadServerDataAsync()
+    {
+        if (!IsServerMode || OnRead is null || _isLoadingServerData)
+            return;
+
+        _isLoadingServerData = true;
+
+        try
+        {
+            var request = new OutlanderGridDataRequest
+            {
+                Page = CurrentPage,
+                PageSize = PageSize,
+                SearchText = SearchBoxText ?? string.Empty,
+                SortField = _sortFieldName,
+                SortOrder = _sortOrder,
+                Filters = _filters.ToDictionary(
+                    x => x.Key,
+                    x => new OutlanderGridFilterValue
+                    {
+                        Value = x.Value.Value,
+                        ValueTo = x.Value.ValueTo
+                    })
+            };
+
+            var result = await OnRead(request) ?? new OutlanderGridDataResult<TItem>();
+
+            _serverItems = result.Items ?? Array.Empty<TItem>();
+            _serverTotalCount = Math.Max(0, result.TotalCount);
+
+            if (CurrentPage > TotalPages)
+                CurrentPage = TotalPages;
+        }
+        finally
+        {
+            _isLoadingServerData = false;
         }
     }
 
@@ -507,6 +596,20 @@ public partial class OutlanderGrid<TItem> : IAsyncDisposable
     {
         var prop = typeof(TItem).GetProperty(fieldName, BindingFlags.Public | BindingFlags.Instance | BindingFlags.IgnoreCase);
         return prop?.GetValue(item);
+    }
+
+    /// <summary>
+    /// Reloads grid data. In server mode it re-queries the data provider.
+    /// In client mode it simply refreshes the UI.
+    /// </summary>
+    public async Task RefreshAsync()
+    {
+        if (IsServerMode)
+        {
+            await LoadServerDataAsync();
+        }
+
+        await InvokeAsync(StateHasChanged);
     }
 
     public async ValueTask DisposeAsync()

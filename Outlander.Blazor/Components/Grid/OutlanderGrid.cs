@@ -117,6 +117,11 @@ public class OutlanderGridColumnDefinition<TItem>
     /// Gets or sets a custom cell template for the column.
     /// </summary>
     public RenderFragment<OutlanderGridCellContext<TItem>>? CellTemplate { get; set; }
+
+    /// <summary>
+    /// Gets or sets which scope is exported when using server-side mode.
+    /// </summary>
+    public OutlanderGridExportScope ServerExportScope { get; set; } = OutlanderGridExportScope.CurrentPage;
 }
 
 /// <summary>
@@ -435,6 +440,13 @@ public class OutlanderGridExportSettingsDefinition
     /// Gets or sets the text displayed for the print export action.
     /// </summary>
     public string PrintText { get; set; } = "Print";
+
+
+    /// <summary>
+    /// Gets or sets which scope is exported when using server-side mode.
+    /// </summary>
+    public OutlanderGridExportScope ServerExportScope { get; set; } = OutlanderGridExportScope.CurrentPage;
+
 }
 
 /// <summary>

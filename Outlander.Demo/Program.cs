@@ -1,3 +1,5 @@
+using Microsoft.EntityFrameworkCore;
+using Outlander.Demo.Data;
 using Outlander.Blazor.Extensions;
 using Outlander.Demo.Components;
 
@@ -9,7 +11,16 @@ builder.Services.AddRazorComponents()
 
 builder.Services.AddOutlander();
 
+builder.Services.AddDbContext<DemoDbContext>(options =>
+    options.UseInMemoryDatabase("OutlanderDemoDb"));
+
 var app = builder.Build();
+
+using (var scope = app.Services.CreateScope())
+{
+    var db = scope.ServiceProvider.GetRequiredService<DemoDbContext>();
+    DemoDataSeeder.Seed(db);
+}
 
 // Configure the HTTP request pipeline.
 if (!app.Environment.IsDevelopment())

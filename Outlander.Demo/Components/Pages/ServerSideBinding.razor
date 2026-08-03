@@ -1,0 +1,721 @@
+﻿@page "/server-side-binding"
+@using Outlander.Demo.LanguageDefinitions
+@using Outlander.Demo.Data
+@using Microsoft.EntityFrameworkCore
+@inject IJSRuntime JS
+@inject DemoDbContext Db
+
+<PageTitle>Server-side Binding</PageTitle>
+
+<div class="ol-doc-page">
+
+    <div class="row g-4 align-items-start">
+        <div class="col-xl-8">
+            <div class="mb-4">
+                <div class="d-flex align-items-center gap-3 flex-wrap mb-3">
+                    <h1 class="mb-0">OutlanderGrid</h1>
+                    <span class="bg-body-tertiary btn outlander-btn-default btn-sm rounded-pill">Server-side Binding</span>
+                </div>
+
+                <p class="lead text-body-secondary mb-4">
+                    Enterprise-ready grid processing with server-side paging, filtering, sorting, search and export.
+                </p>
+
+                <p class="mb-2">
+                    This demo uses <code>DataMode="Server"</code>, <code>OnRead</code>, <code>OnReadExport</code>
+                    and <code>RefreshAsync()</code> to support large datasets efficiently.
+                </p>
+                <p class="mb-4">
+                    UI interactions are translated into request objects and only the needed slice of data is returned.
+                </p>
+
+                <div class="row g-3">
+                    <div class="col-sm-6 col-lg-3">
+                        <div class="ol-region-pill">
+                            <div class="ol-region-icon"><i class="bi bi-database"></i></div>
+                            <div>
+                                <div class="fw-semibold">Server Paging</div>
+                                <small class="text-body-secondary">Only requested rows are loaded</small>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-sm-6 col-lg-3">
+                        <div class="ol-region-pill">
+                            <div class="ol-region-icon"><i class="bi bi-funnel"></i></div>
+                            <div>
+                                <div class="fw-semibold">Server Filters</div>
+                                <small class="text-body-secondary">Filter state sent to provider</small>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-sm-6 col-lg-3">
+                        <div class="ol-region-pill">
+                            <div class="ol-region-icon"><i class="bi bi-arrow-down-up"></i></div>
+                            <div>
+                                <div class="fw-semibold">Server Sort</div>
+                                <small class="text-body-secondary">Sort by requested column/order</small>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-sm-6 col-lg-3">
+                        <div class="ol-region-pill">
+                            <div class="ol-region-icon"><i class="bi bi-download"></i></div>
+                            <div>
+                                <div class="fw-semibold">Export Scope</div>
+                                <small class="text-body-secondary">Current page or all filtered rows</small>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-xl-4">
+            <div class="card ol-side-card">
+                <div class="card-body">
+                    <h5 class="mb-3">Key Features</h5>
+                    <ul class="list-unstyled mb-0 ol-feature-list">
+                        <li><i class="bi bi-check-circle-fill"></i> DataMode.Server with strongly typed request/response</li>
+                        <li><i class="bi bi-check-circle-fill"></i> Real server paging (skip/take)</li>
+                        <li><i class="bi bi-check-circle-fill"></i> Search/filter/sort criteria sent to callback</li>
+                        <li><i class="bi bi-check-circle-fill"></i> RefreshAsync() for manual reloads</li>
+                        <li><i class="bi bi-check-circle-fill"></i> Export scope per server mode strategy</li>
+                        <li><i class="bi bi-check-circle-fill"></i> Compatible with page size selector and summaries</li>
+                        <li><i class="bi bi-check-circle-fill"></i> Clean baseline for API/EF Core integration</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="border-0 card mt-4 shadow-none">
+        <div class="bg-transparent border-0 card-header pb-0">
+            <ul class="nav ol-doc-tabs" id="gridServerTabs" role="tablist">
+                <li class="nav-item" role="presentation">
+                    <button class="nav-link ol-doc-tab active"
+                            id="preview-tab"
+                            data-bs-toggle="tab"
+                            data-bs-target="#preview-tab-pane"
+                            type="button"
+                            role="tab"
+                            aria-controls="preview-tab-pane"
+                            aria-selected="true">
+                        Preview
+                    </button>
+                </li>
+                <li class="nav-item" role="presentation">
+                    <button class="nav-link ol-doc-tab"
+                            id="razor-tab"
+                            data-bs-toggle="tab"
+                            data-bs-target="#razor-tab-pane"
+                            type="button"
+                            role="tab"
+                            aria-controls="razor-tab-pane"
+                            aria-selected="false">
+                        Razor
+                    </button>
+                </li>
+                <li class="nav-item" role="presentation">
+                    <button class="nav-link ol-doc-tab"
+                            id="csharp-tab"
+                            data-bs-toggle="tab"
+                            data-bs-target="#csharp-tab-pane"
+                            type="button"
+                            role="tab"
+                            aria-controls="csharp-tab-pane"
+                            aria-selected="false">
+                        C#
+                    </button>
+                </li>
+            </ul>
+        </div>
+
+        <div class="outlander-border card-body rounded">
+            <div class="tab-content" id="gridServerTabsContent">
+
+                <div class="tab-pane fade show active"
+                     id="preview-tab-pane"
+                     role="tabpanel"
+                     aria-labelledby="preview-tab"
+                     tabindex="0">
+
+                    <div class="ol-tags-preview">
+                        <div class="ol-tags-preview-toolbar">
+                            <div class="fw-semibold">Grid with server-side data processing</div>
+                            <span class="bg-danger-subtle border border-danger-subtle text-danger-emphasis rounded-pill px-2 d-inline-flex gap-2 align-items-center">
+                                <span class="badge-dot bg-success bg-gradient"></span>Interactive Preview
+                            </span>
+                        </div>
+
+                        <div class="ol-tags-preview-body">
+                            <OutlanderGrid TItem="ServerItem"
+                                           @ref="gridRef"
+                                           DataMode="OutlanderGridDataMode.Server"
+                                           OnRead="LoadServersAsync"
+                                           OnReadExport="LoadServersForExportAsync"
+                                           ServerExportScope="@SelectedExportScope"
+                                           AllowSort="true"
+                                           ShowSearchBox="true"
+                                           SearchBoxNullText="Search in all columns..."
+                                           ShowExportButtons="true"
+                                           ExcelExportMode="OutlanderGridExportMode.Data"
+                                           PdfExportMode="OutlanderGridExportMode.Data"
+                                           PrintExportMode="OutlanderGridExportMode.Data"
+                                           ExportFileName="Servers-ServerMode"
+                                           ExportTitle="Servers Server-side List"
+                                           SearchBoxParseMode="GridSearchTextParseMode.GroupWordsByAnd"
+                                           PageSize="@PageSize"
+                                           PageSizeChanged="OnPageSizeChanged"
+                                           ShowPageSizeSelector="true"
+                                           ShowColumnChooser="true"
+                                           ShowFilterRow="true"
+                                           EmptyText="No Records.">
+
+                                <ToolbarTemplate>
+                                    <div class="d-flex align-items-center gap-2 flex-wrap justify-content-end">
+                                        <select class="form-select form-select-sm w-auto"
+                                                value="@SelectedExportScope"
+                                                @onchange="OnExportScopeChanged">
+                                            <option value="@OutlanderGridExportScope.CurrentPage">Export Current Page</option>
+                                            <option value="@OutlanderGridExportScope.AllFiltered">Export All Filtered</option>
+                                        </select>
+
+                                        <button class="btn btn-primary"
+                                                @onclick="RefreshGridAsync">
+                                            <i class="bi bi-arrow-clockwise me-2"></i>Refresh
+                                        </button>
+                                    </div>
+                                </ToolbarTemplate>
+
+                                <Columns>
+                                    <OutlanderGridDataColumn TItem="ServerItem" FieldName="Name" AllowSort="true" />
+                                    <OutlanderGridDataColumn TItem="ServerItem" FieldName="Provider" AllowSort="true" />
+                                    <OutlanderGridDataColumn TItem="ServerItem" FieldName="Status" AllowSort="true" />
+                                    <OutlanderGridDataColumn TItem="ServerItem" FieldName="Ip" AllowSort="true" />
+                                    <OutlanderGridDataColumn TItem="ServerItem" FieldName="Cluster" AllowSort="true" />
+                                    <OutlanderGridDataColumn TItem="ServerItem" FieldName="OperatingSystem" AllowSort="true" />
+                                    <OutlanderGridDataColumn TItem="ServerItem" FieldName="MemoryGb" FilterMode="GridFilterMode.Range" AllowSort="true" />
+                                    <OutlanderGridDataColumn TItem="ServerItem" FieldName="CreatedAt" FilterMode="GridFilterMode.Date" AllowSort="true" />
+                                </Columns>
+                            </OutlanderGrid>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="tab-pane fade"
+                     id="razor-tab-pane"
+                     role="tabpanel"
+                     aria-labelledby="razor-tab"
+                     tabindex="0">
+
+                    <div class="ol-code-card">
+                        <div class="ol-code-card-body">
+                            <button class="btn btn-sm ol-copy-btn @(copiedBlock == CodeBlockType.Razor ? "copied" : null)"
+                                    @onclick="() => CopyCodeAsync(razorCode, CodeBlockType.Razor)">
+                                <i class="bi @(copiedBlock == CodeBlockType.Razor ? "bi-check2" : "bi-copy") me-1"></i>
+                                @(copiedBlock == CodeBlockType.Razor ? "Copied" : "Copy")
+                            </button>
+
+                            <CodeHighlighter Content="@razorCode"
+                                             LanguageDefinition="@(new OutlanderRazorLanguageDefinition())" />
+                        </div>
+                    </div>
+                </div>
+
+                <div class="tab-pane fade"
+                     id="csharp-tab-pane"
+                     role="tabpanel"
+                     aria-labelledby="csharp-tab"
+                     tabindex="0">
+
+                    <div class="ol-code-card">
+                        <div class="ol-code-card-body">
+                            <button class="btn btn-sm ol-copy-btn @(copiedBlock == CodeBlockType.CSharp ? "copied" : null)"
+                                    @onclick="() => CopyCodeAsync(csharpCode, CodeBlockType.CSharp)">
+                                <i class="bi @(copiedBlock == CodeBlockType.CSharp ? "bi-check2" : "bi-copy") me-1"></i>
+                                @(copiedBlock == CodeBlockType.CSharp ? "Copied" : "Copy")
+                            </button>
+
+                            <CodeHighlighter Content="@csharpCode"
+                                             LanguageDefinition="@(new OutlanderCSharpLanguageDefinition())" />
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+    <div class="row g-4 mt-1">
+        <div class="col-lg-6">
+            <div class="card h-100">
+                <div class="card-body">
+                    <h5 class="mb-3 fw-bold">Grid Layout</h5>
+                    <div class="ol-anatomy">
+                        <div class="ol-anatomy-top">Primary Toolbar (Export Scope + Refresh)</div>
+                        <div class="ol-anatomy-nav">Secondary Toolbar (Search / Page Size / Column Chooser / Filters)</div>
+                        <div class="ol-anatomy-middle ol-anatomy-body">Server-driven Data Surface (OnRead)</div>
+                        <div class="ol-anatomy-footer">Summary + Pagination (TotalCount-based)</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-lg-6">
+            <div class="card h-100">
+                <div class="card-body">
+                    <h5 class="mb-3 fw-bold">Main Elements</h5>
+
+                    <div class="table-responsive ol-rounded-table">
+                        <table class="table align-middle mb-0">
+                            <thead>
+                                <tr>
+                                    <th scope="col" class="bg-secondary-subtle">Element</th>
+                                    <th scope="col" class="bg-secondary-subtle">Description</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td><span class="fw-semibold text-primary">DataMode.Server</span></td>
+                                    <td>Delegates filtering/search/sorting/paging to the callback provider.</td>
+                                </tr>
+                                <tr>
+                                    <td><span class="fw-semibold text-primary">OnRead</span></td>
+                                    <td>Returns requested page items plus the filtered total count.</td>
+                                </tr>
+                                <tr>
+                                    <td><span class="fw-semibold">RefreshAsync()</span></td>
+                                    <td>Forces manual data reload after external operations.</td>
+                                </tr>
+                                <tr>
+                                    <td><span class="fw-semibold text-success">OnReadExport</span></td>
+                                    <td>Retrieves all rows used by export according to active criteria.</td>
+                                </tr>
+                                <tr>
+                                    <td><span class="fw-semibold text-success">ServerExportScope</span></td>
+                                    <td>Switch between current page export and all filtered export.</td>
+                                </tr>
+                                <tr>
+                                    <td><span class="fw-semibold">TotalCount</span></td>
+                                    <td>Drives page count and footer summary values.</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="alert alert-warning mt-4">
+        <div class="d-flex align-items-center gap-2 mb-3">
+            <i class="bi bi-info-circle text-warning"></i>
+            <h5 class="mb-0">Notes</h5>
+        </div>
+
+        <ul class="mb-0">
+            <li>In <strong>Server mode</strong>, the provider callback is the source of truth for query operations.</li>
+            <li>Always return accurate <strong>TotalCount</strong> for stable pager behavior.</li>
+            <li>Use <strong>OnReadExport</strong> to export all filtered rows without loading everything in the grid page.</li>
+            <li><strong>RefreshAsync()</strong> is useful after imports, sync jobs or external updates.</li>
+            <li>For real APIs/DBs, apply limits and timeouts for massive exports.</li>
+        </ul>
+    </div>
+
+</div>
+
+@code {
+    private CodeBlockType? copiedBlock;
+    private OutlanderGrid<ServerItem>? gridRef;
+
+    private enum CodeBlockType
+    {
+        Razor,
+        CSharp
+    }
+
+    public class ServerItem
+    {
+        public string Name { get; set; } = string.Empty;
+        public string Provider { get; set; } = string.Empty;
+        public string Status { get; set; } = string.Empty;
+        public string Ip { get; set; } = string.Empty;
+        public string Cluster { get; set; } = string.Empty;
+        public string OperatingSystem { get; set; } = string.Empty;
+        public DateTime CreatedAt { get; set; }
+        public decimal MemoryGb { get; set; }
+    }
+
+    private int PageSize = 10;
+    private OutlanderGridExportScope SelectedExportScope = OutlanderGridExportScope.CurrentPage;
+
+    private readonly List<ServerItem> Source = new();
+
+    protected override void OnInitialized()
+    {
+        var providers = new[] { "VMware", "Alibaba", "AWS", "Azure" };
+        var status = new[] { "Running", "Powered Off", "Maintenance" };
+        var os = new[] { "Ubuntu 22.04", "RHEL 8.6", "Debian 11", "Windows Server 2022" };
+        var clusters = new[] { "Cluster-Prod", "Cluster-Apps", "Cluster-Web", "Cluster-Test" };
+
+        var rng = new Random(2026);
+
+        for (var i = 1; i <= 1500; i++)
+        {
+            Source.Add(new ServerItem
+            {
+                Name = $"vm-{i:0000}",
+                Provider = providers[rng.Next(providers.Length)],
+                Status = status[rng.Next(status.Length)],
+                Ip = $"10.10.{rng.Next(1, 255)}.{rng.Next(1, 255)}",
+                Cluster = clusters[rng.Next(clusters.Length)],
+                OperatingSystem = os[rng.Next(os.Length)],
+                CreatedAt = DateTime.Today.AddDays(-rng.Next(0, 900)),
+                MemoryGb = rng.Next(4, 257)
+            });
+        }
+    }
+
+    private Task OnPageSizeChanged(int value)
+    {
+        PageSize = value;
+        return Task.CompletedTask;
+    }
+
+    private Task OnExportScopeChanged(ChangeEventArgs e)
+    {
+        if (Enum.TryParse<OutlanderGridExportScope>(e.Value?.ToString(), out var scope))
+            SelectedExportScope = scope;
+
+        return Task.CompletedTask;
+    }
+
+    private async Task RefreshGridAsync()
+    {
+        if (gridRef is not null)
+            await gridRef.RefreshAsync();
+    }
+
+    private async Task<OutlanderGridDataResult<ServerItem>> LoadServersAsync(OutlanderGridDataRequest request)
+    {
+        IQueryable<ServerEntity> query = Db.Servers.AsNoTracking();
+
+        if (!string.IsNullOrWhiteSpace(request.SearchText))
+        {
+            var term = request.SearchText.Trim();
+
+            query = query.Where(x =>
+                x.Name.Contains(term) ||
+                x.Provider.Contains(term) ||
+                x.Status.Contains(term) ||
+                x.Ip.Contains(term) ||
+                x.Cluster.Contains(term) ||
+                x.OperatingSystem.Contains(term));
+        }
+
+        if (request.Filters.TryGetValue(nameof(ServerItem.Provider), out var providerFilter) &&
+            !string.IsNullOrWhiteSpace(providerFilter.Value))
+        {
+            query = query.Where(x => x.Provider.Contains(providerFilter.Value));
+        }
+
+        if (request.Filters.TryGetValue(nameof(ServerItem.Status), out var statusFilter) &&
+            !string.IsNullOrWhiteSpace(statusFilter.Value))
+        {
+            query = query.Where(x => x.Status.Contains(statusFilter.Value));
+        }
+
+        if (request.Filters.TryGetValue(nameof(ServerItem.MemoryGb), out var memoryFilter))
+        {
+            if (decimal.TryParse(memoryFilter.Value, out var from))
+                query = query.Where(x => x.MemoryGb >= from);
+
+            if (decimal.TryParse(memoryFilter.ValueTo, out var to))
+                query = query.Where(x => x.MemoryGb <= to);
+        }
+
+        if (request.Filters.TryGetValue(nameof(ServerItem.CreatedAt), out var dateFilter) &&
+            DateTime.TryParse(dateFilter.Value, out var date))
+        {
+            var from = date.Date;
+            var to = from.AddDays(1);
+            query = query.Where(x => x.CreatedAt >= from && x.CreatedAt < to);
+        }
+
+        query = (request.SortField, request.SortOrder) switch
+        {
+            (nameof(ServerItem.Name), GridColumnSortOrder.Ascending) => query.OrderBy(x => x.Name),
+            (nameof(ServerItem.Name), GridColumnSortOrder.Descending) => query.OrderByDescending(x => x.Name),
+            (nameof(ServerItem.Provider), GridColumnSortOrder.Ascending) => query.OrderBy(x => x.Provider),
+            (nameof(ServerItem.Provider), GridColumnSortOrder.Descending) => query.OrderByDescending(x => x.Provider),
+            (nameof(ServerItem.Status), GridColumnSortOrder.Ascending) => query.OrderBy(x => x.Status),
+            (nameof(ServerItem.Status), GridColumnSortOrder.Descending) => query.OrderByDescending(x => x.Status),
+            (nameof(ServerItem.CreatedAt), GridColumnSortOrder.Ascending) => query.OrderBy(x => x.CreatedAt),
+            (nameof(ServerItem.CreatedAt), GridColumnSortOrder.Descending) => query.OrderByDescending(x => x.CreatedAt),
+            (nameof(ServerItem.MemoryGb), GridColumnSortOrder.Ascending) => query.OrderBy(x => x.MemoryGb),
+            (nameof(ServerItem.MemoryGb), GridColumnSortOrder.Descending) => query.OrderByDescending(x => x.MemoryGb),
+            _ => query.OrderBy(x => x.Id)
+        };
+
+        var totalCount = await query.CountAsync();
+
+        var pageItems = await query
+            .Skip((request.Page - 1) * request.PageSize)
+            .Take(request.PageSize)
+            .Select(x => new ServerItem
+            {
+                Name = x.Name,
+                Provider = x.Provider,
+                Status = x.Status,
+                Ip = x.Ip,
+                Cluster = x.Cluster,
+                OperatingSystem = x.OperatingSystem,
+                CreatedAt = x.CreatedAt,
+                MemoryGb = x.MemoryGb
+            })
+            .ToListAsync();
+
+        return new OutlanderGridDataResult<ServerItem>
+        {
+            Items = pageItems,
+            TotalCount = totalCount
+        };
+    }
+
+    private async Task<IReadOnlyList<ServerItem>> LoadServersForExportAsync(OutlanderGridExportRequest request)
+    {
+        var result = await LoadServersAsync(new OutlanderGridDataRequest
+        {
+            Page = 1,
+            PageSize = int.MaxValue,
+            SearchText = request.SearchText,
+            SortField = request.SortField,
+            SortOrder = request.SortOrder,
+            Filters = request.Filters
+        });
+
+        return result.Items;
+    }
+
+    private async Task CopyCodeAsync(string text, CodeBlockType blockType)
+    {
+        await JS.InvokeVoidAsync("navigator.clipboard.writeText", text);
+
+        copiedBlock = blockType;
+        StateHasChanged();
+
+        await Task.Delay(2000);
+
+        if (copiedBlock == blockType)
+        {
+            copiedBlock = null;
+            StateHasChanged();
+        }
+    }
+
+    private string razorCode = """
+<OutlanderGrid TItem="ServerItem"
+               @ref="gridRef"
+               DataMode="OutlanderGridDataMode.Server"
+               OnRead="LoadServersAsync"
+               OnReadExport="LoadServersForExportAsync"
+               ServerExportScope="@SelectedExportScope"
+               AllowSort="true"
+               ShowSearchBox="true"
+               ShowFilterRow="true"
+               ShowExportButtons="true">
+    <ToolbarTemplate>
+        <button class="btn btn-primary" @onclick="RefreshGridAsync">Refresh</button>
+    </ToolbarTemplate>
+    <Columns>
+        <OutlanderGridDataColumn TItem="ServerItem" FieldName="Name" />
+        <OutlanderGridDataColumn TItem="ServerItem" FieldName="Provider" />
+        <OutlanderGridDataColumn TItem="ServerItem" FieldName="Status" />
+        <OutlanderGridDataColumn TItem="ServerItem" FieldName="MemoryGb" FilterMode="GridFilterMode.Range" />
+        <OutlanderGridDataColumn TItem="ServerItem" FieldName="CreatedAt" FilterMode="GridFilterMode.Date" />
+    </Columns>
+</OutlanderGrid>
+""";
+
+    private string csharpCode = """
+using Microsoft.EntityFrameworkCore;
+
+public sealed class ServerEntity
+{
+    public int Id { get; set; }
+    public string Name { get; set; } = string.Empty;
+    public string Provider { get; set; } = string.Empty;
+    public string Status { get; set; } = string.Empty;
+    public string Ip { get; set; } = string.Empty;
+    public string Cluster { get; set; } = string.Empty;
+    public string OperatingSystem { get; set; } = string.Empty;
+    public DateTime CreatedAt { get; set; }
+    public decimal MemoryGb { get; set; }
+}
+
+public sealed class ServerItem
+{
+    public string Name { get; set; } = string.Empty;
+    public string Provider { get; set; } = string.Empty;
+    public string Status { get; set; } = string.Empty;
+    public string Ip { get; set; } = string.Empty;
+    public string Cluster { get; set; } = string.Empty;
+    public string OperatingSystem { get; set; } = string.Empty;
+    public DateTime CreatedAt { get; set; }
+    public decimal MemoryGb { get; set; }
+}
+
+private async Task<OutlanderGridDataResult<ServerItem>> LoadServersAsync(OutlanderGridDataRequest request)
+{
+    IQueryable<ServerEntity> query = Db.Servers.AsNoTracking();
+
+    query = ApplySearch(query, request.SearchText);
+    query = ApplyFilters(query, request.Filters);
+    query = ApplySort(query, request.SortField, request.SortOrder);
+
+    var totalCount = await query.CountAsync();
+
+    var pageItems = await query
+        .Skip((request.Page - 1) * request.PageSize)
+        .Take(request.PageSize)
+        .Select(x => new ServerItem
+        {
+            Name = x.Name,
+            Provider = x.Provider,
+            Status = x.Status,
+            Ip = x.Ip,
+            Cluster = x.Cluster,
+            OperatingSystem = x.OperatingSystem,
+            CreatedAt = x.CreatedAt,
+            MemoryGb = x.MemoryGb
+        })
+        .ToListAsync();
+
+    return new OutlanderGridDataResult<ServerItem>
+    {
+        Items = pageItems,
+        TotalCount = totalCount
+    };
+}
+
+private async Task<IReadOnlyList<ServerItem>> LoadServersForExportAsync(OutlanderGridExportRequest request)
+{
+    IQueryable<ServerEntity> query = Db.Servers.AsNoTracking();
+
+    query = ApplySearch(query, request.SearchText);
+    query = ApplyFilters(query, request.Filters);
+    query = ApplySort(query, request.SortField, request.SortOrder);
+
+    // Safety limit for demo scenarios
+    const int maxExportRows = 100_000;
+
+    return await query
+        .Take(maxExportRows)
+        .Select(x => new ServerItem
+        {
+            Name = x.Name,
+            Provider = x.Provider,
+            Status = x.Status,
+            Ip = x.Ip,
+            Cluster = x.Cluster,
+            OperatingSystem = x.OperatingSystem,
+            CreatedAt = x.CreatedAt,
+            MemoryGb = x.MemoryGb
+        })
+        .ToListAsync();
+}
+
+private static IQueryable<ServerEntity> ApplySearch(IQueryable<ServerEntity> query, string? searchText)
+{
+    if (string.IsNullOrWhiteSpace(searchText))
+        return query;
+
+    var term = searchText.Trim();
+
+    return query.Where(x =>
+        x.Name.Contains(term) ||
+        x.Provider.Contains(term) ||
+        x.Status.Contains(term) ||
+        x.Ip.Contains(term) ||
+        x.Cluster.Contains(term) ||
+        x.OperatingSystem.Contains(term));
+}
+
+private static IQueryable<ServerEntity> ApplyFilters(
+    IQueryable<ServerEntity> query,
+    Dictionary<string, OutlanderGridFilterValue> filters)
+{
+    if (filters.Count == 0)
+        return query;
+
+    if (filters.TryGetValue(nameof(ServerItem.Provider), out var providerFilter) &&
+        !string.IsNullOrWhiteSpace(providerFilter.Value))
+    {
+        query = query.Where(x => x.Provider.Contains(providerFilter.Value));
+    }
+
+    if (filters.TryGetValue(nameof(ServerItem.Status), out var statusFilter) &&
+        !string.IsNullOrWhiteSpace(statusFilter.Value))
+    {
+        query = query.Where(x => x.Status.Contains(statusFilter.Value));
+    }
+
+    if (filters.TryGetValue(nameof(ServerItem.MemoryGb), out var memoryFilter))
+    {
+        if (decimal.TryParse(memoryFilter.Value, out var from))
+            query = query.Where(x => x.MemoryGb >= from);
+
+        if (decimal.TryParse(memoryFilter.ValueTo, out var to))
+            query = query.Where(x => x.MemoryGb <= to);
+    }
+
+    if (filters.TryGetValue(nameof(ServerItem.CreatedAt), out var dateFilter) &&
+        DateTime.TryParse(dateFilter.Value, out var date))
+    {
+        var from = date.Date;
+        var to = from.AddDays(1);
+        query = query.Where(x => x.CreatedAt >= from && x.CreatedAt < to);
+    }
+
+    return query;
+}
+
+private static IQueryable<ServerEntity> ApplySort(
+    IQueryable<ServerEntity> query,
+    string? sortField,
+    GridColumnSortOrder sortOrder)
+{
+    return (sortField, sortOrder) switch
+    {
+        (nameof(ServerItem.Name), GridColumnSortOrder.Ascending) => query.OrderBy(x => x.Name),
+        (nameof(ServerItem.Name), GridColumnSortOrder.Descending) => query.OrderByDescending(x => x.Name),
+
+        (nameof(ServerItem.Provider), GridColumnSortOrder.Ascending) => query.OrderBy(x => x.Provider),
+        (nameof(ServerItem.Provider), GridColumnSortOrder.Descending) => query.OrderByDescending(x => x.Provider),
+
+        (nameof(ServerItem.Status), GridColumnSortOrder.Ascending) => query.OrderBy(x => x.Status),
+        (nameof(ServerItem.Status), GridColumnSortOrder.Descending) => query.OrderByDescending(x => x.Status),
+
+        (nameof(ServerItem.Ip), GridColumnSortOrder.Ascending) => query.OrderBy(x => x.Ip),
+        (nameof(ServerItem.Ip), GridColumnSortOrder.Descending) => query.OrderByDescending(x => x.Ip),
+
+        (nameof(ServerItem.Cluster), GridColumnSortOrder.Ascending) => query.OrderBy(x => x.Cluster),
+        (nameof(ServerItem.Cluster), GridColumnSortOrder.Descending) => query.OrderByDescending(x => x.Cluster),
+
+        (nameof(ServerItem.OperatingSystem), GridColumnSortOrder.Ascending) => query.OrderBy(x => x.OperatingSystem),
+        (nameof(ServerItem.OperatingSystem), GridColumnSortOrder.Descending) => query.OrderByDescending(x => x.OperatingSystem),
+
+        (nameof(ServerItem.MemoryGb), GridColumnSortOrder.Ascending) => query.OrderBy(x => x.MemoryGb),
+        (nameof(ServerItem.MemoryGb), GridColumnSortOrder.Descending) => query.OrderByDescending(x => x.MemoryGb),
+
+        (nameof(ServerItem.CreatedAt), GridColumnSortOrder.Ascending) => query.OrderBy(x => x.CreatedAt),
+        (nameof(ServerItem.CreatedAt), GridColumnSortOrder.Descending) => query.OrderByDescending(x => x.CreatedAt),
+
+        _ => query.OrderBy(x => x.Id)
+    };
+}
+""";
+}

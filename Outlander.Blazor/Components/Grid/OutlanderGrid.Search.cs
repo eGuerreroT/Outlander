@@ -27,10 +27,13 @@ public partial class OutlanderGrid<TItem>
         return sb.ToString().Normalize(NormalizationForm.FormC);
     }
 
-    private void HandleSearchTextChanged(ChangeEventArgs e)
+    private async Task HandleSearchTextChangedAsync(ChangeEventArgs e)
     {
         SearchBoxText = e.Value?.ToString() ?? string.Empty;
         CurrentPage = 1;
+
+        if (IsServerMode)
+            await LoadServerDataAsync();
     }
 
     private IEnumerable<string> GetSearchTerms()
@@ -66,16 +69,15 @@ public partial class OutlanderGrid<TItem>
 
     private IEnumerable<TItem> ApplyGlobalSearch(IEnumerable<TItem> items)
     {
-        var terms = GetSearchTerms().ToList();
+        // In server mode, search is expected to be handled by the data provider.
+        if (IsServerMode)
+            return items;
 
+        var terms = GetSearchTerms().ToList();
         if (terms.Count == 0)
             return items;
 
-        var normalizedTerms = terms
-            .Select(NormalizeText)
-            .Where(t => !string.IsNullOrWhiteSpace(t))
-            .ToList();
-
+        var normalizedTerms = terms.Select(NormalizeText).Where(t => !string.IsNullOrWhiteSpace(t)).ToList();
         var searchableColumns = GetSearchableColumns().ToList();
 
         if (searchableColumns.Count == 0 || normalizedTerms.Count == 0)
@@ -93,15 +95,9 @@ public partial class OutlanderGrid<TItem>
 
             return ResolvedSearchTextParseMode switch
             {
-                GridSearchTextParseMode.GroupWordsByAnd =>
-                    normalizedTerms.All(term => values.Any(value => value.Contains(term, StringComparison.OrdinalIgnoreCase))),
-
-                GridSearchTextParseMode.GroupWordsByOr =>
-                    normalizedTerms.Any(term => values.Any(value => value.Contains(term, StringComparison.OrdinalIgnoreCase))),
-
-                GridSearchTextParseMode.ExactMatch =>
-                    values.Any(value => value.Contains(normalizedTerms[0], StringComparison.OrdinalIgnoreCase)),
-
+                GridSearchTextParseMode.GroupWordsByAnd => normalizedTerms.All(term => values.Any(value => value.Contains(term, StringComparison.OrdinalIgnoreCase))),
+                GridSearchTextParseMode.GroupWordsByOr => normalizedTerms.Any(term => values.Any(value => value.Contains(term, StringComparison.OrdinalIgnoreCase))),
+                GridSearchTextParseMode.ExactMatch => values.Any(value => value.Contains(normalizedTerms[0], StringComparison.OrdinalIgnoreCase)),
                 _ => false
             };
         });

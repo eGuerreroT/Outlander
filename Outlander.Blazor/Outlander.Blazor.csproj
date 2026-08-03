@@ -17,13 +17,14 @@
     <PackageRequireLicenseAcceptance>False</PackageRequireLicenseAcceptance>
 	<GenerateDocumentationFile>true</GenerateDocumentationFile>
     <GeneratePackageOnBuild>True</GeneratePackageOnBuild>
-	<VersionPrefix>1.1.2</VersionPrefix>
+	<VersionPrefix>1.1.3</VersionPrefix>
 
-	<PackageReleaseNotes>
-		Update components.
-		1. OutlanderTopMenu
-		- Render icon/title only when provided, so action content can be icon-only or text-only safely.
+	<PackageReleaseNotes>Update components.
+	1. OutlanderGrid
+	 - Server side process.
 	</PackageReleaseNotes>
+
+	<PackageProjectUrl>https://outlander-demo.onrender.com</PackageProjectUrl>
   </PropertyGroup>
 
   <ItemGroup>

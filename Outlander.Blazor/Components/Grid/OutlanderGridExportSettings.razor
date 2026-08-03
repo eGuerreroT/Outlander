@@ -82,6 +82,12 @@
     [Parameter]
     public string PrintText { get; set; } = "Print";
 
+    /// <summary>
+    /// Gets or sets which scope is exported when using server-side mode.
+    /// </summary>
+    [Parameter]
+    public OutlanderGridExportScope ServerExportScope { get; set; } = OutlanderGridExportScope.CurrentPage;
+
     protected override void OnInitialized()
     {
         OwnerGrid.RegisterExportSettings(new OutlanderGridExportSettingsDefinition
@@ -98,7 +104,8 @@
             ButtonText = ButtonText,
             ExcelText = ExcelText,
             PdfText = PdfText,
-            PrintText = PrintText
+            PrintText = PrintText,
+            ServerExportScope = ServerExportScope
         });
     }
 

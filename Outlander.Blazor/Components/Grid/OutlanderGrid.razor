@@ -109,7 +109,7 @@
                             <input class="form-control"
                                    placeholder="@ResolvedSearchBoxNullText"
                                    value="@SearchBoxText"
-                                   @oninput="HandleSearchTextChanged" />
+                                   @oninput="async e => await HandleSearchTextChangedAsync(e)" />
                         </div>
                     }
 
@@ -133,7 +133,7 @@
                                                checked="@column.Visible"
                                                id="chk-visible-@column.FieldName"
                                                disabled="@(column.Visible && VisibleColumnsDefinition.Count == 1)"
-                                               @onchange="e => SetColumnVisibility(column.FieldName, e.Value is bool b && b)" />
+                                               @onchange="async e => await SetColumnVisibilityAsync(column.FieldName, e.Value is bool b && b)" />
                                         <label class="form-check-label" for="chk-visible-@column.FieldName">@column.Caption</label>
                                     </div>
                                 }
@@ -166,7 +166,7 @@
                                     {
                                         <button type="button"
                                                 class="outlander-grid-sort-button"
-                                                @onclick="() => ToggleSort(column)">
+                                                @onclick="async () => await ToggleSortAsync(column)">
                                             @if (column.HeaderTemplate is not null)
                                             {
                                                 @column.HeaderTemplate
@@ -275,7 +275,7 @@
                         <li class="page-item @(IsFirstPage ? "disabled" : null)">
                             <button class="page-link"
                                     type="button"
-                                    @onclick="PreviousPage"
+                                    @onclick="async () => await PreviousPageAsync()"
                                     disabled="@IsFirstPage">
                                 @ResolvedPreviousPageText
                             </button>
@@ -286,7 +286,7 @@
                             <li class="page-item @(_page == CurrentPage ? "active" : null)">
                                 <button class="page-link"
                                         type="button"
-                                        @onclick="() => GoToPage(_page)">
+                                        @onclick="async () => await GoToPageAsync(_page)">
                                     @_page
                                 </button>
                             </li>
@@ -295,7 +295,7 @@
                         <li class="page-item @(IsLastPage ? "disabled" : null)">
                             <button class="page-link"
                                     type="button"
-                                    @onclick="NextPage"
+                                    @onclick="async () => await NextPageAsync()"
                                     disabled="@IsLastPage">
                                 @ResolvedNextPageText
                             </button>

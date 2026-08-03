@@ -2,7 +2,7 @@ namespace Outlander.Blazor.Components;
 
 public partial class OutlanderGrid<TItem>
 {
-    private void SetColumnVisibility(string fieldName, bool visible)
+    private async Task SetColumnVisibilityAsync(string fieldName, bool visible)
     {
         var column = AllColumnsDefinition.FirstOrDefault(c =>
             string.Equals(c.FieldName, fieldName, StringComparison.OrdinalIgnoreCase));
@@ -22,7 +22,11 @@ public partial class OutlanderGrid<TItem>
         }
 
         CurrentPage = 1;
-        StateHasChanged();
+
+        if (IsServerMode)
+            await LoadServerDataAsync();
+        else
+            StateHasChanged();
     }
 
     private string GetHeaderCellCssClass(OutlanderGridColumnDefinition<TItem> column)

@@ -22,20 +22,30 @@ public partial class OutlanderGrid<TItem>
     private string GetFilterValueTo(string fieldName)
         => GetOrCreateFilter(fieldName).ValueTo ?? string.Empty;
 
-    private void SetFilterValue(string fieldName, string? value)
+    private async Task SetFilterValueAsync(string fieldName, string? value)
     {
         GetOrCreateFilter(fieldName).Value = value ?? string.Empty;
         CurrentPage = 1;
+
+        if (IsServerMode)
+            await LoadServerDataAsync();
     }
 
-    private void SetFilterValueTo(string fieldName, string? value)
+    private async Task SetFilterValueToAsync(string fieldName, string? value)
     {
         GetOrCreateFilter(fieldName).ValueTo = value ?? string.Empty;
         CurrentPage = 1;
+
+        if (IsServerMode)
+            await LoadServerDataAsync();
     }
 
     private IEnumerable<TItem> ApplyFilters(IEnumerable<TItem> items)
     {
+        // In server mode, filtering is expected to be handled by the data provider.
+        if (IsServerMode)
+            return items;
+
         var query = items;
 
         foreach (var entry in _filters.Where(f =>
@@ -44,6 +54,7 @@ public partial class OutlanderGrid<TItem>
         {
             var fieldName = entry.Key;
             var filter = entry.Value;
+
             var column = VisibleColumnsDefinition.FirstOrDefault(c =>
                 string.Equals(c.FieldName, fieldName, StringComparison.OrdinalIgnoreCase));
 
@@ -51,7 +62,6 @@ public partial class OutlanderGrid<TItem>
                 continue;
 
             var mode = ResolveFilterMode(column);
-
             query = query.Where(item => MatchesFilter(item, column, mode, filter));
         }
 
@@ -64,7 +74,7 @@ public partial class OutlanderGrid<TItem>
         {
             FieldName = column.FieldName,
             Value = GetFilterValue(column.FieldName),
-            SetValue = value => SetFilterValue(column.FieldName, value)
+            SetValue = value => _ = SetFilterValueAsync(column.FieldName, value)
         };
     }
 
@@ -114,8 +124,7 @@ public partial class OutlanderGrid<TItem>
                 builder.AddAttribute(seq++, "class", "form-select form-select-sm");
                 builder.AddAttribute(seq++, "value", GetFilterValue(fieldName));
                 builder.AddAttribute(seq++, "onchange",
-                    EventCallback.Factory.Create<ChangeEventArgs>(this, e => SetFilterValue(fieldName, e.Value?.ToString())));
-
+                    EventCallback.Factory.Create<ChangeEventArgs>(this, async e => await SetFilterValueAsync(fieldName, e.Value?.ToString())));
                 builder.OpenElement(seq++, "option");
                 builder.AddAttribute(seq++, "value", "");
                 builder.AddContent(seq++, ResolvedFilterAllText);
@@ -140,7 +149,7 @@ public partial class OutlanderGrid<TItem>
                 builder.AddAttribute(seq++, "type", "date");
                 builder.AddAttribute(seq++, "value", GetFilterValue(fieldName));
                 builder.AddAttribute(seq++, "onchange",
-                    EventCallback.Factory.Create<ChangeEventArgs>(this, e => SetFilterValue(fieldName, e.Value?.ToString())));
+                    EventCallback.Factory.Create<ChangeEventArgs>(this, async e => await SetFilterValueAsync(fieldName, e.Value?.ToString())));
                 builder.CloseElement();
                 break;
 
@@ -174,7 +183,7 @@ public partial class OutlanderGrid<TItem>
                 builder.AddAttribute(seq++, "placeholder", ResolvedFilterFromText);
                 builder.AddAttribute(seq++, "value", GetFilterValue(fieldName));
                 builder.AddAttribute(seq++, "oninput",
-                    EventCallback.Factory.Create<ChangeEventArgs>(this, e => SetFilterValue(fieldName, e.Value?.ToString())));
+                    EventCallback.Factory.Create<ChangeEventArgs>(this, async e => await SetFilterValueAsync(fieldName, e.Value?.ToString())));
                 builder.CloseElement();
 
                 builder.OpenElement(seq++, "input");
@@ -183,7 +192,7 @@ public partial class OutlanderGrid<TItem>
                 builder.AddAttribute(seq++, "placeholder", ResolvedFilterToText);
                 builder.AddAttribute(seq++, "value", GetFilterValueTo(fieldName));
                 builder.AddAttribute(seq++, "oninput",
-                    EventCallback.Factory.Create<ChangeEventArgs>(this, e => SetFilterValueTo(fieldName, e.Value?.ToString())));
+                    EventCallback.Factory.Create<ChangeEventArgs>(this, async e => await SetFilterValueToAsync(fieldName, e.Value?.ToString())));
                 builder.CloseElement();
 
                 builder.CloseElement();
@@ -197,7 +206,7 @@ public partial class OutlanderGrid<TItem>
                 builder.AddAttribute(seq++, "placeholder", ResolvedFilterNullText);
                 builder.AddAttribute(seq++, "value", GetFilterValue(fieldName));
                 builder.AddAttribute(seq++, "oninput",
-                    EventCallback.Factory.Create<ChangeEventArgs>(this, e => SetFilterValue(fieldName, e.Value?.ToString())));
+                    EventCallback.Factory.Create<ChangeEventArgs>(this, async e => await SetFilterValueAsync(fieldName, e.Value?.ToString())));
                 builder.CloseElement();
                 break;
         }

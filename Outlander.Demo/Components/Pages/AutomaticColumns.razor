@@ -1,6 +1,9 @@
 ﻿@page "/AutomaticColumns"
 @using Outlander.Demo.LanguageDefinitions
+@using Outlander.Demo.Data
+@using Microsoft.EntityFrameworkCore
 @inject IJSRuntime JS
+@inject DemoDbContext Db
 
 <PageTitle>Automatic Columns</PageTitle>
 
@@ -340,40 +343,29 @@
         public decimal MemoryGb { get; set; }
     }
 
-    private List<ServerItem> ServersA = new()
-    {
-        new() { Name = "vm-prod-01", Provider = "VMware", Status = "Running", Ip = "10.10.10.10", Cluster = "Cluster-Prod", OperatingSystem = "Ubuntu 22.04", IsNew = true, Selected = true, BootStrapIcon = "provider-badge-primary", Abreviature = "vm", CreatedAt = new DateTime(2026, 05, 29), MemoryGb = 16 },
-        new() { Name = "vm-prod-01", Provider = "VMware", Status = "Running", Ip = "10.10.10.10", Cluster = "Cluster-Prod", OperatingSystem = "Ubuntu 22.04", IsNew = true, Selected = true, BootStrapIcon = "provider-badge-primary", Abreviature = "vm", CreatedAt = new DateTime(2026, 04, 29), MemoryGb = 20 },
-        new() { Name = "vm-db0-01", Provider = "Alibaba", Status = "Running", Ip = "10.10.10.11", Cluster = "Clúster-Prod", OperatingSystem = "RHEL 8.6", IsNew = true, Selected = true, BootStrapIcon = "provider-badge-orange", Abreviature = "a", CreatedAt = new DateTime(2026, 06, 29), MemoryGb = 16 },
-        new() { Name = "vm-db0-01", Provider = "Alibaba", Status = "Running", Ip = "10.10.10.11", Cluster = "Cluster-Prod", OperatingSystem = "RHEL 8.6", IsNew = true, Selected = true, BootStrapIcon = "provider-badge-orange", Abreviature = "a", CreatedAt = new DateTime(2026, 05, 9), MemoryGb = 16 },
-        new() { Name = "vm-prod-01", Provider = "VMware", Status = "Running", Ip = "10.10.10.10", Cluster = "Cluster-Prod", OperatingSystem = "Ubuntu 22.04", IsNew = true, Selected = true, BootStrapIcon = "provider-badge-primary", Abreviature = "vm", CreatedAt = new DateTime(2025, 05, 29), MemoryGb = 32 },
-        new() { Name = "vm-prod-01", Provider = "VMware", Status = "Running", Ip = "10.10.10.10", Cluster = "Cluster-Prod", OperatingSystem = "Ubuntu 22.04", IsNew = true, Selected = true, BootStrapIcon = "provider-badge-primary", Abreviature = "vm", CreatedAt = new DateTime(2024, 05, 29), MemoryGb = 64 },
-        new() { Name = "vm-db0-01", Provider = "Alibaba", Status = "Running", Ip = "10.10.10.11", Cluster = "Cluster-Prod", OperatingSystem = "RHEL 8.6", IsNew = true, Selected = true, BootStrapIcon = "provider-badge-orange", Abreviature = "a", CreatedAt = new DateTime(2026, 07, 29), MemoryGb = 128 },
-        new() { Name = "vm-db0-01", Provider = "Alibaba", Status = "Running", Ip = "10.10.10.11", Cluster = "Cluster-Prod", OperatingSystem = "RHEL 8.6", IsNew = true, Selected = true, BootStrapIcon = "provider-badge-orange", Abreviature = "a", CreatedAt = new DateTime(2026, 08, 29), MemoryGb = 32 },
-        new() { Name = "vm-prod-01", Provider = "VMware", Status = "Running", Ip = "10.10.10.10", Cluster = "Cluster-Prod", OperatingSystem = "Ubuntu 22.04", IsNew = true, Selected = true, BootStrapIcon = "provider-badge-primary", Abreviature = "vm", CreatedAt = new DateTime(2026, 05, 29), MemoryGb = 32 },
-        new() { Name = "vm-prod-01", Provider = "VMware", Status = "Running", Ip = "10.10.10.10", Cluster = "Cluster-Prod", OperatingSystem = "Ubuntu 22.04", IsNew = true, Selected = true, BootStrapIcon = "provider-badge-primary", Abreviature = "vm", CreatedAt = new DateTime(2026, 05, 29), MemoryGb = 16 },
-        new() { Name = "vm-db0-01", Provider = "Alibaba", Status = "Running", Ip = "10.10.10.11", Cluster = "Cluster-Prod", OperatingSystem = "RHEL 8.6", IsNew = true, Selected = true, BootStrapIcon = "provider-badge-orange", Abreviature = "a", CreatedAt = new DateTime(2026, 07, 30), MemoryGb = 64 },
-        new() { Name = "vm-db0-01", Provider = "Alibaba", Status = "Running", Ip = "10.10.10.11", Cluster = "Cluster-Prod", OperatingSystem = "RHEL 8.6", IsNew = true, Selected = true, BootStrapIcon = "provider-badge-orange", Abreviature = "a", CreatedAt = new DateTime(2026, 08, 30), MemoryGb = 16 },
-        new() { Name = "vm-prod-01", Provider = "VMware", Status = "Running", Ip = "10.10.10.10", Cluster = "Cluster-Prod", OperatingSystem = "Ubuntu 22.04", IsNew = true, Selected = true, BootStrapIcon = "provider-badge-primary", Abreviature = "vm", CreatedAt = new DateTime(2026, 05, 20), MemoryGb = 20 },
-        new() { Name = "vm-prod-01", Provider = "VMware", Status = "Running", Ip = "10.10.10.10", Cluster = "Cluster-Prod", OperatingSystem = "Ubuntu 22.04", IsNew = true, Selected = true, BootStrapIcon = "provider-badge-primary", Abreviature = "vm", CreatedAt = new DateTime(2026, 05, 20), MemoryGb = 20 },
-        new() { Name = "vm-db0-01", Provider = "Alibaba", Status = "Running", Ip = "10.10.10.11", Cluster = "Cluster-Prod", OperatingSystem = "RHEL 8.6", IsNew = true, Selected = true, BootStrapIcon = "provider-badge-orange", Abreviature = "a", CreatedAt = new DateTime(2026, 2, 19), MemoryGb = 32 },
-        new() { Name = "vm-db0-01", Provider = "Alibaba", Status = "Running", Ip = "10.10.10.11", Cluster = "Cluster-Prod", OperatingSystem = "RHEL 8.6", IsNew = true, Selected = true, BootStrapIcon = "provider-badge-orange", Abreviature = "a", CreatedAt = new DateTime(2026, 2, 9), MemoryGb = 32 },
-        new() { Name = "vm-db0-01", Provider = "Alibaba", Status = "Running", Ip = "10.10.10.11", Cluster = "Cluster-Prod", OperatingSystem = "RHEL 8.6", IsNew = true, Selected = true, BootStrapIcon = "provider-badge-orange", Abreviature = "a", CreatedAt = new DateTime(2026, 2, 2), MemoryGb = 20 },
-        new() { Name = "vm-web-02", Provider = "Alibaba", Status = "Powered Off", Ip = "10.10.10.12", Cluster = "Cluster-Web", OperatingSystem = "Ubuntu 20.04", IsNew = true, Selected = true, BootStrapIcon = "provider-badge-orange", Abreviature = "a", CreatedAt = new DateTime(2026, 04, 29), MemoryGb = 20 },
-        new() { Name = "vm-web-02", Provider = "Alibaba", Status = "Powered Off", Ip = "10.10.10.12", Cluster = "Cluster-Web", OperatingSystem = "Ubuntu 20.04", IsNew = true, Selected = true, BootStrapIcon = "provider-badge-orange", Abreviature = "a", CreatedAt = new DateTime(2026, 09, 29), MemoryGb = 20 },
-        new() { Name = "vm-web-02", Provider = "Alibaba", Status = "Powered Off", Ip = "10.10.10.12", Cluster = "Cluster-Web", OperatingSystem = "Ubuntu 20.04", IsNew = true, Selected = true, BootStrapIcon = "provider-badge-orange", Abreviature = "a", CreatedAt = new DateTime(2026, 10, 29), MemoryGb = 20 },
-        new() { Name = "vm-app-03", Provider = "VMware", Status = "Running", Ip = "10.10.10.13", Cluster = "Cluster-Apps", OperatingSystem = "CentOS 7", IsNew = true, Selected = true, BootStrapIcon = "provider-badge-primary", Abreviature = "vm", CreatedAt = new DateTime(2026, 11, 29), MemoryGb = 20 },
-        new() { Name = "vm-app-03", Provider = "VMware", Status = "Running", Ip = "10.10.10.13", Cluster = "Cluster-Apps", OperatingSystem = "CentOS 7", IsNew = true, Selected = true, BootStrapIcon = "provider-badge-primary", Abreviature = "vm", CreatedAt = new DateTime(2026, 12, 29), MemoryGb = 64 },
-        new() { Name = "vm-app-03", Provider = "VMware", Status = "Running", Ip = "10.10.10.13", Cluster = "Cluster-Apps", OperatingSystem = "CentOS 7", IsNew = true, Selected = true, BootStrapIcon = "provider-badge-primary", Abreviature = "vm", CreatedAt = new DateTime(2026, 1, 29), MemoryGb = 64 },
-        new() { Name = "vm-test-01", Provider = "VMware", Status = "Running", Ip = "10.10.10.14", Cluster = "Cluster-Test", OperatingSystem = "Debian 11", IsNew = true, Selected = true, BootStrapIcon = "provider-badge-primary", Abreviature = "vm", CreatedAt = new DateTime(2026, 05, 2), MemoryGb = 120 },
-        new() { Name = "vm-test-01", Provider = "VMware", Status = "Running", Ip = "10.10.10.14", Cluster = "Cluster-Test", OperatingSystem = "Debian 11", IsNew = true, Selected = true, BootStrapIcon = "provider-badge-primary", Abreviature = "vm", CreatedAt = new DateTime(2026, 05, 19), MemoryGb = 120 },
-        new() { Name = "vm-test-01", Provider = "VMware", Status = "Running", Ip = "10.10.10.14", Cluster = "Cluster-Test", OperatingSystem = "Debian 11", IsNew = true, Selected = true, BootStrapIcon = "provider-badge-primary", Abreviature = "vm", CreatedAt = new DateTime(2026, 03, 9), MemoryGb = 16 },
-        new() { Name = "vm-test-01", Provider = "VMware", Status = "Running", Ip = "10.10.10.14", Cluster = "Cluster-Test", OperatingSystem = "Debian 11", IsNew = true, Selected = true, BootStrapIcon = "provider-badge-primary", Abreviature = "vm", CreatedAt = new DateTime(2026, 07, 9), MemoryGb = 16 },
-        new() { Name = "vm-test-01", Provider = "VMware", Status = "Running", Ip = "10.10.10.14", Cluster = "Cluster-Test", OperatingSystem = "Debian 11", IsNew = true, Selected = true, BootStrapIcon = "provider-badge-primary", Abreviature = "vm", CreatedAt = new DateTime(2026, 07, 19), MemoryGb = 16 },
-    };
+    private List<ServerItem> ServersA = new();
 
     private ServerItem? FocusedServerA { get; set; }
     private IList<ServerItem> SelectedServersA { get; set; } = new List<ServerItem>();
+
+    protected override async Task OnInitializedAsync()
+    {
+        ServersA = await Db.Servers
+            .AsNoTracking()
+            .OrderBy(x => x.Name)
+            .Select(x => new ServerItem
+            {
+                Name = x.Name,
+                Provider = x.Provider,
+                Status = x.Status,
+                Ip = x.Ip,
+                Cluster = x.Cluster,
+                OperatingSystem = x.OperatingSystem,
+                CreatedAt = x.CreatedAt,
+                MemoryGb = x.MemoryGb
+            })
+            .ToListAsync();
+    }
 
     private async Task CopyCodeAsync(string text, CodeBlockType blockType)
     {
@@ -414,49 +406,41 @@
     """;
 
     private string csharpCode = """
-        public class ServerItem
-        {
-            public string Name { get; set; } = string.Empty;
-            public string Provider { get; set; } = string.Empty;
-            public string Status { get; set; } = string.Empty;
-            public string Ip { get; set; } = string.Empty;
-            public string Cluster { get; set; } = string.Empty;
-            public string OperatingSystem { get; set; } = string.Empty;
-            public bool IsNew { get; set; }
-            public DateTime CreatedAt { get; set; }
-            public decimal MemoryGb { get; set; }
-        }
+using Microsoft.EntityFrameworkCore;
+using Outlander.Demo.Data;
 
-        private List<ServerItem> ServersA = new()
+public class ServerItem
+{
+    public string Name { get; set; } = string.Empty;
+    public string Provider { get; set; } = string.Empty;
+    public string Status { get; set; } = string.Empty;
+    public string Ip { get; set; } = string.Empty;
+    public string Cluster { get; set; } = string.Empty;
+    public string OperatingSystem { get; set; } = string.Empty;
+    public bool IsNew { get; set; }
+    public DateTime CreatedAt { get; set; }
+    public decimal MemoryGb { get; set; }
+}
+
+private List<ServerItem> ServersA = new();
+
+protected override async Task OnInitializedAsync()
+{
+    ServersA = await Db.Servers
+        .AsNoTracking()
+        .OrderBy(x => x.Name)
+        .Select(x => new ServerItem
         {
-            new() { Name = "vm-prod-01", Provider = "VMware", Status = "Running", Ip = "10.10.10.10", Cluster = "Cluster-Prod", OperatingSystem = "Ubuntu 22.04", IsNew = true, Selected = true, BootStrapIcon = "provider-badge-primary", Abreviature = "vm", CreatedAt = new DateTime(2026, 05, 29), MemoryGb = 16 },
-            new() { Name = "vm-prod-01", Provider = "VMware", Status = "Running", Ip = "10.10.10.10", Cluster = "Cluster-Prod", OperatingSystem = "Ubuntu 22.04", IsNew = true, Selected = true, BootStrapIcon = "provider-badge-primary", Abreviature = "vm", CreatedAt = new DateTime(2026, 04, 29), MemoryGb = 20 },
-            new() { Name = "vm-db0-01", Provider = "Alibaba", Status = "Running", Ip = "10.10.10.11", Cluster = "Clúster-Prod", OperatingSystem = "RHEL 8.6", IsNew = true, Selected = true, BootStrapIcon = "provider-badge-orange", Abreviature = "a", CreatedAt = new DateTime(2026, 06, 29), MemoryGb = 16 },
-            new() { Name = "vm-db0-01", Provider = "Alibaba", Status = "Running", Ip = "10.10.10.11", Cluster = "Cluster-Prod", OperatingSystem = "RHEL 8.6", IsNew = true, Selected = true, BootStrapIcon = "provider-badge-orange", Abreviature = "a", CreatedAt = new DateTime(2026, 05, 9), MemoryGb = 16 },
-            new() { Name = "vm-prod-01", Provider = "VMware", Status = "Running", Ip = "10.10.10.10", Cluster = "Cluster-Prod", OperatingSystem = "Ubuntu 22.04", IsNew = true, Selected = true, BootStrapIcon = "provider-badge-primary", Abreviature = "vm", CreatedAt = new DateTime(2025, 05, 29), MemoryGb = 32 },
-            new() { Name = "vm-prod-01", Provider = "VMware", Status = "Running", Ip = "10.10.10.10", Cluster = "Cluster-Prod", OperatingSystem = "Ubuntu 22.04", IsNew = true, Selected = true, BootStrapIcon = "provider-badge-primary", Abreviature = "vm", CreatedAt = new DateTime(2024, 05, 29), MemoryGb = 64 },
-            new() { Name = "vm-db0-01", Provider = "Alibaba", Status = "Running", Ip = "10.10.10.11", Cluster = "Cluster-Prod", OperatingSystem = "RHEL 8.6", IsNew = true, Selected = true, BootStrapIcon = "provider-badge-orange", Abreviature = "a", CreatedAt = new DateTime(2026, 07, 29), MemoryGb = 128 },
-            new() { Name = "vm-db0-01", Provider = "Alibaba", Status = "Running", Ip = "10.10.10.11", Cluster = "Cluster-Prod", OperatingSystem = "RHEL 8.6", IsNew = true, Selected = true, BootStrapIcon = "provider-badge-orange", Abreviature = "a", CreatedAt = new DateTime(2026, 08, 29), MemoryGb = 32 },
-            new() { Name = "vm-prod-01", Provider = "VMware", Status = "Running", Ip = "10.10.10.10", Cluster = "Cluster-Prod", OperatingSystem = "Ubuntu 22.04", IsNew = true, Selected = true, BootStrapIcon = "provider-badge-primary", Abreviature = "vm", CreatedAt = new DateTime(2026, 05, 29), MemoryGb = 32 },
-            new() { Name = "vm-prod-01", Provider = "VMware", Status = "Running", Ip = "10.10.10.10", Cluster = "Cluster-Prod", OperatingSystem = "Ubuntu 22.04", IsNew = true, Selected = true, BootStrapIcon = "provider-badge-primary", Abreviature = "vm", CreatedAt = new DateTime(2026, 05, 29), MemoryGb = 16 },
-            new() { Name = "vm-db0-01", Provider = "Alibaba", Status = "Running", Ip = "10.10.10.11", Cluster = "Cluster-Prod", OperatingSystem = "RHEL 8.6", IsNew = true, Selected = true, BootStrapIcon = "provider-badge-orange", Abreviature = "a", CreatedAt = new DateTime(2026, 07, 30), MemoryGb = 64 },
-            new() { Name = "vm-db0-01", Provider = "Alibaba", Status = "Running", Ip = "10.10.10.11", Cluster = "Cluster-Prod", OperatingSystem = "RHEL 8.6", IsNew = true, Selected = true, BootStrapIcon = "provider-badge-orange", Abreviature = "a", CreatedAt = new DateTime(2026, 08, 30), MemoryGb = 16 },
-            new() { Name = "vm-prod-01", Provider = "VMware", Status = "Running", Ip = "10.10.10.10", Cluster = "Cluster-Prod", OperatingSystem = "Ubuntu 22.04", IsNew = true, Selected = true, BootStrapIcon = "provider-badge-primary", Abreviature = "vm", CreatedAt = new DateTime(2026, 05, 20), MemoryGb = 20 },
-            new() { Name = "vm-prod-01", Provider = "VMware", Status = "Running", Ip = "10.10.10.10", Cluster = "Cluster-Prod", OperatingSystem = "Ubuntu 22.04", IsNew = true, Selected = true, BootStrapIcon = "provider-badge-primary", Abreviature = "vm", CreatedAt = new DateTime(2026, 05, 20), MemoryGb = 20 },
-            new() { Name = "vm-db0-01", Provider = "Alibaba", Status = "Running", Ip = "10.10.10.11", Cluster = "Cluster-Prod", OperatingSystem = "RHEL 8.6", IsNew = true, Selected = true, BootStrapIcon = "provider-badge-orange", Abreviature = "a", CreatedAt = new DateTime(2026, 2, 19), MemoryGb = 32 },
-            new() { Name = "vm-db0-01", Provider = "Alibaba", Status = "Running", Ip = "10.10.10.11", Cluster = "Cluster-Prod", OperatingSystem = "RHEL 8.6", IsNew = true, Selected = true, BootStrapIcon = "provider-badge-orange", Abreviature = "a", CreatedAt = new DateTime(2026, 2, 9), MemoryGb = 32 },
-            new() { Name = "vm-db0-01", Provider = "Alibaba", Status = "Running", Ip = "10.10.10.11", Cluster = "Cluster-Prod", OperatingSystem = "RHEL 8.6", IsNew = true, Selected = true, BootStrapIcon = "provider-badge-orange", Abreviature = "a", CreatedAt = new DateTime(2026, 2, 2), MemoryGb = 20 },
-            new() { Name = "vm-web-02", Provider = "Alibaba", Status = "Powered Off", Ip = "10.10.10.12", Cluster = "Cluster-Web", OperatingSystem = "Ubuntu 20.04", IsNew = true, Selected = true, BootStrapIcon = "provider-badge-orange", Abreviature = "a", CreatedAt = new DateTime(2026, 04, 29), MemoryGb = 20 },
-            new() { Name = "vm-web-02", Provider = "Alibaba", Status = "Powered Off", Ip = "10.10.10.12", Cluster = "Cluster-Web", OperatingSystem = "Ubuntu 20.04", IsNew = true, Selected = true, BootStrapIcon = "provider-badge-orange", Abreviature = "a", CreatedAt = new DateTime(2026, 09, 29), MemoryGb = 20 },
-            new() { Name = "vm-web-02", Provider = "Alibaba", Status = "Powered Off", Ip = "10.10.10.12", Cluster = "Cluster-Web", OperatingSystem = "Ubuntu 20.04", IsNew = true, Selected = true, BootStrapIcon = "provider-badge-orange", Abreviature = "a", CreatedAt = new DateTime(2026, 10, 29), MemoryGb = 20 },
-            new() { Name = "vm-app-03", Provider = "VMware", Status = "Running", Ip = "10.10.10.13", Cluster = "Cluster-Apps", OperatingSystem = "CentOS 7", IsNew = true, Selected = true, BootStrapIcon = "provider-badge-primary", Abreviature = "vm", CreatedAt = new DateTime(2026, 11, 29), MemoryGb = 20 },
-            new() { Name = "vm-app-03", Provider = "VMware", Status = "Running", Ip = "10.10.10.13", Cluster = "Cluster-Apps", OperatingSystem = "CentOS 7", IsNew = true, Selected = true, BootStrapIcon = "provider-badge-primary", Abreviature = "vm", CreatedAt = new DateTime(2026, 12, 29), MemoryGb = 64 },
-            new() { Name = "vm-app-03", Provider = "VMware", Status = "Running", Ip = "10.10.10.13", Cluster = "Cluster-Apps", OperatingSystem = "CentOS 7", IsNew = true, Selected = true, BootStrapIcon = "provider-badge-primary", Abreviature = "vm", CreatedAt = new DateTime(2026, 1, 29), MemoryGb = 64 },
-            new() { Name = "vm-test-01", Provider = "VMware", Status = "Running", Ip = "10.10.10.14", Cluster = "Cluster-Test", OperatingSystem = "Debian 11", IsNew = true, Selected = true, BootStrapIcon = "provider-badge-primary", Abreviature = "vm", CreatedAt = new DateTime(2026, 05, 2), MemoryGb = 120 },
-            new() { Name = "vm-test-01", Provider = "VMware", Status = "Running", Ip = "10.10.10.14", Cluster = "Cluster-Test", OperatingSystem = "Debian 11", IsNew = true, Selected = true, BootStrapIcon = "provider-badge-primary", Abreviature = "vm", CreatedAt = new DateTime(2026, 05, 19), MemoryGb = 120 },
-            new() { Name = "vm-test-01", Provider = "VMware", Status = "Running", Ip = "10.10.10.14", Cluster = "Cluster-Test", OperatingSystem = "Debian 11", IsNew = true, Selected = true, BootStrapIcon = "provider-badge-primary", Abreviature = "vm", CreatedAt = new DateTime(2026, 03, 9), MemoryGb = 16 },
-            new() { Name = "vm-test-01", Provider = "VMware", Status = "Running", Ip = "10.10.10.14", Cluster = "Cluster-Test", OperatingSystem = "Debian 11", IsNew = true, Selected = true, BootStrapIcon = "provider-badge-primary", Abreviature = "vm", CreatedAt = new DateTime(2026, 07, 9), MemoryGb = 16 },
-            new() { Name = "vm-test-01", Provider = "VMware", Status = "Running", Ip = "10.10.10.14", Cluster = "Cluster-Test", OperatingSystem = "Debian 11", IsNew = true, Selected = true, BootStrapIcon = "provider-badge-primary", Abreviature = "vm", CreatedAt = new DateTime(2026, 07, 19), MemoryGb = 16 },
-        };
-    """;
+            Name = x.Name,
+            Provider = x.Provider,
+            Status = x.Status,
+            Ip = x.Ip,
+            Cluster = x.Cluster,
+            OperatingSystem = x.OperatingSystem,
+            CreatedAt = x.CreatedAt,
+            MemoryGb = x.MemoryGb
+        })
+        .ToListAsync();
+}
+""";
 }

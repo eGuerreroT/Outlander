@@ -21,7 +21,7 @@ public partial class OutlanderGrid<TItem>
         _initialSortApplied = true;
     }
 
-    private void ToggleSort(OutlanderGridColumnDefinition<TItem> column)
+    private async Task ToggleSortAsync(OutlanderGridColumnDefinition<TItem> column)
     {
         if (!AllowSort || !column.AllowSort)
             return;
@@ -31,6 +31,10 @@ public partial class OutlanderGrid<TItem>
             _sortFieldName = column.FieldName;
             _sortOrder = GridColumnSortOrder.Ascending;
             CurrentPage = 1;
+
+            if (IsServerMode)
+                await LoadServerDataAsync();
+
             return;
         }
 
@@ -43,11 +47,12 @@ public partial class OutlanderGrid<TItem>
         };
 
         if (_sortOrder == GridColumnSortOrder.None)
-        {
             _sortFieldName = null;
-        }
 
         CurrentPage = 1;
+
+        if (IsServerMode)
+            await LoadServerDataAsync();
     }
 
     private string GetSortIcon(OutlanderGridColumnDefinition<TItem> column)
@@ -68,6 +73,10 @@ public partial class OutlanderGrid<TItem>
 
     private IEnumerable<TItem> ApplySorting(IEnumerable<TItem> items)
     {
+        // In server mode, sorting is expected to be handled by the data provider.
+        if (IsServerMode)
+            return items;
+
         EnsureInitialSort();
 
         if (!AllowSort || string.IsNullOrWhiteSpace(_sortFieldName) || _sortOrder == GridColumnSortOrder.None)
@@ -95,5 +104,4 @@ public partial class OutlanderGrid<TItem>
             ? items.OrderBy(valueSelector)
             : items.OrderByDescending(valueSelector);
     }
-
 }
