@@ -151,44 +151,64 @@
                         <tr>
                             @foreach (var column in VisibleColumnsDefinition)
                             {
-                                <th class="@GetHeaderCellCssClass(column)" style="@GetWidthStyle(column)">
-                                    @if (column.IsSelectionColumn)
-                                    {
-                                        <input class="form-check-input"
-                                               type="checkbox"
-                                               checked="@AreAllPageItemsSelected()"
-                                               title="@GetSelectCurrentPageTitle()"
-                                               @ref="_selectPageCheckboxRef"
-                                               @onchange="async e => await SetAllPageItemsSelectedAsync(e.Value is bool b && b)"
-                                               @onclick:stopPropagation="true" />
-                                    }
-                                    else if (AllowSort && column.AllowSort)
-                                    {
-                                        <button type="button"
-                                                class="outlander-grid-sort-button"
-                                                @onclick="async () => await ToggleSortAsync(column)">
+                                <th class="@($"{GetHeaderCellCssClass(column)} {GetHeaderDragCssClass()} {GetDropIndicatorCss(column)}")"
+                                    draggable="@(IsColumnReorderDraggable(column) ? "true" : "false")"
+                                    @ondragstart="@(e => OnHeaderDragStart(e, column.FieldName))"
+                                    @ondragend="@(e => ClearDragVisuals())">
+
+                                    <div class="outlander-grid-th-content">
+                                        @if (column.IsSelectionColumn)
+                                        {
+                                            <input class="form-check-input"
+                                                   type="checkbox"
+                                                   checked="@AreAllPageItemsSelected()"
+                                                   title="@GetSelectCurrentPageTitle()"
+                                                   @ref="_selectPageCheckboxRef"
+                                                   @onchange="async e => await SetAllPageItemsSelectedAsync(e.Value is bool b && b)"
+                                                   @onclick:stopPropagation="true" />
+                                        }
+                                        else if (AllowSort && column.AllowSort)
+                                        {
+                                            <button type="button"
+                                                    class="outlander-grid-sort-button"
+                                                    @onclick="async () => await ToggleSortAsync(column)">
+                                                @if (column.HeaderTemplate is not null)
+                                                {
+                                                    @column.HeaderTemplate
+                                                }
+                                                else
+                                                {
+                                                    <span>@column.Caption</span>
+                                                }
+
+                                                <i class="@GetSortIcon(column)"></i>
+                                            </button>
+                                        }
+                                        else
+                                        {
                                             @if (column.HeaderTemplate is not null)
                                             {
                                                 @column.HeaderTemplate
                                             }
                                             else
                                             {
-                                                <span>@column.Caption</span>
+                                                @column.Caption
                                             }
-
-                                            <i class="@GetSortIcon(column)"></i>
-                                        </button>
-                                    }
-                                    else
+                                        }
+                                    </div>
+                                    @if (AllowColumnReorder && !column.IsSelectionColumn && IsDraggingColumn)
                                     {
-                                        @if (column.HeaderTemplate is not null)
-                                        {
-                                            @column.HeaderTemplate
-                                        }
-                                        else
-                                        {
-                                            @column.Caption
-                                        }
+                                        <div class="outlander-grid-dropzone outlander-grid-dropzone-left"
+                                             @ondragenter="@(e => OnDropZoneDragEnter(e, column.FieldName, true))"
+                                             @ondragover:preventDefault="true"
+                                             @ondragover="@(e => OnDropZoneDragOver(e, column.FieldName, true))"
+                                             @ondrop="@(async e => await OnDropZoneDropAsync(e, column.FieldName, true))"></div>
+
+                                        <div class="outlander-grid-dropzone outlander-grid-dropzone-right"
+                                             @ondragenter="@(e => OnDropZoneDragEnter(e, column.FieldName, false))"
+                                             @ondragover:preventDefault="true"
+                                             @ondragover="@(e => OnDropZoneDragOver(e, column.FieldName, false))"
+                                             @ondrop="@(async e => await OnDropZoneDropAsync(e, column.FieldName, false))"></div>
                                     }
                                 </th>
                             }

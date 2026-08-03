@@ -29,8 +29,8 @@ public partial class OutlanderGrid<TItem> : IAsyncDisposable
     private int _serverTotalCount;
     private bool _isLoadingServerData;
 
-    private IReadOnlyList<OutlanderGridColumnDefinition<TItem>> AllColumnsDefinition => _columns;
-    private IReadOnlyList<OutlanderGridColumnDefinition<TItem>> VisibleColumnsDefinition => [.. _columns.Where(c => c.Visible)];
+    private IReadOnlyList<OutlanderGridColumnDefinition<TItem>> AllColumnsDefinition => [.. _columns.OrderBy(c => c.OrderIndex)];
+    private IReadOnlyList<OutlanderGridColumnDefinition<TItem>> VisibleColumnsDefinition => [.. _columns.Where(c => c.Visible).OrderBy(c => c.OrderIndex)];
     private int ResolvedColumnCount => Math.Max(1, VisibleColumnsDefinition.Count);
 
     private OutlanderGridColumnDefinition<TItem>? SelectionColumn => AllColumnsDefinition.FirstOrDefault(c => c.IsSelectionColumn);
@@ -470,6 +470,8 @@ public partial class OutlanderGrid<TItem> : IAsyncDisposable
         }
 
         await UpdateSelectionCheckboxStatesAsync();
+
+        EnsureColumnOrderInitialized();
     }
 
     protected override void OnParametersSet()
@@ -524,6 +526,9 @@ public partial class OutlanderGrid<TItem> : IAsyncDisposable
     {
         if (_columns.All(c => c.FieldName != column.FieldName))
         {
+            if (column.OrderIndex < 0)
+                column.OrderIndex = _columns.Count;
+
             _columns.Add(column);
 
             if (!_renderPending)

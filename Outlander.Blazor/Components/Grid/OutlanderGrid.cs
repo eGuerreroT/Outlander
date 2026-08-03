@@ -122,6 +122,11 @@ public class OutlanderGridColumnDefinition<TItem>
     /// Gets or sets which scope is exported when using server-side mode.
     /// </summary>
     public OutlanderGridExportScope ServerExportScope { get; set; } = OutlanderGridExportScope.CurrentPage;
+
+    /// <summary>
+    /// Internal column order index used by the grid for rendering/reordering.
+    /// </summary>
+    public int OrderIndex { get; set; } = -1;
 }
 
 /// <summary>
